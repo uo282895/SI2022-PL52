@@ -35,7 +35,7 @@ public class DM_implementation_DB {
 
 	}
 	
-	public static Connection stablishConnection(String url) {
+	public static Connection stablishConnection(String url){
 		try{
 			// Trying to establish connection with the database called "coursesdb" in url variable
 			Connection connect = DriverManager.getConnection(url);
@@ -54,7 +54,7 @@ public class DM_implementation_DB {
 		try {
 			PreparedStatement st = connect.prepareStatement(command);
 			int result = st.executeUpdate();
-			if(result > 0)
+			if(result > 0) // Check for errors
 				return true;
 			else
 				return false;
@@ -66,9 +66,9 @@ public class DM_implementation_DB {
 	
 	public static ResultSet executeSQLquery(String command, Connection connect) { // Function to execute an SQL query
 		try {
-			ResultSet result;
+			ResultSet result; // To store the ResultSet value got from the DB
 			PreparedStatement st = connect.prepareStatement(command);
-			result = st.executeQuery();
+			result = st.executeQuery(); // Execute the query in the DB
 			if(result != null)
 				return result;
 			else
@@ -91,11 +91,10 @@ public class DM_implementation_DB {
 	       
 	       for (String commandunit : sql.split(";")) {
                if (commandunit.trim().length() > 0) {
-                   executeSQLcommand(commandunit, connect);
+                   executeSQLcommand(commandunit, connect); // Execute the command unit in the DB
                    System.out.println("Executed command: " + commandunit);
                }
            }
-	       
 	    }
 	    catch(Exception x){
 	    	System.err.println("Insertion ERROR: " + x.getMessage().toString());
@@ -117,7 +116,6 @@ public class DM_implementation_DB {
 
 	    try {
 	       // Opening of the file and creation of the buffer to read the information
-	       fr = new FileReader (archive);
 	       sql = new String(Files.readAllBytes(Paths.get(archive.getAbsolutePath())));
 
 	       for (String commandunit : sql.split(";")) {

@@ -1,18 +1,17 @@
 DROP TABLE if exists course;
 CREATE TABLE if not exists course(
-	course_id INTIGER PRIMARY KEY,
+	course_id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
 	description TEXT NOT NULL,
-	aviable_places INTIGER NOT NULL
+	aviable_places INTEGER NOT NULL
 );
 
 DROP TABLE if exists registration;
 CREATE TABLE if not exists registration(
-	registration_id INTIGER PRIMARY KEY,
+	registration_id INTEGER PRIMARY KEY,
 	name TEXT NOT NULL,
-	surname TEXT NOT NULL,
 	date_of_registration TEXT NOT NULL,
-	course_id INTIGER not null default 0,
+	course_id INTEGER not null default 0,
     	foreign key(course_id) references course(course_id)
 ); 
 

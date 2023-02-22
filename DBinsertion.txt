@@ -7,11 +7,11 @@ VALUES
 ( 4, 'Calculus','Mathematical representation of functions and other related topics', 30);
 
 INSERT INTO registration 
-(registration_id, name, surname, date_of_registration, course_id) 
+(registration_id, name, date_of_registration, course_id) 
 VALUES
-( 1, Manuel, Hernández, '3-1-2022', 1),
-( 2, Daniel, López, '2-3-2022', 2),
-( 3, Alejandro, Álvarez, '3-12-2022', 1),
-( 4, José, González, '13-2-2023', 3),
-( 5, Nerea, Hernández, '3-9-2022', 2);
+( 1, 'Manuel', '3-1-2022', 1),
+( 2, 'Daniel', '2-3-2022', 2),
+( 3, 'Alejandro', '3-12-2022', 1),
+( 4, 'José', '13-2-2023', 3),
+( 5, 'Nerea', '3-9-2022', 2);
 
