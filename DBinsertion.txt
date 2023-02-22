@@ -1,0 +1,17 @@
+INSERT INTO course 
+(course_id, name, description, aviable_places) 
+VALUES
+( 1, 'Computers Architecture', 'Principles of new computers architecture', 30),
+( 2, 'Computer Electronics', 'Basic electronic and embeded systems', 50),
+( 3, 'Data Bases', 'Data bases structures and fundamentals', 100),
+( 4, 'Calculus','Mathematical representation of functions and other related topics', 30);
+
+INSERT INTO registration 
+(registration_id, name, surname, date_of_registration, course_id) 
+VALUES
+( 1, Manuel, Hernández, '3-1-2022', 1),
+( 2, Daniel, López, '2-3-2022', 2),
+( 3, Alejandro, Álvarez, '3-12-2022', 1),
+( 4, José, González, '13-2-2023', 3),
+( 5, Nerea, Hernández, '3-9-2022', 2);
+
