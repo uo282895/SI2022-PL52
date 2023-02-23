@@ -1,4 +1,4 @@
-package Windows;
+package app;
 
 import java.awt.EventQueue;
 
@@ -18,7 +18,7 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 
-public class RegisterWindow {
+public class InscriptionsView {
 
 	private JFrame frame;
 	private JTextField nameField;
@@ -34,7 +34,7 @@ public class RegisterWindow {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegisterWindow window = new RegisterWindow();
+					InscriptionsView window = new InscriptionsView();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -46,7 +46,7 @@ public class RegisterWindow {
 	/**
 	 * Create the application.
 	 */
-	public RegisterWindow() {
+	public InscriptionsView() {
 		initialize();
 	}
 
