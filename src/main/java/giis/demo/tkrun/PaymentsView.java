@@ -72,5 +72,5 @@ public class PaymentsView {
 	
 	//Getters and setters used in the controller
 	public JFrame getFrame() { return this.frame; }
-	public JTable getTable() { return this.table; }
+	public JTable getTablePayments() { return this.table; }
 }
