@@ -8,7 +8,6 @@ public class RegistrationEntity {
 	private String surnames;
 	private String phone;
 	private String email;
-	private String bank;
 	private String datetime;
 	private String state;
 	
@@ -43,12 +42,6 @@ public class RegistrationEntity {
 	}
 	public void setEmail(String email) {
 		this.email = email;
-	}
-	public String getBank() {
-		return bank;
-	}
-	public void setBank(String bank) {
-		this.bank = bank;
 	}
 	public String getDatetime() {
 		return datetime;
