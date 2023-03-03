@@ -1,3 +1,4 @@
+package giis.demo.tkrun;
 
 
 import java.awt.EventQueue;
@@ -14,7 +15,7 @@ import java.awt.Window.Type;
 import java.awt.Font;
 import javax.swing.JScrollPane;
 
-public class RegistrationsView {
+public class PaymentsView {
 
 	private JFrame frame;
 	private JTable table;
@@ -26,7 +27,7 @@ public class RegistrationsView {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					RegistrationsView window = new RegistrationsView();
+					PaymentsView window = new PaymentsView();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -38,7 +39,7 @@ public class RegistrationsView {
 	/**
 	 * Create the application.
 	 */
-	public RegistrationsView() {
+	public PaymentsView() {
 		initialize();
 	}
 
