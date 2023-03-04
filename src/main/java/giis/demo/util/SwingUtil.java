@@ -93,10 +93,10 @@ public class SwingUtil {
 	 * @param colProperties Los nombres de atributo de los objetos (ordenados) que se incluiran en el tablemodel
 	 * (cada uno debe disponer del correspondiente getter)
 	 */
-	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties) {
+	public static <E> DefaultTableModel getTableModelFromPojos(List<E> pojos, String[] colProperties) {
 		//Creacion inicial del tablemodel y dimensionamiento
 		//tener en cuenta que para que la tabla pueda mostrar las columnas debera estar dentro de un JScrollPane
-		TableModel tm;
+		DefaultTableModel tm;
 		if (pojos==null) //solo las columnas (p.e. para inicializaciones)
 			return new DefaultTableModel(colProperties,0);
 		else

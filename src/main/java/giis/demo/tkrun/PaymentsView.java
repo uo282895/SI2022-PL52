@@ -48,12 +48,12 @@ public class PaymentsView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("Course registrations");
+		frame.setTitle("Registration of payments");
 		frame.setBounds(100, 100, 535, 490);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel labelInfo = new JLabel("These are the current registrations for the selected course:");
+		JLabel labelInfo = new JLabel("These are the pending payments for active courses:");
 		labelInfo.setFont(new Font("Tahoma", Font.BOLD, 12));
 		labelInfo.setBounds(10, 11, 444, 14);
 		frame.getContentPane().add(labelInfo);

@@ -2,63 +2,64 @@ package giis.demo.tkrun;
 
 public class PaymentDisplayDTO {
 	
-	private String coursename;
-	private String name;
-	private String surnames;
-	private String email;
-	private int fee;
-	private String datehour;
+	private String course_name;
+	private String reg_name;
+	private String reg_surnames;
+	private String reg_email;
+	private int course_fee;
+	private String reg_date_time;
 	
 	
 	//Constructors
 	public PaymentDisplayDTO(){}
 	public PaymentDisplayDTO(String coursename, String name, String surnames, String email, int fee, String datehour) {
-		this.coursename = coursename;
-		this.name = name;
-		this.surnames = surnames;
-		this.email = email;
-		this.fee = fee;
-		this.datehour = datehour;
+		this.course_name = coursename;
+		this.reg_name = name;
+		this.reg_surnames = surnames;
+		this.reg_email = email;
+		this.course_fee = fee;
+		this.reg_date_time = datehour;
 	}
 	
 	
-	//Getters and setters
-	public String getCoursename() {
-		return coursename;
+	public String getCourse_name() {
+		return course_name;
 	}
-	public void setCoursename(String coursename) {
-		this.coursename = coursename;
+	public void setCourse_name(String course_name) {
+		this.course_name = course_name;
 	}
-	public String getName() {
-		return name;
+	public String getReg_name() {
+		return reg_name;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setReg_name(String reg_name) {
+		this.reg_name = reg_name;
 	}
-	public String getSurnames() {
-		return surnames;
+	public String getReg_surnames() {
+		return reg_surnames;
 	}
-	public void setSurnames(String surnames) {
-		this.surnames = surnames;
+	public void setReg_surnames(String reg_surnames) {
+		this.reg_surnames = reg_surnames;
 	}
-	public String getEmail() {
-		return email;
+	public String getReg_email() {
+		return reg_email;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setReg_email(String reg_email) {
+		this.reg_email = reg_email;
 	}
-	public int getFee() {
-		return fee;
+	public int getCourse_fee() {
+		return course_fee;
 	}
-	public void setFee(int fee) {
-		this.fee = fee;
+	public void setCourse_fee(int course_fee) {
+		this.course_fee = course_fee;
 	}
-	public String getDatehour() {
-		return datehour;
+	public String getReg_date_time() {
+		return reg_date_time;
 	}
-	public void setDatehour(String datehour) {
-		this.datehour = datehour;
+	public void setReg_date_time(String reg_date_time) {
+		this.reg_date_time = reg_date_time;
 	}
+	
+
 	
 	
 	

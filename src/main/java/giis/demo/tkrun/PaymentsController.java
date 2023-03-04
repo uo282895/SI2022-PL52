@@ -40,10 +40,12 @@ public class PaymentsController {
 	 */
 	public void getListPayments() {
 		List<PaymentDisplayDTO> payments = model.getListPayments();
-		TableModel tmodel = SwingUtil.getTableModelFromPojos(payments, new String[] {"Course name", "Name", "Surnames", "email", "Course fee", "Date and hour of registration"});
+		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(payments, new String[] {"course_name", "reg_name", "reg_surnames", "reg_email", "course_fee", "reg_date_time"});
+		Object[] newHeaders = {"Course name", "Professional name", "Professional surnames", "email", "Course fee", "Date and hour of registration"};
+		tmodel.setColumnIdentifiers(newHeaders);
 		view.getTablePayments().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTablePayments());
-		
+	
 		//Como se guarda la clave del ultimo elemento seleccionado, restaura la seleccion de los detalles
 		//this.restoreDetail();
 	}

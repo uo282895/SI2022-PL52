@@ -50,16 +50,7 @@ public class SwingMain {
 		frame.setTitle("Main");
 		frame.setBounds(0, 0, 287, 185);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		
-		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
-		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				PaymentsController controller=new PaymentsController(new PaymentsModel(), new PaymentsView());
-				//controller.initController();
-			}
-		});
 		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		frame.getContentPane().add(btnEjecutarTkrun);
 		
 			
 		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
@@ -69,6 +60,15 @@ public class SwingMain {
 				db.createDatabase(false);
 			}
 		});
+		
+		JButton btnPayments = new JButton("Register pending payments");
+		btnPayments.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				PaymentsController controller=new PaymentsController(new PaymentsModel(), new PaymentsView());
+				//controller.initController();
+			}
+		});
+		frame.getContentPane().add(btnPayments);
 		frame.getContentPane().add(btnInicializarBaseDeDatos);
 			
 		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");
