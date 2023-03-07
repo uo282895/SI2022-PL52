@@ -59,7 +59,7 @@ public class CarrerasController {
 		this.getListaCarreras();
 		
 		//Abre la ventana (sustituye al main generado por WindowBuilder)
-		view.getFrame().setVisible(true); 
+		view.getFrame().dispose(); 
 	}
 	/**
 	 * La obtencion de la lista de carreras solo necesita obtener la lista de objetos del modelo 

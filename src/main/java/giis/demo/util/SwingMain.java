@@ -65,7 +65,7 @@ public class SwingMain {
 		btnPayments.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				PaymentsController controller=new PaymentsController(new PaymentsModel(), new PaymentsView());
-				//controller.initController();
+				controller.initController();
 			}
 		});
 		frame.getContentPane().add(btnPayments);

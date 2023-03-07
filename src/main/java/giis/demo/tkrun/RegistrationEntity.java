@@ -3,58 +3,66 @@ package giis.demo.tkrun;
 public class RegistrationEntity {
 	
 	//Attributes
-	private int id;
-	private String name;
-	private String surnames;
-	private String phone;
-	private String email;
-	private String datetime;
-	private String state;
-	
+	private int reg_id;
+	private String reg_name;
+	private String reg_surnames;
+	private String reg_phone;
+	private String reg_email;
+	private String reg_date;
+	private String reg_time;
+	private String reg_state;
 	
 	//Getters and setters
-	public int getId() {
-		return id;
+	public int getReg_id() {
+		return reg_id;
 	}
-	public void setId(int id) {
-		this.id = id;
+	public void setReg_id(int reg_id) {
+		this.reg_id = reg_id;
 	}
-	public String getName() {
-		return name;
+	public String getReg_name() {
+		return reg_name;
 	}
-	public void setName(String name) {
-		this.name = name;
+	public void setReg_name(String reg_name) {
+		this.reg_name = reg_name;
 	}
-	public String getSurnames() {
-		return surnames;
+	public String getReg_surnames() {
+		return reg_surnames;
 	}
-	public void setSurnames(String surnames) {
-		this.surnames = surnames;
+	public void setReg_surnames(String reg_surnames) {
+		this.reg_surnames = reg_surnames;
 	}
-	public String getPhone() {
-		return phone;
+	public String getReg_phone() {
+		return reg_phone;
 	}
-	public void setPhone(String phone) {
-		this.phone = phone;
+	public void setReg_phone(String reg_phone) {
+		this.reg_phone = reg_phone;
 	}
-	public String getEmail() {
-		return email;
+	public String getReg_email() {
+		return reg_email;
 	}
-	public void setEmail(String email) {
-		this.email = email;
+	public void setReg_email(String reg_email) {
+		this.reg_email = reg_email;
 	}
-	public String getDatetime() {
-		return datetime;
+	public String getReg_date() {
+		return reg_date;
 	}
-	public void setDatetime(String datetime) {
-		this.datetime = datetime;
+	public void setReg_date(String reg_date) {
+		this.reg_date = reg_date;
 	}
-	public String getState() {
-		return state;
+	public String getReg_time() {
+		return reg_time;
 	}
-	public void setState(String state) {
-		this.state = state;
+	public void setReg_time(String reg_time) {
+		this.reg_time = reg_time;
 	}
+	public String getReg_state() {
+		return reg_state;
+	}
+	public void setReg_state(String reg_state) {
+		this.reg_state = reg_state;
+	}
+	
+	
 	
 	
 	

@@ -1,12 +1,14 @@
 package giis.demo.util;
 
 import java.lang.reflect.InvocationTargetException;
+import java.sql.Time;
 import java.text.Format;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.SimpleFormatter;
 
 import org.apache.commons.beanutils.BeanUtils;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -120,13 +122,13 @@ public class Util {
 	}
 	
 	/** 
-	 * Convierte fecha repesentada como un string iso a fecha java (para conversion de entradas de tipo fecha)
+	 * Convierte fecha representada como un string iso a fecha java (para conversion de entradas de tipo fecha)
 	 */
 	public static Date isoStringToDate(String isoDateString) {
 		try {
 		return new SimpleDateFormat("yyyy-MM-dd").parse(isoDateString);
 		} catch (ParseException e) {
-			throw new ApplicationException("Formato ISO incorrecto para fecha: "+isoDateString);
+			throw new ApplicationException("Incorrect ISO format for dates: "+isoDateString);
 		}
 	}
 	/** 
@@ -137,4 +139,18 @@ public class Util {
 		return formatter.format(javaDate);
 	}
 	
+	
+	public static Date isoStringToHour(String isoHourString) {
+		try {
+		return new SimpleDateFormat("HH:mm:ss").parse(isoHourString);
+		} catch (ParseException e) {
+			throw new ApplicationException("Incorrect ISO format for hours: "+isoHourString);
+		}
+	}
+	
+	public static String hourToIsoString(Date javaHour) {
+		Format formatter = new SimpleDateFormat("HH:mm:ss");
+		return formatter.format(javaHour);
+	}
+
 }
