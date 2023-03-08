@@ -1,3 +1,4 @@
+package giis.demo.tkrun;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -21,18 +22,36 @@ import javax.swing.JFormattedTextField;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JScrollBar;
+import javax.swing.JTable;
 import javax.swing.JButton;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-public class Courses_creation {
+public class CoursesCreationView {
 
 	private JFrame frame;
 	private JTextField Course_name_textfield;
 	private JTextField course_place_textField;
+	private JButton accept_NewButton;
+	private JButton close_NewButton;
+	private JFormattedTextField course_fee_formattedTextField;
+	private JDateChooser course_start_date_dateChooser;
+	private JTextArea course_description_textArea;
+	private JTextArea course_main_contents_textArea;
+	private JFormattedTextField formattedTextField;
+	private JDateChooser Date_of_erollement_begining_dateChooser;
+	private JDateChooser Date_of_enrollement_end_dateChooser;
+	@SuppressWarnings("rawtypes")
+	private JComboBox course_modality_comboBox;
+	@SuppressWarnings("rawtypes")
+	private JComboBox course_modality_comboBox_1;
+	private JFormattedTextField teachers_remuneration_formattedTextField_2;
+	private JLabel course_palce_label;
+	
 
 	/**
 	 * Launch the application.
@@ -41,7 +60,7 @@ public class Courses_creation {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					Courses_creation window = new Courses_creation();
+					CoursesCreationView window = new CoursesCreationView();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -53,43 +72,18 @@ public class Courses_creation {
 	/**
 	 * Create the application.
 	 */
-	public Courses_creation() {
+	public CoursesCreationView() {
 		initialize();
 	}
 	
-	private float getFloatValue(Object value) {
-		if (value != null) {
-		    // Covert the value to type float
-		    try {
-		        float floatValue = Float.parseFloat((String) value);
-
-		        // Verify if the value is not null
-		        if (floatValue > 0) {
-		            // Valid input
-		        	return floatValue;
-		        } else {
-		            // Show error message if the value is not positive and not null
-		        	JOptionPane.showMessageDialog(null, "Introduce a positive fee value");
-		            throw new NumberFormatException("The fee must be positive and not 0.");
-		        }
-		    } catch (NumberFormatException e) {
-		        JOptionPane.showMessageDialog(null, "Introduce a fee value positive and not null");
-		        e.printStackTrace();
-		    }
-		} else {
-		    // Show an error message if the fee is null
-		    JOptionPane.showMessageDialog(null, "Introduce a positive not null value for the fee quantity");
-		}
-		return (float) -1.0;
-	}
-
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings("unchecked")
 	private void initialize() {
 		frame = new JFrame();
 		frame.setBounds(100, 100, 797, 646);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Plan a New Formative Action");
@@ -109,12 +103,12 @@ public class Courses_creation {
 		Teachers_name_label_1.setBounds(25, 98, 123, 17);
 		frame.getContentPane().add(Teachers_name_label_1);
 		
-		JDateChooser course_start_date_dateChooser = new JDateChooser();
+		course_start_date_dateChooser = new JDateChooser();
 		course_start_date_dateChooser.setBounds(587, 65, 159, 20);
         course_start_date_dateChooser.setDateFormatString("dd/MM/yy HH:mm");
         frame.getContentPane().add(course_start_date_dateChooser);
 		
-		JTextArea course_description_textArea = new JTextArea();
+		course_description_textArea = new JTextArea();
 		course_description_textArea.setBounds(25, 289, 721, 98);
 		course_description_textArea.setWrapStyleWord(true);
 		course_description_textArea.setLineWrap(true);
@@ -128,7 +122,7 @@ public class Courses_creation {
 		course_main_contents_label.setBounds(25, 398, 166, 17);
 		frame.getContentPane().add(course_main_contents_label);
 		
-		JTextArea course_main_contents_textArea = new JTextArea();
+		course_main_contents_textArea = new JTextArea();
 		course_main_contents_textArea.setWrapStyleWord(true);
 		course_main_contents_textArea.setBounds(25, 426, 721, 98);
 		course_main_contents_textArea.setLineWrap(true);
@@ -142,7 +136,7 @@ public class Courses_creation {
 		course_number_of_hours_label.setBounds(386, 98, 191, 17);
 		frame.getContentPane().add(course_number_of_hours_label);
 		
-		JFormattedTextField formattedTextField = new JFormattedTextField();
+		formattedTextField = new JFormattedTextField();
 		formattedTextField.setBounds(587, 96, 62, 20);
 		formattedTextField.setText("2");
 		frame.getContentPane().add(formattedTextField);
@@ -159,17 +153,17 @@ public class Courses_creation {
 		Teachers_name_label_1_1_1.setBounds(386, 130, 166, 17);
 		frame.getContentPane().add(Teachers_name_label_1_1_1);
 		
-		JDateChooser Date_of_erollement_begining_dateChooser = new JDateChooser();
+		Date_of_erollement_begining_dateChooser = new JDateChooser();
 		Date_of_erollement_begining_dateChooser.setBounds(174, 126, 161, 20);
 		Date_of_erollement_begining_dateChooser.setDateFormatString("dd/MM/yy HH:mm");
 		frame.getContentPane().add(Date_of_erollement_begining_dateChooser);
 		
-		JDateChooser Date_of_enrollement_end_dateChooser = new JDateChooser();
+		Date_of_enrollement_end_dateChooser = new JDateChooser();
 		Date_of_enrollement_end_dateChooser.setBounds(587, 127, 159, 20);
 		Date_of_enrollement_end_dateChooser.setDateFormatString("dd/MM/yy HH:mm");
 		frame.getContentPane().add(Date_of_enrollement_end_dateChooser);
 		
-		JFormattedTextField course_fee_formattedTextField = new JFormattedTextField();
+		course_fee_formattedTextField = new JFormattedTextField();
 		course_fee_formattedTextField.setBounds(174, 96, 62, 20);
 		frame.getContentPane().add(course_fee_formattedTextField);
 		
@@ -181,7 +175,7 @@ public class Courses_creation {
 		Course_name_label_1.setBounds(25, 163, 137, 17);
 		frame.getContentPane().add(Course_name_label_1);
 		
-		JLabel course_palce_label = new JLabel("Course place:");
+		course_palce_label = new JLabel("Course place:");
 		course_palce_label.setBounds(386, 164, 145, 17);
 		frame.getContentPane().add(course_palce_label);
 		
@@ -190,19 +184,8 @@ public class Courses_creation {
 		course_place_textField.setColumns(10);
 		frame.getContentPane().add(course_place_textField);
 		
-		JComboBox course_modality_comboBox = new JComboBox();
-		course_modality_comboBox.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if(course_modality_comboBox.getSelectedItem().equals("Online")){
-					course_palce_label.setVisible(false);
-					course_place_textField.setVisible(false);
-				}else {
-					course_palce_label.setVisible(true);
-					course_place_textField.setVisible(true);
-				}
-			}
-		});
-		
+		course_modality_comboBox = new JComboBox();
+				
 		course_modality_comboBox.setBounds(174, 160, 161, 22);
 		course_modality_comboBox.setModel(new DefaultComboBoxModel(new String[] {"In person", "Online"}));
 		frame.getContentPane().add(course_modality_comboBox);
@@ -215,17 +198,14 @@ public class Courses_creation {
 		course_fee_formattedTextField_1.setBounds(440, 241, 62, 20);
 		frame.getContentPane().add(course_fee_formattedTextField_1);
 		
-		JButton close_NewButton = new JButton("Close");
+		close_NewButton = new JButton("Close");
+		
 		close_NewButton.setBounds(25, 560, 159, 36);
 		frame.getContentPane().add(close_NewButton);
 		
-		JComboBox course_modality_comboBox_1 = new JComboBox();
+		course_modality_comboBox_1 = new JComboBox();
 		course_modality_comboBox_1.setBounds(174, 199, 161, 22);
 		frame.getContentPane().add(course_modality_comboBox_1);
-
-		JLabel date_label = new JLabel("Date");
-		date_label.setBounds(545, 244, 166, 17);
-		frame.getContentPane().add(date_label);
 		
 		JLabel Course_name_label_1_1 = new JLabel("Select the teacher:");
 		Course_name_label_1_1.setBounds(25, 202, 137, 17);
@@ -235,7 +215,7 @@ public class Courses_creation {
 		Teachers_name_label_1_3.setBounds(386, 202, 166, 17);
 		frame.getContentPane().add(Teachers_name_label_1_3);
 		
-		JFormattedTextField teachers_remuneration_formattedTextField_2 = new JFormattedTextField();
+		teachers_remuneration_formattedTextField_2 = new JFormattedTextField();
 		teachers_remuneration_formattedTextField_2.setBounds(587, 200, 95, 20);
 		frame.getContentPane().add(teachers_remuneration_formattedTextField_2);
 		
@@ -243,41 +223,32 @@ public class Courses_creation {
 		course_number_of_hours_label_1_1_1.setBounds(692, 202, 42, 17);
 		frame.getContentPane().add(course_number_of_hours_label_1_1_1);
 		
-		JButton accept_NewButton = new JButton("Check and accept");
-		accept_NewButton.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				String course_name = Course_name_textfield.getText(); // Name of the course to be created
-				
-				// Storing the course start date and checking null issue
-				Date course_start_date = course_start_date_dateChooser.getDate();
-				if(course_start_date == null) {
-					JOptionPane.showMessageDialog(null, "The course start date must not be null");
-				}
-				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm");
-				String course_start_date_string = format.format(course_start_date);
-				
-				// Storing the course enrollment start date and checking null issue
-				Date course_enrollement_start_date = Date_of_erollement_begining_dateChooser.getDate();
-				if(course_enrollement_start_date == null) {
-					JOptionPane.showMessageDialog(null, "The course enrollment start date must not be null");
-				}
-				String course_enrollement_start_date_string = format.format(course_enrollement_start_date);
-				
-				// Storing the course enrollment end date and checking null issue
-				Date course_enrollement_end_date = Date_of_enrollement_end_dateChooser.getDate();
-				if(course_enrollement_end_date == null) {
-					JOptionPane.showMessageDialog(null, "The course enrollment start date must not be null");
-				}
-				String course_enrollement_end_date_string = format.format(course_enrollement_end_date);
-				
-				float fee = getFloatValue(course_fee_formattedTextField.getText());
-				
-			}
-		});
+		accept_NewButton = new JButton("Check and accept");
+		
+		
 		accept_NewButton.setBounds(587, 560, 159, 36);
 		frame.getContentPane().add(accept_NewButton);
-		
-		
 	}
+	
+	
+	//Getters and setters used in the controller
+		public JFrame getFrame() { return this.frame; }
+		public JButton getAcceptButton() {return this.accept_NewButton; }
+		public JButton getCloseButton () {return this.close_NewButton;}
+		public JTextField getCourse_name_textfield() {return this.Course_name_textfield;};
+		public JTextField getcourse_place_textField () {return this.course_place_textField ;}
+		public JFormattedTextField getcourse_fee_formattedTextField() {return this.course_fee_formattedTextField;}
+		public JDateChooser getcourse_start_date_dateChooser() {return this.course_start_date_dateChooser;}
+		public JTextArea getcourse_description_textArea() {return this.course_description_textArea;}
+		public JTextArea getcourse_main_contents_textArea() {return this.course_main_contents_textArea;}
+		public JFormattedTextField getformattedTextField() {return this.formattedTextField;}
+		public JDateChooser getDate_of_erollement_begining_dateChooser() {return this.Date_of_erollement_begining_dateChooser;}
+		public JDateChooser getDate_of_enrollement_end_dateChooser() {return this.Date_of_enrollement_end_dateChooser;}
+		@SuppressWarnings("rawtypes")
+		public JComboBox getcourse_modality_comboBox() {return this.course_modality_comboBox;}
+		@SuppressWarnings("rawtypes")
+		public JComboBox getcourse_modality_comboBox_1() {return this.course_modality_comboBox_1;}
+		public JFormattedTextField getteachers_remuneration_formattedTextField_2() {return this.teachers_remuneration_formattedTextField_2;}
+		public JLabel getcourse_palce_label() { return this.course_palce_label;}
+	
 }

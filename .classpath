@@ -42,6 +42,5 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/danie/OneDrive - Universidad de Oviedo/3º carrera/2º Cuatrimestre/Information Systems/Practices/Courses project/Courses_Project/src/main/jcalendar-1.4.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

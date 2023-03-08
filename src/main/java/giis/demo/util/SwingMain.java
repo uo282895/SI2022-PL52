@@ -7,6 +7,11 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import giis.demo.tkrun.*;
+import javax.swing.GroupLayout;
+import javax.swing.GroupLayout.Alignment;
+import javax.swing.LayoutStyle.ComponentPlacement;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
@@ -48,30 +53,30 @@ public class SwingMain {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Main");
-		frame.setBounds(0, 0, 287, 185);
-		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+		frame.setBounds(0, 0, 483, 265);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
 		
 		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
+		btnEjecutarTkrun.setLocation(218, 46);
 		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
-				controller.initController();
+				
 			}
 		});
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		frame.getContentPane().add(btnEjecutarTkrun);
 		
 			
 		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
+		btnInicializarBaseDeDatos.setLocation(153, 11);
 		btnInicializarBaseDeDatos.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				Database db=new Database();
 				db.createDatabase(false);
 			}
 		});
-		frame.getContentPane().add(btnInicializarBaseDeDatos);
 			
 		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");
+		btnCargarDatosIniciales.setLocation(84, 101);
 		btnCargarDatosIniciales.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				Database db=new Database();
@@ -79,9 +84,52 @@ public class SwingMain {
 				db.loadDatabase();
 			}
 		});
-		frame.getContentPane().add(btnCargarDatosIniciales);
+		
+		JButton btnNewButton = new JButton("Create a new formative action");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				CoursesCreationController controller=new CoursesCreationController(new CoursesCreationModel(), new CoursesCreationView());
+				controller.initController();
+			}
+		});
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		GroupLayout groupLayout = new GroupLayout(frame.getContentPane());
+		groupLayout.setHorizontalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(111)
+							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
+								.addComponent(btnInicializarBaseDeDatos)
+								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
+									.addComponent(btnNewButton)
+									.addComponent(btnCargarDatosIniciales))))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(129)
+							.addComponent(btnEjecutarTkrun)))
+					.addContainerGap(151, Short.MAX_VALUE))
+		);
+		groupLayout.setVerticalGroup(
+			groupLayout.createParallelGroup(Alignment.LEADING)
+				.addGroup(groupLayout.createSequentialGroup()
+					.addContainerGap()
+					.addComponent(btnInicializarBaseDeDatos)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnCargarDatosIniciales)
+					.addPreferredGap(ComponentPlacement.RELATED)
+					.addComponent(btnEjecutarTkrun)
+					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addComponent(btnNewButton)
+					.addGap(100))
+		);
+		groupLayout.setHonorsVisibility(false);
+		frame.getContentPane().setLayout(groupLayout);
 	}
 
 	public JFrame getFrame() { return this.frame; }
-	
 }
