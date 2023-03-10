@@ -232,4 +232,6 @@ public class InscriptionsView {
 		table.getColumnModel().getColumn(0).setPreferredWidth(200);
 		
 	}
+	
+	
 }
