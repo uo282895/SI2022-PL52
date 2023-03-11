@@ -1,9 +1,31 @@
 --Datos para carga inicial de la base de datos
---delete from carreras;
---insert into carreras(id,inicio,fin,fecha,descr) values 
---	(100,'2016-10-05','2016-10-25','2016-11-09','finalizada'),
---	(101,'2016-10-05','2016-10-25','2016-11-10','en fase 3'),
---	(102,'2016-11-05','2016-11-09','2016-11-20','en fase 2'),
---	(103,'2016-11-10','2016-11-15','2016-11-21','en fase 1'),
---	(104,'2016-11-11','2016-11-15','2016-11-22','antes inscripcion');
+delete from Teacher;
+delete from Course;
+delete from Invoice;
+delete from Registration;
+delete from Payment;
 
+-- Insertar datos en la tabla Teacher
+INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email)
+VALUES (1, 'Juan', 'Pérez García', '123456789', 'juan.perez@gmail.com'),
+       (2, 'María', 'López Fernández', '987654321', 'maria.lopez@hotmail.com');
+
+-- Insertar datos en la tabla Course
+INSERT INTO Course (course_id, course_name, description, objectives, course_hours, course_date, course_time, course_start_period, course_end_period, total_places, available_places, course_fee, place, course_state, teacher_id)
+VALUES (1, 'Programación en Java', 'Aprende a programar en Java desde cero', 'Conocer los conceptos fundamentales de la programación orientada a objetos y las características del lenguaje Java', 40, '2023-03-15', '14:00:00', '2023-03-15', '2023-05-30', 20, 20, 100, 'Sala 101', 'Activo', 1),
+       (2, 'Diseño gráfico', 'Aprende a diseñar gráficos para la web', 'Conocer los principios del diseño gráfico y las herramientas para la creación de gráficos', 20, '2023-03-20', '16:00:00', '2023-03-20', '2023-04-30', 15, 15, 50, 'Sala 102', 'Activo', 2);
+
+-- Insertar datos en la tabla Invoice
+INSERT INTO Invoice (invoice_id, invoice_number, invoice_date, invoice_quantity, invoice_state, teacher_id, course_id)
+VALUES (1, 10001, '2023-03-25', 1, 'Pendiente', 1, 1),
+       (2, 10002, '2023-04-01', 2, 'Pagada', 2, 2);
+
+-- Insertar datos en la tabla Registration
+INSERT INTO Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_time, reg_state, course_id)
+VALUES (1, 'Pedro', 'Martínez López', '555555555', 'pedro.martinez@gmail.com', '2023-03-20', '10:00:00', 'Pendiente', 1),
+       (2, 'Ana', 'González Sánchez', '666666666', 'ana.gonzalez@hotmail.com', '2023-03-25', '16:00:00', 'Pagado', 2);
+
+-- Insertar datos en la tabla Payment
+INSERT INTO Payment (payment_id, amount, payment_date, payment_time, payment_type, invoice_id, reg_id)
+VALUES (1, 100, '2023-03-30', '12:00:00', 'Tarjeta de crédito', 1, null),
+       (2, 50, '2023-04-01', '18:00:00', 'Paypal', null, 2);

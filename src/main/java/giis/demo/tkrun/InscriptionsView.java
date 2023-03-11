@@ -3,6 +3,11 @@ package giis.demo.tkrun;
 
 
 import java.awt.EventQueue;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -34,6 +39,9 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.awt.GridBagLayout;
 
 public class InscriptionsView {
 
@@ -44,6 +52,7 @@ public class InscriptionsView {
 	private JTextField phoneField;
 	private JTextField emailField;
 	private JTable table;
+	private JTable description;
 
 	/**
 	 * Launch the application.
@@ -89,10 +98,6 @@ public class InscriptionsView {
 		infoTitle.setFont(new Font("Arial", Font.PLAIN, 12));
 		infoTitle.setBounds(412, 25, 91, 13);
 		frame.getContentPane().add(infoTitle);
-		
-		JLabel infoText = new JLabel("");
-		infoText.setBounds(412, 49, 232, 57);
-		frame.getContentPane().add(infoText);
 		
 		JLabel lblNewLabel = new JLabel("Total places:");
 		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 12));
@@ -167,7 +172,7 @@ public class InscriptionsView {
 		confirmButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to formalize the inscription?"
-						+ "\nThis is nor reversible and will generate a debt according to the price of the selected formative action.");
+						+ "\nThis is not reversible and will generate a debt according to the price of the selected formative action.");
 				if (confirm == JOptionPane.YES_OPTION) {
 					frame.dispose();
 				}
@@ -214,9 +219,19 @@ public class InscriptionsView {
 			new Object[][] {
 			},
 			new String[] {
-				"Formative Action", "Date", "Place", "Price"
 			}
 		));
+		
+		JPanel panel_1 = new JPanel();
+		panel_1.setBounds(412, 48, 225, 59);
+		frame.getContentPane().add(panel_1);
+		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		panel_1.add(scrollPane_1);
+		
+		description = new JTable();
+		scrollPane_1.setViewportView(description);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -229,9 +244,17 @@ public class InscriptionsView {
 		
 		JMenu mnNewMenu_1 = new JMenu("Edit");
 		menuBar.add(mnNewMenu_1);
-		table.getColumnModel().getColumn(0).setPreferredWidth(200);
 		
 	}
 	
+	public String getFechaHoy()  { 
+		LocalDate now = LocalDate.now(); 
+		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-mm-dd");
+		String strdate = now.format(dtf);
+		return strdate; 
+	}
 	
+	public JTable getTableCourses() { return this.table; }
+	public JTable getDetalleCourses() { return this.description; }
+	public JTable getListCourses() { return this.table; }
 }
