@@ -106,12 +106,13 @@ public class SwingMain {
 							.addGap(111)
 							.addGroup(groupLayout.createParallelGroup(Alignment.TRAILING)
 								.addComponent(btnInicializarBaseDeDatos)
-								.addGroup(groupLayout.createParallelGroup(Alignment.LEADING)
-									.addComponent(btnNewButton)
-									.addComponent(btnCargarDatosIniciales))))
+								.addComponent(btnCargarDatosIniciales)))
 						.addGroup(groupLayout.createSequentialGroup()
 							.addGap(129)
-							.addComponent(btnEjecutarTkrun)))
+							.addComponent(btnEjecutarTkrun))
+						.addGroup(groupLayout.createSequentialGroup()
+							.addGap(119)
+							.addComponent(btnNewButton)))
 					.addContainerGap(151, Short.MAX_VALUE))
 		);
 		groupLayout.setVerticalGroup(
@@ -123,9 +124,9 @@ public class SwingMain {
 					.addComponent(btnCargarDatosIniciales)
 					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnEjecutarTkrun)
-					.addPreferredGap(ComponentPlacement.UNRELATED)
+					.addPreferredGap(ComponentPlacement.RELATED)
 					.addComponent(btnNewButton)
-					.addGap(100))
+					.addGap(105))
 		);
 		groupLayout.setHonorsVisibility(false);
 		frame.getContentPane().setLayout(groupLayout);

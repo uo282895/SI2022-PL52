@@ -48,7 +48,7 @@ public class CoursesCreationView {
 	@SuppressWarnings("rawtypes")
 	private JComboBox course_modality_comboBox;
 	@SuppressWarnings("rawtypes")
-	private JComboBox course_modality_comboBox_1;
+	private JComboBox course_teacher_comboBox;
 	private JFormattedTextField teachers_remuneration_formattedTextField_2;
 	private JLabel course_palce_label;
 	
@@ -145,11 +145,11 @@ public class CoursesCreationView {
 		course_number_of_hours_label_1.setBounds(669, 98, 42, 17);
 		frame.getContentPane().add(course_number_of_hours_label_1);
 		
-		JLabel Teachers_name_label_1_1 = new JLabel("Enrollment start date:");
+		JLabel Teachers_name_label_1_1 = new JLabel("Enrolment start date:");
 		Teachers_name_label_1_1.setBounds(25, 126, 171, 17);
 		frame.getContentPane().add(Teachers_name_label_1_1);
 		
-		JLabel Teachers_name_label_1_1_1 = new JLabel("Enrollment end date:");
+		JLabel Teachers_name_label_1_1_1 = new JLabel("Enrolment end date:");
 		Teachers_name_label_1_1_1.setBounds(386, 130, 166, 17);
 		frame.getContentPane().add(Teachers_name_label_1_1_1);
 		
@@ -187,7 +187,6 @@ public class CoursesCreationView {
 		course_modality_comboBox = new JComboBox();
 				
 		course_modality_comboBox.setBounds(174, 160, 161, 22);
-		course_modality_comboBox.setModel(new DefaultComboBoxModel(new String[] {"In person", "Online"}));
 		frame.getContentPane().add(course_modality_comboBox);
 		
 		JLabel Teachers_name_label_1_2 = new JLabel("Total number of places available:");
@@ -203,9 +202,9 @@ public class CoursesCreationView {
 		close_NewButton.setBounds(25, 560, 159, 36);
 		frame.getContentPane().add(close_NewButton);
 		
-		course_modality_comboBox_1 = new JComboBox();
-		course_modality_comboBox_1.setBounds(174, 199, 161, 22);
-		frame.getContentPane().add(course_modality_comboBox_1);
+		course_teacher_comboBox = new JComboBox();
+		course_teacher_comboBox.setBounds(174, 199, 161, 22);
+		frame.getContentPane().add(course_teacher_comboBox);
 		
 		JLabel Course_name_label_1_1 = new JLabel("Select the teacher:");
 		Course_name_label_1_1.setBounds(25, 202, 137, 17);
@@ -247,7 +246,7 @@ public class CoursesCreationView {
 		@SuppressWarnings("rawtypes")
 		public JComboBox getcourse_modality_comboBox() {return this.course_modality_comboBox;}
 		@SuppressWarnings("rawtypes")
-		public JComboBox getcourse_modality_comboBox_1() {return this.course_modality_comboBox_1;}
+		public JComboBox getcourse_teacher_comboBox() {return this.course_teacher_comboBox;}
 		public JFormattedTextField getteachers_remuneration_formattedTextField_2() {return this.teachers_remuneration_formattedTextField_2;}
 		public JLabel getcourse_palce_label() { return this.course_palce_label;}
 	
