@@ -3,36 +3,21 @@ package giis.demo.tkrun;
 
 
 import java.awt.EventQueue;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import java.awt.BorderLayout;
-import javax.swing.SwingConstants;
 import java.awt.Component;
 import java.awt.Rectangle;
-import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Font;
 import java.awt.Dimension;
 import javax.swing.JScrollPane;
-import javax.swing.ScrollPaneConstants;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.JButton;
-import javax.swing.JDialog;
+import javax.swing.JComponent;
 import javax.swing.JPanel;
-import javax.swing.JList;
 import javax.swing.JTable;
-import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.AbstractListModel;
-import java.awt.Color;
-import javax.swing.border.LineBorder;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
@@ -41,7 +26,6 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.awt.GridBagLayout;
 
 public class InscriptionsView {
 
@@ -53,6 +37,7 @@ public class InscriptionsView {
 	private JTextField emailField;
 	private JTable table;
 	private JTable description;
+	private JButton viewCourses;
 
 	/**
 	 * Launch the application.
@@ -210,17 +195,17 @@ public class InscriptionsView {
 		frame.getContentPane().add(panel);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		JScrollPane scrollPane = new JScrollPane();
-		panel.add(scrollPane);
 		
 		table = new JTable();
-		scrollPane.setViewportView(table);
 		table.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
 			}
 		));
+		
+		JScrollPane scrollPane = new JScrollPane(table);
+		panel.add(scrollPane);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(412, 48, 225, 59);
@@ -232,6 +217,14 @@ public class InscriptionsView {
 		
 		description = new JTable();
 		scrollPane_1.setViewportView(description);
+		
+		JButton viewCourses = new JButton("view courses");
+		viewCourses.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		viewCourses.setBounds(196, 21, 120, 21);
+		frame.getContentPane().add(viewCourses);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);
@@ -245,6 +238,10 @@ public class InscriptionsView {
 		JMenu mnNewMenu_1 = new JMenu("Edit");
 		menuBar.add(mnNewMenu_1);
 		
+		if (placesLeftLabel.getText().equals("0")) {
+			confirmButton.setEnabled(false);;
+		}
+		
 	}
 	
 	public String getFechaHoy()  { 
@@ -254,7 +251,15 @@ public class InscriptionsView {
 		return strdate; 
 	}
 	
+	public JFrame getFrame() { return this.frame; }
 	public JTable getTableCourses() { return this.table; }
 	public JTable getDetalleCourses() { return this.description; }
 	public JTable getListCourses() { return this.table; }
+	public JButton getViewCourses() { return this.viewCourses; }
+	public JTextField getnameField() { return this.nameField; }
+	public JTextField getsurnamesField() { return this.surnamesField; }
+	public JTextField getdniField() { return this.dniField; }
+	public JTextField getphoneField() { return this.phoneField; }
+	public JTextField getemailField() { return this.emailField; }
+
 }
