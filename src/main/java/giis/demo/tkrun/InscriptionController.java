@@ -85,6 +85,7 @@ public class InscriptionController {
 		//Obtiene la clave seleccinada y la guarda para recordar la seleccion en futuras interacciones
 		this.lastSelectedKey=SwingUtil.getSelectedKey(insview.getTableCourses());
 		int idCourse=Integer.parseInt(this.lastSelectedKey);
+		;
 		
 		//Detalles de la carrera seleccionada
 		CourseEntity course=insmodel.getCourse(idCourse);

@@ -22,7 +22,7 @@ public class InscriptionModel {
 		public List<CourseDisplayDTO> getListCourses(Date fechaInsc){
 			String sql = SQL_List_Courses;
 			String d = Util.dateToIsoString(fechaInsc);
-			return db.executeQueryPojo(CourseDisplayDTO.class, sql, d, d, d, d, d);
+			return db.executeQueryPojo(CourseDisplayDTO.class, sql);
 		}
 		
 		public void insertNewProffessional(String name, String surnames, String phone, String email) {
@@ -34,7 +34,7 @@ public class InscriptionModel {
 		}
 		
 		public CourseEntity getCourse(int id) {
-			String sql="SELECT id,course_name, course_date, place, course_fee from Course where id=?";
+			String sql="SELECT course_id, course_name, course_date, place, course_fee from Course where id=?";
 			List<CourseEntity> courses=db.executeQueryPojo(CourseEntity.class, sql, id);
 			validateCondition(!courses.isEmpty(),"Id of course not found: "+id);
 			return courses.get(0);

@@ -26,6 +26,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
 
 public class InscriptionsView {
 
@@ -245,10 +246,7 @@ public class InscriptionsView {
 	}
 	
 	public String getFechaHoy()  { 
-		LocalDate now = LocalDate.now(); 
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy-mm-dd");
-		String strdate = now.format(dtf);
-		return strdate; 
+		return "2023-03-14";
 	}
 	
 	public JFrame getFrame() { return this.frame; }
