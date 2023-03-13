@@ -39,8 +39,9 @@ public class CoursesCreationModel {
 		
 		int course_id = c_id++; // This needs to be fixed
 		/*try {
-			String sql = "SELECT MAX(course_id) FROM Course;";
-			course_id = db.executeQueryPojo(CourseDisplayDTO.class, sql).get(0).getCourse_id() + 1;
+			
+			String sql = "SELECT course_id FROM Course WHERE course_id = (SELECT MAX(course_id) FROM Course);";
+			course_id = db.executeQueryPojo(CourseMaxIdDisplayDTO.class, sql).get(0).getCourse_id() + 1;
 	        
 	    } catch (Exception e) {
 	        e.printStackTrace();

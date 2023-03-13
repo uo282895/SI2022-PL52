@@ -16,12 +16,13 @@ public class CourseDisplayDTO {
 	private float course_fee;
 	private String place;
 	private String course_state;
+	private int teacher_id;
 		
 	public CourseDisplayDTO(int course_id, String course_name, String description, String objectives,
 			int course_hours, String course_date, String course_time, String course_start_period,
 			String course_end_period, int total_places, int available_places, float course_fee, String place,
-			String course_state) {
-		super();
+			String course_state, int teacher_id) {
+		
 		this.course_id = course_id;
 		this.course_name = course_name;
 		this.description = description;
@@ -36,8 +37,17 @@ public class CourseDisplayDTO {
 		this.course_fee = course_fee;
 		this.place = place;
 		this.course_state = course_state;
+		this.teacher_id = teacher_id;
 	}
 	
+	public int getTeacher_id() {
+		return teacher_id;
+	}
+
+	public void setTeacher_id(int teacher_id) {
+		this.teacher_id = teacher_id;
+	}
+
 	public int getCourse_id() {
 		return course_id;
 	}
