@@ -5,6 +5,8 @@ import javax.swing.JFrame;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import giis.demo.tkrun.*;
 
@@ -48,12 +50,12 @@ public class MainSecretary {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Main");
-		frame.setBounds(0, 0, 287, 185);
+		frame.setBounds(0, 0, 613, 378);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
+		frame.getContentPane().setLayout(null);
 		
 			
-		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
+		JButton btnInicializarBaseDeDatos = new JButton("Initialize in blank the Data Base");
 		btnInicializarBaseDeDatos.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				Database db=new Database();
@@ -68,10 +70,12 @@ public class MainSecretary {
 				controller.initControllerPayments();
 			}
 		});
+		btnPayments.setBounds(334, 100, 237, 41);
 		frame.getContentPane().add(btnPayments);
+		btnInicializarBaseDeDatos.setBounds(20, 11, 244, 41);
 		frame.getContentPane().add(btnInicializarBaseDeDatos);
 			
-		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");
+		JButton btnCargarDatosIniciales = new JButton("Load initial data for testing");
 		btnCargarDatosIniciales.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				Database db=new Database();
@@ -79,16 +83,31 @@ public class MainSecretary {
 				db.loadDatabase();
 			}
 		});
+		btnCargarDatosIniciales.setBounds(334, 11, 237, 41);
 		frame.getContentPane().add(btnCargarDatosIniciales);
 		
-		JButton btnCourses = new JButton("Consult courses");
+		JButton btnCourses = new JButton("Consult formative actions");
 		btnCourses.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				SecretaryController controller = new SecretaryController(new SecretaryModel(), new CoursesView());
 				controller.initControllerCourses();
 			}
 		});
+		btnCourses.setBounds(24, 168, 240, 41);
 		frame.getContentPane().add(btnCourses);
+		
+		JButton btnNewButton = new JButton("Create a new formative action");
+		btnNewButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				CoursesCreationController controller=new CoursesCreationController(new CoursesCreationModel(), new CoursesCreationView());
+				controller.initController();
+			}
+		});
+		frame.getContentPane().add(btnNewButton);
+		btnNewButton.setBounds(24, 100, 240, 41);
+				
+		
 	}
 
 	public JFrame getFrame() { return this.frame; }

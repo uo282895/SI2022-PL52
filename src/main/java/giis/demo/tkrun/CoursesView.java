@@ -51,7 +51,7 @@ public class CoursesView {
 		frmConsultFormativeActions = new JFrame();
 		frmConsultFormativeActions.setTitle("Consult formative actions");
 		frmConsultFormativeActions.setBounds(100, 100, 656, 490);
-		frmConsultFormativeActions.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frmConsultFormativeActions.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frmConsultFormativeActions.getContentPane().setLayout(null);
 		
 		JLabel lblInfo = new JLabel("This is the list of all the courses taught at COIIPA:");

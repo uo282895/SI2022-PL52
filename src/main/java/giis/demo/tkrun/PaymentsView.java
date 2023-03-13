@@ -57,7 +57,7 @@ public class PaymentsView {
 		frame = new JFrame();
 		frame.setTitle("Registration of payments");
 		frame.setBounds(150, 150, 940, 490);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblInfo = new JLabel("These are the pending payments for active courses:");
