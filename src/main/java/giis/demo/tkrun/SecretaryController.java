@@ -191,11 +191,13 @@ public class SecretaryController {
 		String courseName = "";
 		String regDate = "";
 		String regName = "";
+		String regHour = "";
 		if (index >=0) {//No errors if the fields are not selected
 			fee = model.getListPayments().get(index).getCourse_fee();
 			courseName = model.getListPayments().get(index).getCourse_name();
 			regDate = model.getListPayments().get(index).getReg_date();
 			regName = model.getListPayments().get(index).getReg_name();
+			regHour = model.getListPayments().get(index).getReg_time();
 		}
 		
 		//Get the course places, depending on which course the registration is associated
@@ -204,38 +206,42 @@ public class SecretaryController {
 		
 		//Get a correct id (the last one + 1)
 		int payid = model.getLastPaymentId();
-		if (Objects.isNull(payid)) {
-			payid = 1;
-		}else payid++;
+		payid++;
 		
-		double days = model.differenceDates(Util.isoStringToDate(regDate), Util.isoStringToDate(date));
+		//double days = model.differenceDates(Util.isoStringToDate(regDate), Util.isoStringToDate(date));
+		
+		boolean days = model.differenceDatesHour(Util.isoStringToDate(regDate), Util.isoStringToDate(date), Util.isoStringToHour(regHour), Util.isoStringToHour(hour));
 		
 		//All the different possibilities according to courses
-		if (quant == fee && days <= 2) {//CORRECT, but there are more restrictions
-			model.insertAmountDate(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+		if (quant == fee && days) {//CORRECT
+			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place", 
 					"Correct registration of the payment.", 1);
-		} else if (quant == fee && places > 0 && days > 2) {//Wrong, but registered (
-			model.insertAmountDate(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+		} else if (quant == fee && places > 0 && !days) {//Wrong, but registered (
+			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.\n"
-					+ "The payment has been done more than 48 hours after the registration but there where places available in the course", 
+					+ "The payment has been done more than 48 hours after the registration but there where available places in the course", 
 					"Correct registration of the payment.", 1);
-		} else if (quant > fee && days <=2) {//Wrong, but registered (MORE MONEY)
-			model.insertAmountDate(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+		} else if (quant > fee && days) {//Wrong, but registered (MORE MONEY)
+			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place."
 					+ "In addition, COIIPA must give back the professional the additional money he has paid.", 
 					"Correct registration of the payment.", 1);
-		} else if (quant > fee && places > 0 && days > 2) {//Wrong, but registered (MORE MONEY AND DAYS)
-			model.insertAmountDate(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+		} else if (quant > fee && places > 0 && !days) {//Wrong, but registered (MORE MONEY AND DAYS)
+			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place."
-					+ "The payment has been done more than 48 hours after the registration but there where places available."
+					+ "The payment has been done more than 48 hours after the registration but there where available places."
 					+ "In addition, COIIPA must give back the professional the additional money he has paid." , 
 					"Correct registration of the payment.", 1);
+			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 		} else if (quant < fee) {
-			model.insertAmountDate(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			SwingUtil.showMessage("The professional cannot be assigned a place for the course. Please, warn her/him to pay the whole fee", "Wrong data", 0);//WRONG
-		} else if (quant >= fee && days > 2 && places == 0) {
-			model.insertAmountDate(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			SwingUtil.showMessage("The professional cannot be assigned a place for the course. Please, warn her/him to pay the whole fee.", "Wrong data", 0);//WRONG
+		} else if (quant >= fee && !days && places == 0) {
+			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			SwingUtil.showMessage("The professional cannot be assigned a place for the course. He/she has paid more than 2 days after the registration date "
 					+ "and at this moment there are no free places.","Wrong data",0);
 		}

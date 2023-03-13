@@ -1,6 +1,8 @@
 package giis.demo.tkrun;
 
+import java.time.Duration;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
@@ -50,8 +52,21 @@ public class SecretaryModel {
 		return db.executeQueryPojo(CourseDisplayDTO.class, sql);
 	}
 	
-	public void insertAmountDate(int payid, int amount, Date paydate, Date payhour, int regid) {
+	public void validateDate(Date paydate, Date payhour, int regid) {
+		RegistrationEntity registration = this.getRegistration(regid);
+		LocalDate localdate = LocalDate.now();
+		
+		//Actual date
+		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+		Date regdate = Util.isoStringToDate(registration.getReg_date());
+		
+		validateCondition(paydate.compareTo(today) <= 0, "You cannot input future dates. Please, enter a valid date.");
+		validateCondition(regdate.compareTo(paydate) <= 0, "The payment date must be after the registration date");
+	}
+	
+	public void updateTable(int payid, int amount, Date paydate, Date payhour, int regid) {
 		String sql = SQL_INSERT_AMOUNTDATEHOUR;
+		
 		String sql_updatestate = "UPDATE Registration " //Update the state (it is now correctly registered)
 				+ "set reg_state = 'Confirmed' where reg_id = ?";
 		String sql_updateplaces = "UPDATE Course " //Update the available places (-1 because someone has been registered9
@@ -59,16 +74,11 @@ public class SecretaryModel {
 		
 		int places = getPlacesCourse(regid);//places of the course associated to the registration
 		int courseid = getCourseId(regid);//id of the course 
-		RegistrationEntity registration = this.getRegistration(regid);
-		LocalDate localdate = LocalDate.now();
-		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
-		Date regdate = Util.isoStringToDate(registration.getReg_date());
-		validateCondition(paydate.compareTo(today) <= 0, "You cannot input future dates. Please, enter a valid date.");
-		validateCondition(regdate.compareTo(paydate) < 0, "The payment date must be after the registration date");
 		
 		
 		String d = Util.dateToIsoString(paydate);
 		String h = Util.hourToIsoString(payhour);
+		
 		db.executeUpdate(sql, payid, amount, d, h, regid);
 		db.executeUpdate(sql_updatestate, regid);
 		db.executeUpdate(sql_updateplaces, places - 1, courseid);
@@ -90,8 +100,14 @@ public class SecretaryModel {
 	
 	//Get the last id recorded on the table payments
 	public int getLastPaymentId () {
-		String sql = "select max(payment_id) from Payment";
-		return db.executeQueryPojo(PaymentInputDTO.class, sql).get(0).getPayment_id(); 
+		String sql = "select * from Payment order by payment_id";
+		
+		List<PaymentInputDTO> list = db.executeQueryPojo(PaymentInputDTO.class, sql);
+		int size = list.size();
+		if (size == 0) {
+			return 0;
+		}
+		else return list.get(size -1).getPayment_id();
 	}
 	
 	//Obtains the id of the registration of the selected values on the table
@@ -138,11 +154,30 @@ public class SecretaryModel {
 			throw new ApplicationException(message);
 	}
 	
+	/*
 	public double differenceDates(Date regdate, Date paydate) {
 		long fechaInicialMs = regdate.getTime();
 		long fechaFinalMs = paydate.getTime();
 		long diff = fechaFinalMs - fechaInicialMs;
 		double days = Math.floor(diff / (1000 * 60 * 60 * 24));
 		return days;
+	}*/
+	
+	public boolean differenceDatesHour(Date regdate, Date paydate, Date reghour, Date payhour) {
+		// Convert input dates to LocalDateTime objects
+		LocalDateTime regDateTime = LocalDateTime.ofInstant(regdate.toInstant(), ZoneId.systemDefault());
+		LocalDateTime payDateTime = LocalDateTime.ofInstant(paydate.toInstant(), ZoneId.systemDefault());
+		LocalDateTime regHourDateTime = LocalDateTime.ofInstant(reghour.toInstant(), ZoneId.systemDefault());
+		LocalDateTime payHourDateTime = LocalDateTime.ofInstant(payhour.toInstant(), ZoneId.systemDefault());
+		
+		// Combine date and hour into a single LocalDateTime object
+		LocalDateTime regDateTimeWithHour = regDateTime.withHour(regHourDateTime.getHour()).withSecond(regHourDateTime.getSecond());
+		LocalDateTime payDateTimeWithHour = payDateTime.withHour(payHourDateTime.getHour()).withSecond(payHourDateTime.getSecond());
+		
+		// Calculate the duration between the two date-times
+		Duration duration = Duration.between(regDateTimeWithHour, payDateTimeWithHour);
+		
+		// Check if the duration is less than or equal to 48 hours
+		return duration.compareTo(Duration.ofHours(48)) <= 0;
 	}
 }
