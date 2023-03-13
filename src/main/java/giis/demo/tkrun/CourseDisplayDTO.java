@@ -1,12 +1,15 @@
 package giis.demo.tkrun;
 
 public class CourseDisplayDTO {
+	
 	private String course_name;
 	private String course_date;
 	private String place;
 	private int course_fee;
 	private int available_places;
 	private int total_places;
+	
+	
 	public CourseDisplayDTO() {}
 	public CourseDisplayDTO(String rowname, String rowdate, String rowplace, int rowfee) {
 		this.course_name = rowname;

@@ -19,14 +19,8 @@ public class InscriptionModel {
 				"UPDATE Course SET available_places = available_places - 1 WHERE course_id = <curso_id>;\r\n";
 				
 		
-		public List<Object[]> getListCoursesArray(Date fechaInsc){
-			String sql = SQL_List_Courses;
-			String d = Util.dateToIsoString(fechaInsc);
-			return db.executeQueryArray(sql, d);
-		}
-		
 		public List<CourseDisplayDTO> getListCourses(Date fechaInsc){
-			String sql = "SELECT course_name, course_date, place, course_fee from Course";
+			String sql = SQL_List_Courses;
 			String d = Util.dateToIsoString(fechaInsc);
 			return db.executeQueryPojo(CourseDisplayDTO.class, sql, d, d, d, d, d);
 		}
