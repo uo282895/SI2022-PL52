@@ -1,5 +1,7 @@
 package giis.demo.tkrun;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -52,14 +54,18 @@ public class SecretaryModel {
 		String sql = SQL_INSERT_AMOUNTDATEHOUR;
 		String sql_updatestate = "UPDATE Registration " //Update the state (it is now correctly registered)
 				+ "set reg_state = 'Confirmed' where reg_id = ?";
-		String sql_updateplaces = "UPDATE Course" //Update the available places (-1 because someone has been registered9
-				+ "set available_places = ? where course_id = ";
+		String sql_updateplaces = "UPDATE Course " //Update the available places (-1 because someone has been registered9
+				+ "set available_places = ? where course_id = ?";
 		
 		int places = getPlacesCourse(regid);//places of the course associated to the registration
 		int courseid = getCourseId(regid);//id of the course 
 		RegistrationEntity registration = this.getRegistration(regid);
+		LocalDate localdate = LocalDate.now();
+		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		Date regdate = Util.isoStringToDate(registration.getReg_date());
+		validateCondition(paydate.compareTo(today) <= 0, "You cannot input future dates. Please, enter a valid date.");
 		validateCondition(regdate.compareTo(paydate) < 0, "The payment date must be after the registration date");
+		
 		
 		String d = Util.dateToIsoString(paydate);
 		String h = Util.hourToIsoString(payhour);

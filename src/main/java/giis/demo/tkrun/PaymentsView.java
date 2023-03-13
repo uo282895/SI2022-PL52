@@ -24,6 +24,8 @@ public class PaymentsView {
 	private JButton btnCancel; 
 	private JButton btnConfirm;
 	private JTextField tfHour;
+	private JButton btnRefresh;
+	private JLabel lblTodaysDate;
 
 	/**
 	 * Launch the application.
@@ -54,18 +56,18 @@ public class PaymentsView {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Registration of payments");
-		frame.setBounds(100, 100, 656, 490);
+		frame.setBounds(150, 150, 940, 490);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblInfo = new JLabel("These are the pending payments for active courses:");
 		lblInfo.setFont(new Font("Tahoma", Font.BOLD, 12));
-		lblInfo.setBounds(10, 11, 444, 14);
+		lblInfo.setBounds(10, 11, 373, 14);
 		frame.getContentPane().add(lblInfo);
 		
 		//Scroll panel and table to show the headers
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 49, 622, 211);
+		scrollPane.setBounds(10, 49, 910, 211);
 		frame.getContentPane().add(scrollPane);
 		
 		table = new JTable();
@@ -111,11 +113,11 @@ public class PaymentsView {
 		frame.getContentPane().add(lblFormat);
 		
 		btnCancel = new JButton("Cancel");
-		btnCancel.setBounds(444, 419, 89, 23);
+		btnCancel.setBounds(732, 419, 89, 23);
 		frame.getContentPane().add(btnCancel);
 		
 		btnConfirm = new JButton("Confirm");
-		btnConfirm.setBounds(543, 419, 89, 23);
+		btnConfirm.setBounds(831, 419, 89, 23);
 		frame.getContentPane().add(btnConfirm);
 		
 		JLabel lblHour = new JLabel("Hour of payment:");
@@ -128,6 +130,19 @@ public class PaymentsView {
 		tfHour.setBounds(197, 366, 154, 20);
 		frame.getContentPane().add(tfHour);
 		tfHour.setColumns(10);
+		
+		btnRefresh = new JButton("Refresh list");
+		btnRefresh.setBounds(776, 11, 140, 23);
+		frame.getContentPane().add(btnRefresh);
+		
+		JLabel lblFormatHour = new JLabel("(Format: \"HH:MM:SS\")");
+		lblFormatHour.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblFormatHour.setBounds(364, 369, 173, 14);
+		frame.getContentPane().add(lblFormatHour);
+		
+		lblTodaysDate = new JLabel("");
+		lblTodaysDate.setBounds(510, 11, 154, 14);
+		frame.getContentPane().add(lblTodaysDate);
 	}
 	
 	
@@ -139,4 +154,8 @@ public class PaymentsView {
 	public JTextField getTFHour() {return this.tfHour;}
 	public JButton getBtnCancel() {return this.btnCancel;}
 	public JButton getBtnConfirm() {return this.btnConfirm;}
+	public JButton getBtnRefresh() {return this.btnRefresh;}
+	
+	//Set today's date
+	public void setTodayDate(String date) {this.lblTodaysDate.setText("Today's date: "+date);}
 }
