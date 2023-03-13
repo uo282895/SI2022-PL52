@@ -48,18 +48,9 @@ public class SwingMain {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Main");
-		frame.setBounds(0, 0, 287, 185);
+		frame.setBounds(0, 0, 435, 289);
+		frame.getContentPane().setLayout(null);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-		
-		JButton btnEjecutarTkrun = new JButton("Ejecutar giis.demo.tkrun");
-		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
-			public void actionPerformed(ActionEvent e) {
-				CarrerasController controller=new CarrerasController(new CarrerasModel(), new CarrerasView());
-				controller.initController();
-			}
-		});
-		frame.getContentPane().setLayout(new BoxLayout(frame.getContentPane(), BoxLayout.Y_AXIS));
-		frame.getContentPane().add(btnEjecutarTkrun);
 		
 			
 		JButton btnInicializarBaseDeDatos = new JButton("Inicializar Base de Datos en Blanco");
@@ -69,6 +60,7 @@ public class SwingMain {
 				db.createDatabase(false);
 			}
 		});
+		btnInicializarBaseDeDatos.setBounds(69, 11, 257, 31);
 		frame.getContentPane().add(btnInicializarBaseDeDatos);
 			
 		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");
@@ -79,7 +71,19 @@ public class SwingMain {
 				db.loadDatabase();
 			}
 		});
+		btnCargarDatosIniciales.setBounds(69, 53, 257, 31);
 		frame.getContentPane().add(btnCargarDatosIniciales);
+		
+		JButton btnEjecutarTkrun = new JButton("Register cancellations to courses");
+		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				RegistrationCancellationController controller=
+						new RegistrationCancellationController(new RegistrationCancellationModel(), 
+								new RegistrationCancellationView());
+			}
+		});
+		btnEjecutarTkrun.setBounds(69, 95, 257, 31);
+		frame.getContentPane().add(btnEjecutarTkrun);
 	}
 
 	public JFrame getFrame() { return this.frame; }
