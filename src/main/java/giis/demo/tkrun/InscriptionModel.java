@@ -12,12 +12,13 @@ public class InscriptionModel {
 				"SELECT course_name, course_date, place, course_fee from Course";
 		
 		public static final String SQL_Insert_Proffessional=
-				"INSERT into Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_time, reg_state, course_id)\r\n"
+				"INSERT into Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_time, reg_state, course_id)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, 'Received', ?)";
 		
 		public static final String SQL_Proff_Registered=
-				"UPDATE Course SET available_places = available_places - 1 WHERE course_id = <curso_id>;\r\n";
-				
+				"UPDATE Course SET available_places = available_places - 1 WHERE course_id = <curso_id>;";
+
+		
 		
 		public List<CourseDisplayDTO> getListCourses(Date fechaInsc){
 			String sql = SQL_List_Courses;
@@ -30,7 +31,7 @@ public class InscriptionModel {
 			String sql_updateplaces = SQL_Proff_Registered;
 			
 			db.executeUpdate(sql, name, surnames, phone, email);
-			db.executeUpdate(sql_updateplaces, -1);
+			db.executeUpdate(sql_updateplaces);
 		}
 		
 		public CourseEntity getCourse(int id) {

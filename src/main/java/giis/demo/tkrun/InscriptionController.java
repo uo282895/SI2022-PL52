@@ -35,7 +35,7 @@ public class InscriptionController {
 			public void mouseReleased(MouseEvent e) {
 				//no usa mouseClicked porque al establecer seleccion simple en la tabla de carreras
 				//el usuario podria arrastrar el raton por varias filas e interesa solo la ultima
-				SwingUtil.exceptionWrapper(() -> updateDetail());
+				//SwingUtil.exceptionWrapper(() -> updateDetail());
 			}
 		});
 	}
@@ -52,7 +52,7 @@ public class InscriptionController {
 		SwingUtil.autoAdjustColumns(insview.getTableCourses());
 		
 		//Como se guarda la clave del ultimo elemento seleccionado, restaura la seleccion de los detalles
-		this.restoreDetail();
+		//this.restoreDetail();
 	}
 	
 	public void insertNewProffessional() {
