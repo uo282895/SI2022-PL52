@@ -85,6 +85,8 @@ public class CoursesCreationView {
 		frame.setBounds(100, 100, 797, 646);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setTitle("Plan a new Formative Action");
+		
 		
 		JLabel lblNewLabel = new JLabel("Plan a New Formative Action");
 		lblNewLabel.setBounds(330, 11, 171, 25);
