@@ -7,7 +7,7 @@ import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 import giis.demo.util.Util;
 
-public class PaymentsModel {
+public class SecretaryModel {
 	//private static final String MSG_FECHA_INSCRIPCION_NO_NULA = "La fecha de inscripcion no puede ser nula";
 
 	private Database db=new Database();

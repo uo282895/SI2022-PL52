@@ -13,22 +13,22 @@ import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
 
-public class PaymentsController {
+public class SecretaryController {
 	
-	private PaymentsModel model;
+	private SecretaryModel model;
 	private PaymentsView viewPayments;
 	private CoursesView viewCourses;
 	private String lastSelectedKey=""; //recuerda la ultima fila seleccionada para restaurarla cuando cambie la tabla de carreras
 	
 	//Constructors (one for each view)
-	public PaymentsController(PaymentsModel m, PaymentsView v) {
+	public SecretaryController(SecretaryModel m, PaymentsView v) {
 		this.model = m;
 		this.viewPayments = v;
 		//no model initialization but the view
 		this.initViewPayments();
 	}
 	
-	public PaymentsController(PaymentsModel m, CoursesView v) {
+	public SecretaryController(SecretaryModel m, CoursesView v) {
 		this.model = m;
 		this.viewCourses = v;
 		//no model initialization but the view

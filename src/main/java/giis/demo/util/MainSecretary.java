@@ -15,7 +15,7 @@ import giis.demo.tkrun.*;
  * No sigue MVC pues es solamente temporal para que durante el desarrollo se tenga posibilidad
  * de realizar acciones de inicializacion
  */
-public class SwingMain {
+public class MainSecretary {
 
 	private JFrame frame;
 
@@ -26,7 +26,7 @@ public class SwingMain {
 		EventQueue.invokeLater(new Runnable() { //NOSONAR codigo autogenerado
 			public void run() {
 				try {
-					SwingMain window = new SwingMain();
+					MainSecretary window = new MainSecretary();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace(); //NOSONAR codigo autogenerado
@@ -38,7 +38,7 @@ public class SwingMain {
 	/**
 	 * Create the application.
 	 */
-	public SwingMain() {
+	public MainSecretary() {
 		initialize();
 	}
 
@@ -64,7 +64,7 @@ public class SwingMain {
 		JButton btnPayments = new JButton("Register pending payments");
 		btnPayments.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				PaymentsController controller=new PaymentsController(new PaymentsModel(), new PaymentsView());
+				SecretaryController controller=new SecretaryController(new SecretaryModel(), new PaymentsView());
 				controller.initControllerPayments();
 			}
 		});
@@ -84,7 +84,7 @@ public class SwingMain {
 		JButton btnCourses = new JButton("Consult courses");
 		btnCourses.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				PaymentsController controller = new PaymentsController(new PaymentsModel(), new CoursesView());
+				SecretaryController controller = new SecretaryController(new SecretaryModel(), new CoursesView());
 				controller.initControllerCourses();
 			}
 		});
