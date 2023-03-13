@@ -9,6 +9,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
 import giis.demo.tkrun.*;
+import javax.swing.JSeparator;
 
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
@@ -17,7 +18,7 @@ import giis.demo.tkrun.*;
  * No sigue MVC pues es solamente temporal para que durante el desarrollo se tenga posibilidad
  * de realizar acciones de inicializacion
  */
-public class MainSecretary {
+public class AdministrationWindow {
 
 	private JFrame frame;
 
@@ -28,7 +29,7 @@ public class MainSecretary {
 		EventQueue.invokeLater(new Runnable() { //NOSONAR codigo autogenerado
 			public void run() {
 				try {
-					MainSecretary window = new MainSecretary();
+					AdministrationWindow window = new AdministrationWindow();
 					window.frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace(); //NOSONAR codigo autogenerado
@@ -40,7 +41,7 @@ public class MainSecretary {
 	/**
 	 * Create the application.
 	 */
-	public MainSecretary() {
+	public AdministrationWindow() {
 		initialize();
 	}
 
@@ -106,10 +107,23 @@ public class MainSecretary {
 		});
 		frame.getContentPane().add(btnNewButton);
 		btnNewButton.setBounds(24, 100, 240, 41);
-				
+		
+		JButton btnEjecutarTkrun = new JButton("Register cancellations to courses");
+		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				RegistrationCancellationController controller=
+						new RegistrationCancellationController(new RegistrationCancellationModel(), 
+								new RegistrationCancellationView());
+			}
+		});
+		btnEjecutarTkrun.setBounds(334, 168, 237, 41);
+		frame.getContentPane().add(btnEjecutarTkrun);
+		
+		JSeparator separator = new JSeparator();
+		separator.setBounds(20, 71, 551, 18);
+		frame.getContentPane().add(separator);
 		
 	}
 
 	public JFrame getFrame() { return this.frame; }
-	
 }
