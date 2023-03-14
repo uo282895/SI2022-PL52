@@ -30,7 +30,7 @@ public class SecretaryModel {
 	
 	public static final String SQL_INSERT_AMOUNTDATEHOUR=
 			"INSERT into Payment(payment_id, amount, payment_date, payment_time, payment_type, "
-			+ "invoice_id, reg_id) values(?, ?, ?, ?,'Good',null, ?)";
+			+ "invoice_id, reg_id) values(?, ?, ?, ?,'Professional registration',null, ?)";
 	
 	/**
 	 * Obtiene la lista de carreras activas en forma objetos para una fecha de inscripcion dada

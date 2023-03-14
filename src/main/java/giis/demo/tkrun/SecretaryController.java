@@ -226,15 +226,15 @@ public class SecretaryController {
 			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 		} else if (quant > fee && days) {//Wrong, but registered (MORE MONEY)
 			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place."
-					+ "In addition, COIIPA must give back the professional the additional money he has paid.", 
+			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.\n"
+					+ "In addition, COIIPA must give back the professional the additional money he has paid: " + Integer.toString(quant - fee) + " €", 
 					"Correct registration of the payment.", 1);
 			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 		} else if (quant > fee && places > 0 && !days) {//Wrong, but registered (MORE MONEY AND DAYS)
 			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place."
+			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.\n"
 					+ "The payment has been done more than 48 hours after the registration but there where available places."
-					+ "In addition, COIIPA must give back the professional the additional money he has paid." , 
+					+ "In addition, COIIPA must give back the professional the additional money he has paid: " + Integer.toString(quant - fee) + " €", 
 					"Correct registration of the payment.", 1);
 			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 		} else if (quant < fee) {
