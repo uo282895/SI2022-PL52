@@ -13,6 +13,7 @@ import java.awt.Dimension;
 import javax.swing.JScrollPane;
 import javax.swing.JSeparator;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JPanel;
@@ -70,7 +71,7 @@ public class InscriptionsView {
 		frame = new JFrame();
 		frame.getContentPane().setName("");
 		frame.setBounds(100, 100, 680, 507);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel csLabel = new JLabel("Course selection:");
@@ -196,17 +197,14 @@ public class InscriptionsView {
 		frame.getContentPane().add(panel);
 		panel.setLayout(new GridLayout(1, 0, 0, 0));
 		
-		
-		table = new JTable();
-		table.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-			}
-		));
-		
 		JScrollPane scrollPane = new JScrollPane(table);
 		panel.add(scrollPane);
+		
+		
+		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		table.setDefaultEditor(Object.class, null);
+		scrollPane.setViewportView(table);
 		
 		JPanel panel_1 = new JPanel();
 		panel_1.setBounds(412, 48, 225, 59);
@@ -218,14 +216,6 @@ public class InscriptionsView {
 		
 		description = new JTable();
 		scrollPane_1.setViewportView(description);
-		
-		JButton viewCourses = new JButton("view courses");
-		viewCourses.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		viewCourses.setBounds(196, 21, 120, 21);
-		frame.getContentPane().add(viewCourses);
 		
 		JMenuBar menuBar = new JMenuBar();
 		frame.setJMenuBar(menuBar);

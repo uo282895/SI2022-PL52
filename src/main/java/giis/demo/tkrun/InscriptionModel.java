@@ -22,7 +22,6 @@ public class InscriptionModel {
 		
 		public List<CourseDisplayDTO> getListCourses(Date fechaInsc){
 			String sql = SQL_List_Courses;
-			String d = Util.dateToIsoString(fechaInsc);
 			return db.executeQueryPojo(CourseDisplayDTO.class, sql);
 		}
 		

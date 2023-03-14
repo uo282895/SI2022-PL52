@@ -69,7 +69,7 @@ public class CarrerasController {
 		List<CarreraDisplayDTO> carreras=model.getListaCarreras(Util.isoStringToDate(view.getFechaHoy()));
 		TableModel tmodel=SwingUtil.getTableModelFromPojos(carreras, new String[] {"id", "descr", "estado"});
 		view.getTablaCarreras().setModel(tmodel);
-		SwingUtil.autoAdjustColumns(view.getTablaCarreras());
+		
 		
 		//Como se guarda la clave del ultimo elemento seleccionado, restaura la seleccion de los detalles
 		this.restoreDetail();
@@ -78,6 +78,8 @@ public class CarrerasController {
 		List<Object[]> carrerasList=model.getListaCarrerasArray(Util.isoStringToDate(view.getFechaHoy()));
 		ComboBoxModel<Object> lmodel=SwingUtil.getComboModelFromList(carrerasList);
 		view.getListaCarreras().setModel(lmodel);
+		
+		SwingUtil.autoAdjustColumns(view.getTablaCarreras());
 	}
 	/**
 	 * Restaura la informacion del detalle de la carrera para visualizar los valores correspondientes

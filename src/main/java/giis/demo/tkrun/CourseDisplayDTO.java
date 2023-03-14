@@ -11,22 +11,76 @@ public class CourseDisplayDTO {
 	
 	
 	public CourseDisplayDTO() {}
-	public CourseDisplayDTO(String rowname, String rowdate, String rowplace, int rowfee) {
-		this.course_name = rowname;
-		this.course_date = rowdate;
-		this.place = rowplace;
-		this.course_fee = rowfee;
+
+
+	public String getCourse_name() {
+		return course_name;
 	}
-	public String getName() { return this.course_name; }
-	public String getDate() { return this.course_date; }
-	public String getPlace() { return this.place; }
-	public int getFee() { return this.course_fee; }
-	public int getAvailable_places() { return this.available_places; }
-	public int getTotal_places() { return this.total_places; }
-	public void setName(String value) { this.course_name = value; }
-	public void setDate(String value) { this.course_date = value; }
-	public void setPlace(String value) { this.place = value; }
-	public void setFee(int value) { this.course_fee = value; }
-	public void setAvailablePlaces(int value) { this.available_places = value; }
-	public void setTotalPlaces(int value) { this.total_places = value; }
+
+
+	public void setCourse_name(String course_name) {
+		this.course_name = course_name;
+	}
+
+
+	public String getCourse_date() {
+		return course_date;
+	}
+
+
+	public void setCourse_date(String course_date) {
+		this.course_date = course_date;
+	}
+
+
+	public String getPlace() {
+		return place;
+	}
+
+
+	public void setPlace(String place) {
+		this.place = place;
+	}
+
+
+	public int getCourse_fee() {
+		return course_fee;
+	}
+
+
+	public void setCourse_fee(int course_fee) {
+		this.course_fee = course_fee;
+	}
+
+
+	public int getAvailable_places() {
+		return available_places;
+	}
+
+
+	public void setAvailable_places(int available_places) {
+		this.available_places = available_places;
+	}
+
+
+	public int getTotal_places() {
+		return total_places;
+	}
+
+
+	public void setTotal_places(int total_places) {
+		this.total_places = total_places;
+	}
+
+
+	public CourseDisplayDTO(String course_name, String course_date, String place, int course_fee, int available_places,
+			int total_places) {
+		super();
+		this.course_name = course_name;
+		this.course_date = course_date;
+		this.place = place;
+		this.course_fee = course_fee;
+		this.available_places = available_places;
+		this.total_places = total_places;
+	}
 }
