@@ -50,7 +50,7 @@ public class AdministrationWindow {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("Main");
+		frame.setTitle("Administration Window");
 		frame.setBounds(0, 0, 613, 378);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
