@@ -51,6 +51,7 @@ public class CoursesCreationView {
 	private JComboBox course_teacher_comboBox;
 	private JFormattedTextField teachers_remuneration_formattedTextField_2;
 	private JLabel course_palce_label;
+	JFormattedTextField course_fee_formattedTextField_1;
 	
 
 	/**
@@ -195,7 +196,7 @@ public class CoursesCreationView {
 		Teachers_name_label_1_2.setBounds(216, 243, 227, 17);
 		frame.getContentPane().add(Teachers_name_label_1_2);
 		
-		JFormattedTextField course_fee_formattedTextField_1 = new JFormattedTextField();
+		course_fee_formattedTextField_1 = new JFormattedTextField();
 		course_fee_formattedTextField_1.setBounds(440, 241, 62, 20);
 		frame.getContentPane().add(course_fee_formattedTextField_1);
 		
@@ -251,5 +252,11 @@ public class CoursesCreationView {
 		public JComboBox getcourse_teacher_comboBox() {return this.course_teacher_comboBox;}
 		public JFormattedTextField getteachers_remuneration_formattedTextField_2() {return this.teachers_remuneration_formattedTextField_2;}
 		public JLabel getcourse_palce_label() { return this.course_palce_label;}
+
+		public JFormattedTextField getCourse_fee_formattedTextField_1() {return course_fee_formattedTextField_1;}
+
+		public void setCourse_fee_formattedTextField_1(JFormattedTextField course_fee_formattedTextField_1) {
+			this.course_fee_formattedTextField_1 = course_fee_formattedTextField_1;}
+
 	
 }

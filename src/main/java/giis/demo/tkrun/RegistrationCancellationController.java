@@ -146,9 +146,9 @@ public class RegistrationCancellationController {
 				view.getCancellation_dateJDateChooser().setCalendar(null);
 				int sel = view.getTable().getSelectedRow();
 				int id = (int)view.getTable().getValueAt(sel, 0);
-				String course_name = (String)view.getTable().getValueAt(sel, 1);
-				String reg_name = (String)view.getTable().getValueAt(sel, 2);
-				String reg_surname = (String)view.getTable().getValueAt(sel, 3);
+				String course_name = (String)view.getTable().getValueAt(sel, 1); // Get the course name from the table
+				String reg_name = (String)view.getTable().getValueAt(sel, 2); // Get the Professional name from the table
+				String reg_surname = (String)view.getTable().getValueAt(sel, 3); // Get the Professional surname from the table
 				view.getSelected_registration_label().setText("ID " + id + " from "+ reg_name + " "
 				+ reg_surname + " for " + course_name + " course");
 			}

@@ -81,41 +81,32 @@ VALUES
 INSERT INTO Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_time, reg_state, course_id)
 VALUES 
     
-    (13, 'Isabella', 'Wilson', '321654987', 'isabella.wilson@email.com', '2023-03-25', '14:00:00', 'registered', 7),
-    (14, 'Liam', 'Davis', '654987321', 'liam.davis@email.com', '2023-03-26', '16:00:00', 'registered', 7),
-    (15, 'Mason', 'Anderson', '987321654', 'mason.anderson@email.com', '2023-03-27', '10:00:00', 'registered', 8),
-    (16, 'Evelyn', 'Moore', '321789654', 'evelyn.moore@email.com', '2023-03-28', '14:00:00', 'registered', 8),
-    (17, 'Noah', 'Martin', '123456789', 'noah.martin@email.com', '2023-03-29', '10:00:00', 'registered', 9),
-    (18, 'Charlotte', 'Clark', '987654321', 'charlotte.clark@email.com', '2023-03-30', '14:00:00', 'registered', 9),
-    (19, 'Amelia', 'Rodriguez', '456789123', 'amelia.rodriguez@email.com', '2023-03-31', '16:00:00', 'registered', 10),
-    (20, 'Sophia', 'Garcia', '789123456', 'sophia.garcia@email.com', '2023-04-01', '10:00:00', 'registered', 10);
+    (13, 'Isabella', 'Wilson', '321654987', 'isabella.wilson@email.com', '2023-03-25', '14:00:00', 'Registered', 7),
+    (14, 'Liam', 'Davis', '654987321', 'liam.davis@email.com', '2023-03-26', '16:00:00', 'Registered', 7),
+    (15, 'Mason', 'Anderson', '987321654', 'mason.anderson@email.com', '2023-03-27', '10:00:00', 'Registered', 8),
+    (16, 'Evelyn', 'Moore', '321789654', 'evelyn.moore@email.com', '2023-03-28', '14:00:00', 'Registered', 8),
+    (17, 'Noah', 'Martin', '123456789', 'noah.martin@email.com', '2023-03-29', '10:00:00', 'Registered', 9),
+    (18, 'Charlotte', 'Clark', '987654321', 'charlotte.clark@email.com', '2023-03-30', '14:00:00', 'Registered', 9),
+    (19, 'Amelia', 'Rodriguez', '456789123', 'amelia.rodriguez@email.com', '2023-03-31', '16:00:00', 'Registered', 10),
+    (20, 'Sophia', 'Garcia', '789123456', 'sophia.garcia@email.com', '2023-04-01', '10:00:00', 'Registered', 10);
 
 INSERT INTO Invoice (invoice_id, invoice_number, invoice_date, invoice_quantity, invoice_state, teacher_id, course_id)
 VALUES
-  (1, 1001, '2023-03-01', 100, 'Paid', null, 1),
-  (2, 1002, '2023-03-02', 100, 'Paid', null, 2),
-  (3, 1003, '2023-03-03', 80, 'Paid', null, 3),
-  (4, 1004, '2023-03-04', 120, 'Paid', null, 4),
-  (5, 1005, '2023-03-05', 90, 'Paid', null, 5),
-  (6, 1006, '2023-03-06', 60, 'Paid', null, 6),
-  (7, 1007, '2023-03-07', 110, 'Paid', null, 7),
-  (8, 1008, '2023-03-08', 70, 'Paid', null, 8),
-  (9, 1009, '2023-03-09', 130, 'Paid', null, 9),
-  (10, 1010, '2023-03-10', 85, 'Paid', null, 10);
+  (1, 1001, '2023-03-01', 100, 'Paid', null, 1);
 
 -- Payment corresponding to the invoice
 INSERT INTO Payment (payment_id, amount, payment_date, payment_time, payment_type, invoice_id, reg_id)
 VALUES
   (1, 100, '2023-03-01', '14:30:00', 'Bank transfer', 1, 1),
-  (2, 50, '2023-03-02', '10:15:00', 'Bank transfer', 2, 2),
-  (3, 80, '2023-03-03', '11:45:00', 'Bank transfer', 3, 3),
-  (4, 120, '2023-03-04', '15:00:00', 'Bank transfer', 4, 4),
-  (5, 90, '2023-03-05', '09:00:00', 'Bank transfer', 5, 5),
-  (6, 60, '2023-03-06', '13:30:00', 'Bank transfer', 6, 6),
-  (7, 110, '2023-03-07', '16:00:00', 'Bank transfer', 7, 7),
-  (8, 70, '2023-03-08', '08:45:00', 'Bank transfer', 8, 8),
-  (9, 130, '2023-03-09', '12:15:00', 'Bank transfer', 9, 9),
-  (10, 85, '2023-03-10', '17:30:00', 'Bank transfer', 10, 10);
+  (2, 50, '2023-03-02', '10:15:00', 'Bank transfer', 1, 2),
+  (3, 80, '2023-03-03', '11:45:00', 'Bank transfer', 1, 3),
+  (4, 120, '2023-03-04', '15:00:00', 'Bank transfer', 1, 4),
+  (5, 90, '2023-03-05', '09:00:00', 'Bank transfer', 1, 5),
+  (6, 60, '2023-03-06', '13:30:00', 'Bank transfer', 1, 6),
+  (7, 110, '2023-03-07', '16:00:00', 'Bank transfer', 1, 7),
+  (8, 70, '2023-03-08', '08:45:00', 'Bank transfer', 1, 8),
+  (9, 130, '2023-03-09', '12:15:00', 'Bank transfer', 1, 9),
+  (10, 85, '2023-03-10', '17:30:00', 'Bank transfer', 1, 10);
 
 
 

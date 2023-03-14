@@ -17,13 +17,13 @@ public class RegistrationCancellationModel {
 			+ "Payment.amount "
 			+ "FROM Course "
 			+ "INNER JOIN Registration ON Course.course_id = Registration.course_id "
-			+ "INNER JOIN Invoice ON Course.course_id = Invoice.course_id "
-			+ "INNER JOIN Payment ON Invoice.invoice_id = Payment.invoice_id "
-			+ "WHERE Registration.reg_state != 'cancelled';";
+			+ "INNER JOIN Payment ON Payment.reg_id = Registration.reg_id "
+			+ "WHERE Registration.reg_state != 'Cancelled' "
+			+ "ORDER BY Registration.reg_id;";
 	
 	public static final String SQL_UPDATE_CANCELLATION=
 			"UPDATE Registration "
-			+ "SET reg_state = 'cancelled' "
+			+ "SET reg_state = 'Cancelled' "
 			+ "WHERE reg_id = ?;";
 	
 	public void insertCancellation(int id) {

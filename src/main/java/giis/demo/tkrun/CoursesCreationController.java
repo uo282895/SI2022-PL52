@@ -281,7 +281,7 @@ public class CoursesCreationController {
 				float teacher_remuneration = getFloatValue(view.getteachers_remuneration_formattedTextField_2().getText());
 				
 				// Store the number of available places 
-				int n_places = getIntegerValue(view.getcourse_fee_formattedTextField().getText());
+				int n_places = getIntegerValue(view.getCourse_fee_formattedTextField_1().getText());
 				
 				
 				// Store the id of the selected teacher
@@ -332,6 +332,7 @@ public class CoursesCreationController {
 							course_enrollement_start_date_string, course_enrollement_end_date_string, fee, 
 							place, n_hours, teacher_remuneration, n_places, course_teacher_id, 
 							course_objectives, course_main_contents);
+					System.out.println(n_places);
 					
 					// Create a custom dialog box with an "OK" button
 					JDialog dialog = new JDialog();
