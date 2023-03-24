@@ -36,6 +36,11 @@ public class CoursesCreationController {
 	Random rand = new Random();
     private int c_id = rand.nextInt(1000);
 	
+    private String error_message = "There were some errors introduced:\n\n";
+    private boolean error = false;
+    public boolean float_error = false;
+    private boolean week3_warning = false;
+    private boolean date_before_today = false;
 	
 	public CoursesCreationController(CoursesCreationModel m, CoursesCreationView v) {
 		this.model = m;
@@ -56,15 +61,27 @@ public class CoursesCreationController {
 		        	return floatValue;
 		        } else {
 		            // Show error message if the value is not positive and not null
-		        	JOptionPane.showMessageDialog(null, "The fee, remuneration and hours value must be positive");
+		        	//JOptionPane.showMessageDialog(null, "The fee, remuneration and hours value must be positive");
+		        	error = true;
+		        	if(!float_error){
+		        		error_message += "- The fee, remuneration and hours value must be positive.\n";		
+		        	}
+		        	float_error = true;
 		        }
 		    } catch (NumberFormatException e) {
-		        JOptionPane.showMessageDialog(null, "The fee, remuneration and hours value must be positive and not null");
+		        // JOptionPane.showMessageDialog(null, "The fee, remuneration and hours value must be positive and not null");
+		        error = true;
+		        if(!float_error){
+		        	error_message += "- The fee, remuneration and hours value must be positive and not null.\n";
+		        }
+	        	float_error = true;
 		        e.printStackTrace();
 		    }
 		} else {
 		    // Show an error message if the fee is null
 		    JOptionPane.showMessageDialog(null, "The fee, remuneration and hours quantity must be positive and not null");
+		    error = true;
+		    error_message += "- The fee, remuneration and hours quantity must be positive and not null.\n";
 		}
 		return (float) -1.0;
 	}
@@ -82,15 +99,22 @@ public class CoursesCreationController {
 		        	return intValue;
 		        } else {
 		            // Show error message if the value is not positive and not null
-		        	JOptionPane.showMessageDialog(null, "Introduce a positive number of places value");
+		        	// JOptionPane.showMessageDialog(null, "Introduce a positive number of places value");
+		        	error = true;
+		        	error_message += "- Introduce a positive number of places value.\n";
 		        }
 		    } catch (NumberFormatException e) {
-		        JOptionPane.showMessageDialog(null, "Introduce a number of places value positive and not null");
+		        // JOptionPane.showMessageDialog(null, "Introduce a number of places value positive and not null");
+		        error = true;
+	        	error_message += "- Introduce a number of places value positive and not null.\n";
+			
 		        e.printStackTrace();
 		    }
 		} else {
 		    // Show an error message if the fee is null
-		    JOptionPane.showMessageDialog(null, "Introduce a positive not null value for the number of places value");
+		    //JOptionPane.showMessageDialog(null, "Introduce a positive not null value for the number of places value");
+		    error = true;
+        	error_message += "- Introduce a positive not null value for the number of places value.\n";
 		}
 		return (int) -1;
 	}
@@ -157,11 +181,7 @@ public class CoursesCreationController {
 		view.getAcceptButton().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				
-				boolean error = false;
-				
-				String error_message = "";
-				
+								
 				String course_name = view.getCourse_name_textfield().getText(); // Name of the course to be created
 				if(course_name.isBlank()){
 					//JOptionPane.showMessageDialog(null, "The course must have a name");
@@ -175,11 +195,13 @@ public class CoursesCreationController {
 				}
 				
 				Date today = new Date(); // Todays date
+				boolean null_date = false; // Variable to check if any date is null introduced
 				
 				// Storing the course start date and checking null issue
 				Date course_start_date = view.getcourse_start_date_dateChooser().getDate();
 				if(course_start_date == null) {
 					error = true;
+					null_date = true;
 					//JOptionPane.showMessageDialog(null, "The course start date must not be null");
 					error_message += "- The course start date must not be null.\n" ;
 				}
@@ -189,6 +211,7 @@ public class CoursesCreationController {
 				Date course_enrollement_start_date = view.getDate_of_erollement_begining_dateChooser().getDate();
 				if(course_enrollement_start_date == null) {
 					error = true;
+					null_date = true;
 					//JOptionPane.showMessageDialog(null, "The course enrolment start date must not be null");
 					error_message += "- The course enrolment start date must not be null.\n";
 				}
@@ -197,99 +220,109 @@ public class CoursesCreationController {
 				Date course_enrollement_end_date = view.getDate_of_enrollement_end_dateChooser().getDate();
 				if(course_enrollement_end_date == null) {
 					error = true;
+					null_date = true;
 					//JOptionPane.showMessageDialog(null, "The course enrolment start date must not be null");
-					error_message += "- The course enrolment start date must not be null.\n";
+					error_message += "- The course enrolment end date must not be null.\n";
 				}
 				
 				/****************DATE CHECKINGS start****************/
 				
-				if(course_enrollement_end_date == null) {
-					try {
-						error_message += "- The introduced dates must be for the future, after: " + today.toString() + ".\n";
-						throw new Exception("The date of the enrollment period must be before the start of the course");
-						}catch (Exception exp){
-						System.err.println(exp.getMessage());
-					}
-				}
-				
-				if(course_enrollement_start_date == null) {
-					try {
-						error_message += "- The introduced dates must be for the future, after: " + today.toString() + ".\n";
-						throw new Exception("The date of the enrollment period must be before the start of the course");
-						}catch (Exception exp){
-						System.err.println(exp.getMessage());
-					}
-				}
-				
-				if(course_start_date == null) {
-					try {
-						error_message += "- The introduced dates must be for the future, after: " + today.toString() + ".\n";
-						throw new Exception("The date of the enrollment period must be before the start of the course");
-						}catch (Exception exp){
-						System.err.println(exp.getMessage());
-					}
-				}
-				
-				// Check that the user-introduced dates are for the future
-				if(course_enrollement_end_date.before(today) || course_enrollement_start_date.before(today)
-						|| course_start_date.before(today)) {
-					try {
-						error = true;
-						// JOptionPane.showMessageDialog(null, "The introduced dates must be for the future, after: " + today.toString());
-						error_message += "- The introduced dates must be for the future, after: " + today.toString() + ".\n";
-						throw new Exception("The date of the enrollment period must be before the start of the course");
-					}catch (Exception exp){
-						System.err.println(exp.getMessage());
-					}
-				}else {
-				
-					// Check that the enrolment period is in the future
-					if(course_enrollement_start_date.after(course_start_date)) {
+				if(!null_date){
+					// Check that the user-introduced dates are for the future
+					/*if(course_enrollement_end_date.before(today) || course_enrollement_start_date.before(today)
+							|| course_start_date.before(today)) {
 						try {
 							error = true;
-							// JOptionPane.showMessageDialog(null, "The course enrolment start date must be before the start of the course");
-							error_message += "- The course enrolment start date must be before the start of the course.\n"; 
+							// JOptionPane.showMessageDialog(null, "The introduced dates must be for the future, after: " + today.toString());
+							error_message += "- The introduced dates must be for the future, after: " + today.toString() + ".\n";
 							throw new Exception("The date of the enrollment period must be before the start of the course");
 						}catch (Exception exp){
 							System.err.println(exp.getMessage());
 						}
-					}else {
-				
-						// Check that the enrolment period is before the start of the course
-						if(course_enrollement_end_date.after(course_start_date)) {
+					}*/
+					
+					if(course_enrollement_end_date.before(today)) {
+						try {
 							error = true;
-							// JOptionPane.showMessageDialog(null, "The course enrolment end date must be before the start of the course");
-							error_message += "- The course enrolment end date must be before the start of the course.\n";
+							date_before_today = true;
+							error_message += "- The introduced course enrolment end date must be for the future, after: " + today.toString() + ".\n";
+							throw new Exception("The introduced course enrolment end date must be for the future");
+						}catch (Exception exp){
+							System.err.println(exp.getMessage());
+						}
+					}
+					
+					if(course_enrollement_start_date.before(today)) {
+						try {
+							error = true;
+							date_before_today = true;
+							error_message += "- The introduced course enrolment start date must be for the future, after: " + today.toString() + ".\n";
+							throw new Exception("The introduced course enrolment start date must be for the future");
+						}catch (Exception exp){
+							System.err.println(exp.getMessage());
+						}
+					}
+					
+					if(course_start_date.before(today)) {
+						try {
+							error = true;
+							date_before_today = true;
+							error_message += "- The introduced course start date must be for the future, after: " + today.toString() + ".\n";
+							throw new Exception("The introduced course start date must be for the future");
+						}catch (Exception exp){
+							System.err.println(exp.getMessage());
+						}
+					}
+					
+					if(!date_before_today){
+					
+						// Check that the enrolment period is in the future
+						if(course_enrollement_start_date.after(course_start_date)) {
 							try {
-								throw new Exception("The date of the enrolment period must be before the start of the course");
+								error = true;
+								// JOptionPane.showMessageDialog(null, "The course enrolment start date must be before the start of the course");
+								error_message += "- The course enrolment start date must be before the start of the course.\n"; 
+								throw new Exception("The date of the enrollment period must be before the start of the course");
 							}catch (Exception exp){
 								System.err.println(exp.getMessage());
 							}
 						}else {
-				
-							// Check that the start enrolment date is before the end of the period
-							if(course_enrollement_start_date.after(course_enrollement_end_date)) {
+					
+							// Check that the enrolment period is before the start of the course
+							if(course_enrollement_end_date.after(course_start_date)) {
 								error = true;
-								// JOptionPane.showMessageDialog(null, "The course enrolment start date must be before the end of the enrolment period.");
-								error_message += "- The course enrolment start date must be before the end of the enrolment period.\n";
+								// JOptionPane.showMessageDialog(null, "The course enrolment end date must be before the start of the course");
+								error_message += "- The course enrolment end date must be before the start of the course.\n";
 								try {
-									throw new Exception("the start enrolment date imust be before the end of the enrolment period");
+									throw new Exception("The date of the enrolment period must be before the start of the course");
 								}catch (Exception exp){
 									System.err.println(exp.getMessage());
+								}
+							}else {
+					
+								// Check that the start enrolment date is before the end of the period
+								if(course_enrollement_start_date.after(course_enrollement_end_date)) {
+									error = true;
+									// JOptionPane.showMessageDialog(null, "The course enrolment start date must be before the end of the enrolment period.");
+									error_message += "- The course enrolment start date must be before the end of the enrolment period.\n";
+									try {
+										throw new Exception("the start enrolment date imust be before the end of the enrolment period");
+									}catch (Exception exp){
+										System.err.println(exp.getMessage());
+									}
 								}
 							}
 						}
 					}
-				}
-				
-				// Show a message if the enrolment start date is after three weeks before the start of the course
-				Calendar calendar = Calendar.getInstance(); // Use it to add days to the actual date
-		        calendar.setTime(course_enrollement_start_date);
-		        // Add 21 days (3 weeks) to the date 
-		        calendar.add(Calendar.DAY_OF_YEAR, 21);
-		        Date weeks3_later = calendar.getTime();
-				if(weeks3_later.after(course_start_date)){
-					JOptionPane.showMessageDialog(null, "WARNING: the start date of the enrolment period is not 3 weeks before the formative action");
+					// Show a message if the enrolment start date is after three weeks before the start of the course
+					Calendar calendar = Calendar.getInstance(); // Use it to add days to the actual date
+			        calendar.setTime(course_enrollement_start_date);
+			        // Add 21 days (3 weeks) to the date 
+			        calendar.add(Calendar.DAY_OF_YEAR, 21);
+			        Date weeks3_later = calendar.getTime();
+					if(weeks3_later.after(course_start_date)){
+						week3_warning = true;
+					}
 				}
 				
 				/****************DATE CHECKINGS end****************/
@@ -356,6 +389,9 @@ public class CoursesCreationController {
 				/********************* DATA INTRODUCTION INTO THE DB *************************/
 				
 				if(!error) { // If there was no error in the introduced data, the course will be introduced in the DB
+					if(week3_warning){
+						JOptionPane.showMessageDialog(null, "WARNING: the start date of the enrolment period is not 3 weeks before the formative action");
+					}
 					// Formating to string the course dates 
 					SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // Create a SimpleDateFormat object with the desired pattern
 			        String course_start_date_string = formatter.format(course_start_date);
@@ -396,6 +432,9 @@ public class CoursesCreationController {
 				}else {
 					// Display the error message with all the errors that were checked 
 					JOptionPane.showMessageDialog(null, error_message);
+					error_message = "There were some errors introduced:\n\n";
+					float_error = false;
+					error = false;
 				}
 			}
 		});
