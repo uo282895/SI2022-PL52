@@ -15,19 +15,15 @@ import javax.swing.JSeparator;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.JPanel;
 import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionListener;
+import java.lang.ModuleLayer.Controller;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
 
 public class InscriptionsView {
 
@@ -39,7 +35,7 @@ public class InscriptionsView {
 	private JTextField emailField;
 	private JTable table;
 	private JTable description;
-	private JButton viewCourses;
+	private JButton confirmButton;
 
 	/**
 	 * Launch the application.
@@ -85,16 +81,6 @@ public class InscriptionsView {
 		infoTitle.setFont(new Font("Arial", Font.PLAIN, 12));
 		infoTitle.setBounds(412, 25, 91, 13);
 		frame.getContentPane().add(infoTitle);
-		
-		JLabel lblNewLabel = new JLabel("Total places:");
-		lblNewLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblNewLabel.setBounds(412, 117, 75, 13);
-		frame.getContentPane().add(lblNewLabel);
-		
-		JLabel lblNewLabel_1 = new JLabel("Places left:");
-		lblNewLabel_1.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblNewLabel_1.setBounds(412, 141, 67, 13);
-		frame.getContentPane().add(lblNewLabel_1);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(10, 261, 646, 13);
@@ -155,16 +141,7 @@ public class InscriptionsView {
 		frame.getContentPane().add(emailField);
 		emailField.setColumns(10);
 		
-		JButton confirmButton = new JButton("Confirm and formalize");
-		confirmButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to formalize the inscription?"
-						+ "\nThis is not reversible and will generate a debt according to the price of the selected formative action.");
-				if (confirm == JOptionPane.YES_OPTION) {
-					frame.dispose();
-				}
-			}
-		});
+		confirmButton = new JButton("Confirm and formalize");
 		confirmButton.setFont(new Font("Arial", Font.BOLD, 12));
 		confirmButton.setBounds(481, 406, 175, 30);
 		frame.getContentPane().add(confirmButton);
@@ -182,16 +159,6 @@ public class InscriptionsView {
 		backButton.setBounds(386, 406, 85, 30);
 		frame.getContentPane().add(backButton);
 		
-		JLabel totPlacesLabel = new JLabel("");
-		totPlacesLabel.setFont(new Font("Calibri", Font.PLAIN, 12));
-		totPlacesLabel.setBounds(497, 117, 35, 13);
-		frame.getContentPane().add(totPlacesLabel);
-		
-		JLabel placesLeftLabel = new JLabel("");
-		placesLeftLabel.setFont(new Font("Calibri", Font.PLAIN, 12));
-		placesLeftLabel.setBounds(486, 141, 35, 13);
-		frame.getContentPane().add(placesLeftLabel);
-		
 		JPanel panel = new JPanel();
 		panel.setBounds(56, 49, 334, 186);
 		frame.getContentPane().add(panel);
@@ -207,7 +174,7 @@ public class InscriptionsView {
 		scrollPane.setViewportView(table);
 		
 		JPanel panel_1 = new JPanel();
-		panel_1.setBounds(412, 48, 225, 59);
+		panel_1.setBounds(412, 48, 225, 187);
 		frame.getContentPane().add(panel_1);
 		panel_1.setLayout(new GridLayout(1, 0, 0, 0));
 		
@@ -225,14 +192,18 @@ public class InscriptionsView {
 		
 		JMenuItem mntmNewMenuItem = new JMenuItem("Exit");
 		mnNewMenu.add(mntmNewMenuItem);
+		mntmNewMenuItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int confirm = JOptionPane.showConfirmDialog(null, "Are you sure?");
+				if (confirm == JOptionPane.YES_OPTION) {
+					frame.dispose();
+				}
+			}
+		});
+		
 		
 		JMenu mnNewMenu_1 = new JMenu("Edit");
-		menuBar.add(mnNewMenu_1);
-		
-		if (placesLeftLabel.getText().equals("0")) {
-			confirmButton.setEnabled(false);;
-		}
-		
+		menuBar.add(mnNewMenu_1);	
 	}
 	
 	public String getFechaHoy()  { 
@@ -243,7 +214,7 @@ public class InscriptionsView {
 	public JTable getTableCourses() { return this.table; }
 	public JTable getDetalleCourses() { return this.description; }
 	public JTable getListCourses() { return this.table; }
-	public JButton getViewCourses() { return this.viewCourses; }
+	public JButton getConfirm() { return this.confirmButton; }
 	public JTextField getnameField() { return this.nameField; }
 	public JTextField getsurnamesField() { return this.surnamesField; }
 	public JTextField getdniField() { return this.dniField; }

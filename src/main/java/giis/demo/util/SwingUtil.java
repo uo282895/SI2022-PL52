@@ -65,7 +65,7 @@ public class SwingUtil {
 	public static String getSelectedKey(JTable table) {
 		int row=table.getSelectedRow(); //el item de primera columna es el id de carrera
 		if (row>=0)
-			return (String)table.getModel().getValueAt(row,0);
+			return (String) table.getModel().getValueAt(row, 0);
 		else //no hay filas seleccionadas
 			return "";
 	}

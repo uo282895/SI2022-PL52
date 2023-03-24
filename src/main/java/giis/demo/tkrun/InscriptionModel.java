@@ -9,14 +9,17 @@ public class InscriptionModel {
 		private Database db = new Database();
 		
 		public static final String SQL_List_Courses=
-				"SELECT course_name, course_date, place, course_fee from Course";
+				"SELECT course_id, course_name, course_date, place, course_fee from Course";
 		
 		public static final String SQL_Insert_Proffessional=
 				"INSERT into Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_time, reg_state, course_id)"
 				+ "VALUES (?, ?, ?, ?, ?, ?, ?, 'Received', ?)";
 		
 		public static final String SQL_Proff_Registered=
-				"UPDATE Course SET available_places = available_places - 1 WHERE course_id = <curso_id>;";
+				"UPDATE Course SET available_places = available_places - 1 WHERE course_id = ?;";
+		
+		public static final String SQL_Last_ID=
+				"SELECT reg_id FROM Registration WHERE reg_id = (SELECT MAX(reg_id) FROM Registration);";
 
 		
 		
@@ -25,16 +28,27 @@ public class InscriptionModel {
 			return db.executeQueryPojo(CourseDisplayDTO.class, sql);
 		}
 		
-		public void insertNewProffessional(String name, String surnames, String phone, String email) {
+		public void insertNewProffessional(int regid, String name, String surnames, String phone, String email, String date, String time, String state, int course_id) {
 			String sql = SQL_Insert_Proffessional;	
 			String sql_updateplaces = SQL_Proff_Registered;
 			
-			db.executeUpdate(sql, name, surnames, phone, email);
-			db.executeUpdate(sql_updateplaces);
+			int regid2 = regid++;
+			try {
+				
+				String sql2 = SQL_Last_ID;
+				regid2 = db.executeQueryPojo(RegisterMaxDisplayDTO.class, sql2).get(0).getReg_id() + 1;
+		        
+		    } catch (Exception e) {
+		        e.printStackTrace();
+		        throw e;
+		    }
+			
+			db.executeUpdate(sql, regid2, name, surnames, phone, email, "2023-04-03","12:00:00",1);
+			db.executeUpdate(sql_updateplaces, course_id);
 		}
 		
 		public CourseEntity getCourse(int id) {
-			String sql="SELECT course_id, course_name, course_date, place, course_fee from Course where id=?";
+			String sql="SELECT course_id, course_name, description, course_date, course_start_period, course_end_period, total_places, available_places, place, course_fee from Course where course_id=?";
 			List<CourseEntity> courses=db.executeQueryPojo(CourseEntity.class, sql, id);
 			validateCondition(!courses.isEmpty(),"Id of course not found: "+id);
 			return courses.get(0);
@@ -47,6 +61,6 @@ public class InscriptionModel {
 		
 		public int getPlacesCourse(int id) {
 			String sql = "SELECT available_places from Course";
-			return db.executeQueryPojo(CourseDisplayDTO.class, sql, id).get(0).getAvailable_places();
+			return db.executeQueryPojo(CourseDisplayDTO.class, sql).get(0).getAvailable_places();
 		}
 }
