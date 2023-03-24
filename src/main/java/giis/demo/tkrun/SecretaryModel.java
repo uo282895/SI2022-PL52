@@ -12,8 +12,7 @@ import giis.demo.util.Database;
 import giis.demo.util.Util;
 
 public class SecretaryModel {
-	//private static final String MSG_FECHA_INSCRIPCION_NO_NULA = "La fecha de inscripcion no puede ser nula";
-
+	
 	private Database db=new Database();
 	
 	public static final String SQL_LIST_PAYMENTS=
@@ -33,25 +32,22 @@ public class SecretaryModel {
 			+ "invoice_id, reg_id) values(?, ?, ?, ?,'Professional registration',null, ?)";
 	
 	/**
-	 * Obtiene la lista de carreras activas en forma objetos para una fecha de inscripcion dada
+	 * Obtains the list of pending payments
 	 */
 	public List<PaymentDisplayDTO> getListPayments() {
-		//validateNotNull(fechaInscripcion,MSG_FECHA_INSCRIPCION_NO_NULA);
 		String sql= SQL_LIST_PAYMENTS;
-		//String d=Util.dateToIsoString(fechaInscripcion);
 		return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
 	}
 	
 	/**
-	 * Obtiene la lista de carreras activas en forma objetos para una fecha de inscripcion dada
+	 * Obtains the list of courses (formative actions)
 	 */
 	public List<CourseDisplayDTO> getListCourses() {
-		//validateNotNull(fechaInscripcion,MSG_FECHA_INSCRIPCION_NO_NULA);
 		String sql= SQL_LIST_COURSES;
-		//String d=Util.dateToIsoString(fechaInscripcion);
 		return db.executeQueryPojo(CourseDisplayDTO.class, sql);
 	}
 	
+	//Method encharged of the validation of dates (both registration and payment)
 	public void validateDate(Date paydate, Date payhour, int regid) {
 		RegistrationEntity registration = this.getRegistration(regid);
 		LocalDate localdate = LocalDate.now();
@@ -64,6 +60,7 @@ public class SecretaryModel {
 		validateCondition(regdate.compareTo(paydate) <= 0, "The payment date must be after the registration date");
 	}
 	
+	//Updates the database with the changes performed on the a
 	public void updateTable(int payid, int amount, Date paydate, Date payhour, int regid) {
 		String sql = SQL_INSERT_AMOUNTDATEHOUR;
 		
@@ -103,7 +100,7 @@ public class SecretaryModel {
 		String sql = "select * from Payment order by payment_id";
 		
 		List<PaymentInputDTO> list = db.executeQueryPojo(PaymentInputDTO.class, sql);
-		int size = list.size();
+		int size = list.size();//size of the list (each element is a PaymentInputDTO)
 		if (size == 0) {
 			return 0;
 		}
@@ -124,7 +121,7 @@ public class SecretaryModel {
 	
 	
 	/**
-	 * Obtiene todos los datos de la carrera con el id indicado
+	 * Obtains all the data of the registration with the selected id
 	 */
 	public RegistrationEntity getRegistration(int id) {
 		String sql="SELECT reg_id,reg_name,reg_surnames,reg_phone,reg_email, "
@@ -134,13 +131,13 @@ public class SecretaryModel {
 		return registrations.get(0);
 	}
 	
-	//Obtains the necessary data to show of the selected course
+	//Obtains the necessary ADDITIONAL data to show of the selected course
 	public CourseInfoDisplayDTO getCourse(int courseid) {
 		String sql="SELECT c.objectives, c.description, c.place, t.teacher_name, t.teacher_surnames "
 				+ "from Course c INNER JOIN Teacher t on c.teacher_id = t.teacher_id "
 				+ "where c.course_id = ?";
 		List<CourseInfoDisplayDTO> courses = db.executeQueryPojo(CourseInfoDisplayDTO.class, sql, courseid);
-		validateCondition(!courses.isEmpty(),"Registration ID not found: "+courseid);
+		validateCondition(!courses.isEmpty(),"Registration ID not found: " + courseid);
 		return courses.get(0);
 	}
 	
@@ -154,15 +151,7 @@ public class SecretaryModel {
 			throw new ApplicationException(message);
 	}
 	
-	/*
-	public double differenceDates(Date regdate, Date paydate) {
-		long fechaInicialMs = regdate.getTime();
-		long fechaFinalMs = paydate.getTime();
-		long diff = fechaFinalMs - fechaInicialMs;
-		double days = Math.floor(diff / (1000 * 60 * 60 * 24));
-		return days;
-	}*/
-	
+	//Method calculating the difference between dates
 	public boolean differenceDatesHour(Date regdate, Date paydate, Date reghour, Date payhour) {
 		// Convert input dates to LocalDateTime objects
 		LocalDateTime regDateTime = LocalDateTime.ofInstant(regdate.toInstant(), ZoneId.systemDefault());
