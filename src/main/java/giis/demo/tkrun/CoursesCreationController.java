@@ -159,9 +159,12 @@ public class CoursesCreationController {
 				
 				boolean error = false;
 				
+				String error_message = "";
+				
 				String course_name = view.getCourse_name_textfield().getText(); // Name of the course to be created
 				if(course_name.isBlank()){
-					JOptionPane.showMessageDialog(null, "The course must have a name");
+					//JOptionPane.showMessageDialog(null, "The course must have a name");
+					error_message += "- The course must have a name.\n";
 					error = true;
 					try {
 						throw new Exception("The course must have a name");
@@ -176,7 +179,8 @@ public class CoursesCreationController {
 				Date course_start_date = view.getcourse_start_date_dateChooser().getDate();
 				if(course_start_date == null) {
 					error = true;
-					JOptionPane.showMessageDialog(null, "The course start date must not be null");
+					//JOptionPane.showMessageDialog(null, "The course start date must not be null");
+					error_message += "- The course start date must not be null.\n" ;
 				}
 				SimpleDateFormat format = new SimpleDateFormat("dd/MM/yy HH:mm");
 				
@@ -184,24 +188,54 @@ public class CoursesCreationController {
 				Date course_enrollement_start_date = view.getDate_of_erollement_begining_dateChooser().getDate();
 				if(course_enrollement_start_date == null) {
 					error = true;
-					JOptionPane.showMessageDialog(null, "The course enrolment start date must not be null");
+					//JOptionPane.showMessageDialog(null, "The course enrolment start date must not be null");
+					error_message += "- The course enrolment start date must not be null.\n";
 				}
 				
 				// Storing the course enrolment end date and checking null issue
 				Date course_enrollement_end_date = view.getDate_of_enrollement_end_dateChooser().getDate();
 				if(course_enrollement_end_date == null) {
 					error = true;
-					JOptionPane.showMessageDialog(null, "The course enrolment start date must not be null");
+					//JOptionPane.showMessageDialog(null, "The course enrolment start date must not be null");
+					error_message += "- The course enrolment start date must not be null.\n";
 				}
 				
 				/****************DATE CHECKINGS start****************/
+				
+				if(course_enrollement_end_date == null) {
+					try {
+						error_message += "- The introduced dates must be for the future, after: " + today.toString() + ".\n";
+						throw new Exception("The date of the enrollment period must be before the start of the course");
+						}catch (Exception exp){
+						System.err.println(exp.getMessage());
+					}
+				}
+				
+				if(course_enrollement_start_date == null) {
+					try {
+						error_message += "- The introduced dates must be for the future, after: " + today.toString() + ".\n";
+						throw new Exception("The date of the enrollment period must be before the start of the course");
+						}catch (Exception exp){
+						System.err.println(exp.getMessage());
+					}
+				}
+				
+				if(course_start_date == null) {
+					try {
+						error_message += "- The introduced dates must be for the future, after: " + today.toString() + ".\n";
+						throw new Exception("The date of the enrollment period must be before the start of the course");
+						}catch (Exception exp){
+						System.err.println(exp.getMessage());
+					}
+				}
 				
 				// Check that the user-introduced dates are for the future
 				if(course_enrollement_end_date.before(today) || course_enrollement_start_date.before(today)
 						|| course_start_date.before(today)) {
 					try {
 						error = true;
-						JOptionPane.showMessageDialog(null, "The introduced dates must be for the future, after: " + today.toString());
+						// JOptionPane.showMessageDialog(null, "The introduced dates must be for the future, after: " + today.toString());
+						error_message += "- The introduced dates must be for the future, after: " + today.toString() + ".\n";
 						throw new Exception("The date of the enrollment period must be before the start of the course");
 					}catch (Exception exp){
 						System.err.println(exp.getMessage());
@@ -212,7 +246,8 @@ public class CoursesCreationController {
 					if(course_enrollement_start_date.after(course_start_date)) {
 						try {
 							error = true;
-							JOptionPane.showMessageDialog(null, "The course enrolment start date must be before the start of the course");
+							// JOptionPane.showMessageDialog(null, "The course enrolment start date must be before the start of the course");
+							error_message += "- The course enrolment start date must be before the start of the course.\n"; 
 							throw new Exception("The date of the enrollment period must be before the start of the course");
 						}catch (Exception exp){
 							System.err.println(exp.getMessage());
@@ -222,7 +257,8 @@ public class CoursesCreationController {
 						// Check that the enrolment period is before the start of the course
 						if(course_enrollement_end_date.after(course_start_date)) {
 							error = true;
-							JOptionPane.showMessageDialog(null, "The course enrolment end date must be before the start of the course");
+							// JOptionPane.showMessageDialog(null, "The course enrolment end date must be before the start of the course");
+							error_message += "- The course enrolment end date must be before the start of the course.\n";
 							try {
 								throw new Exception("The date of the enrolment period must be before the start of the course");
 							}catch (Exception exp){
@@ -233,7 +269,8 @@ public class CoursesCreationController {
 							// Check that the start enrolment date is before the end of the period
 							if(course_enrollement_start_date.after(course_enrollement_end_date)) {
 								error = true;
-								JOptionPane.showMessageDialog(null, "The course enrolment start date must be before the end of the enrolment period.");
+								// JOptionPane.showMessageDialog(null, "The course enrolment start date must be before the end of the enrolment period.");
+								error_message += "- The course enrolment start date must be before the end of the enrolment period.\n";
 								try {
 									throw new Exception("the start enrolment date imust be before the end of the enrolment period");
 								}catch (Exception exp){
@@ -265,7 +302,8 @@ public class CoursesCreationController {
 					place = view.getcourse_place_textField().getText();
 					if(place.isBlank()) {
 						error = true;
-						JOptionPane.showMessageDialog(null, "The place of the session needs to be specified");
+						// JOptionPane.showMessageDialog(null, "The place of the session needs to be specified");
+						error_message += "- The place of the session needs to be specified.\n";
 						try {
 							throw new Exception("The place of the session needs to be specified");
 						}catch (Exception exp){
@@ -292,7 +330,8 @@ public class CoursesCreationController {
 				String course_objectives = view.getcourse_description_textArea().getText();
 				if(course_objectives.isBlank()) {
 					error = true;
-					JOptionPane.showMessageDialog(null, "The course objectives must be specified");
+					// JOptionPane.showMessageDialog(null, "The course objectives must be specified");
+					error_message += "- The course objectives must be specified.\n";
 					try {
 						throw new Exception("The course objectives must be specified");
 					}catch (Exception exp){
@@ -304,7 +343,8 @@ public class CoursesCreationController {
 				String course_main_contents = view.getcourse_main_contents_textArea().getText(); 
 				if(course_main_contents.isBlank()) {
 					error = true;
-					JOptionPane.showMessageDialog(null, "The course main contents must be specified");
+					// JOptionPane.showMessageDialog(null, "The course main contents must be specified");
+					error_message += "- The course main contents must be specified.\n";
 					try {
 						throw new Exception("The course main contents must be specified");
 					}catch (Exception exp){
@@ -352,6 +392,9 @@ public class CoursesCreationController {
 					dialog.pack();
 					dialog.setLocationRelativeTo(null);
 					dialog.setVisible(true);
+				}else {
+					// Display the error message with all the errors that were checked 
+					JOptionPane.showMessageDialog(null, error_message);
 				}
 			}
 		});
