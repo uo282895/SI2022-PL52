@@ -1,5 +1,8 @@
 package giis.demo.coiipa;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -173,5 +176,23 @@ public class SecretaryModel {
 		
 		// Check if the duration is less than or equal to 48 hours
 		return duration.compareTo(Duration.ofHours(48)) <= 0;
+	}
+	
+	//Method to send a fictitious mail to the person which has correctly paid (by creating a .txt)
+	public void sendMail(String name, String surnames, String coursename) {
+		try {
+			String str = name+"_"+surnames+"_"+"_"+coursename;
+            File file = new File(str);
+            FileWriter writer = new FileWriter(file);
+            writer.write("To: "+ name + surnames 
+            		+ "Concept: Correct inscription to a course\n\n"
+            		+"Congratulations! The College has received your payment to the course " + coursename + 
+            		" and you have now a place assigned.");
+            writer.close();
+
+            System.out.println("File created successfully.");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 	}
 }
