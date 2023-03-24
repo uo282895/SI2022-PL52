@@ -1,9 +1,11 @@
-package giis.demo.tkrun;
+package giis.demo.coiipa;
 
 import java.sql.SQLException;
 import java.util.Date;
 import java.util.List;
 
+import giis.demo.dto.CourseCreationDisplayDTO;
+import giis.demo.dto.TeacherDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 import giis.demo.util.Util;

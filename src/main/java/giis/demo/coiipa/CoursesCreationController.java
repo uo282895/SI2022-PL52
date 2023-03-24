@@ -1,4 +1,4 @@
-package giis.demo.tkrun;
+package giis.demo.coiipa;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -20,6 +20,7 @@ import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import giis.demo.dto.TeacherDisplayDTO;
 import giis.demo.util.SwingUtil;
 
 /**

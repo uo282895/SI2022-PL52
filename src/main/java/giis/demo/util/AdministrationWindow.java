@@ -8,8 +8,10 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.ActionEvent;
-import giis.demo.tkrun.*;
+
 import javax.swing.JSeparator;
+
+import giis.demo.coiipa.*;
 
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 

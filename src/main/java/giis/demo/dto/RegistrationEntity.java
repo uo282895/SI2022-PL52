@@ -1,34 +1,23 @@
-package giis.demo.tkrun;
+package giis.demo.dto;
 
-public class PaymentDisplayDTO {
+public class RegistrationEntity {
 	
-	private String course_name;
+	//Attributes
+	private int reg_id;
 	private String reg_name;
 	private String reg_surnames;
+	private String reg_phone;
 	private String reg_email;
-	private int course_fee;
 	private String reg_date;
 	private String reg_time;
+	private String reg_state;
 	
-	
-	//Constructors
-	public PaymentDisplayDTO(){}
-	public PaymentDisplayDTO(String coursename, String name, String surnames, String email, int fee, String date, String time) {
-		this.course_name = coursename;
-		this.reg_name = name;
-		this.reg_surnames = surnames;
-		this.reg_email = email;
-		this.course_fee = fee;
-		this.reg_date = date;
-		this.reg_time = time;
+	//Getters and setters
+	public int getReg_id() {
+		return reg_id;
 	}
-	
-	
-	public String getCourse_name() {
-		return course_name;
-	}
-	public void setCourse_name(String course_name) {
-		this.course_name = course_name;
+	public void setReg_id(int reg_id) {
+		this.reg_id = reg_id;
 	}
 	public String getReg_name() {
 		return reg_name;
@@ -42,17 +31,17 @@ public class PaymentDisplayDTO {
 	public void setReg_surnames(String reg_surnames) {
 		this.reg_surnames = reg_surnames;
 	}
+	public String getReg_phone() {
+		return reg_phone;
+	}
+	public void setReg_phone(String reg_phone) {
+		this.reg_phone = reg_phone;
+	}
 	public String getReg_email() {
 		return reg_email;
 	}
 	public void setReg_email(String reg_email) {
 		this.reg_email = reg_email;
-	}
-	public int getCourse_fee() {
-		return course_fee;
-	}
-	public void setCourse_fee(int course_fee) {
-		this.course_fee = course_fee;
 	}
 	public String getReg_date() {
 		return reg_date;
@@ -66,5 +55,16 @@ public class PaymentDisplayDTO {
 	public void setReg_time(String reg_time) {
 		this.reg_time = reg_time;
 	}
+	public String getReg_state() {
+		return reg_state;
+	}
+	public void setReg_state(String reg_state) {
+		this.reg_state = reg_state;
+	}
+	
+	
+	
+	
+	
 	
 }

@@ -1,4 +1,4 @@
-package giis.demo.tkrun;
+package giis.demo.coiipa;
 
 import java.time.Duration;
 import java.time.LocalDate;
@@ -7,6 +7,11 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
+import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.CourseInfoDisplayDTO;
+import giis.demo.dto.PaymentDisplayDTO;
+import giis.demo.dto.PaymentInputDTO;
+import giis.demo.dto.RegistrationEntity;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 import giis.demo.util.Util;

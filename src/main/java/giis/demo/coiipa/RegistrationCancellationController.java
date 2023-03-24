@@ -1,4 +1,4 @@
-package giis.demo.tkrun;
+package giis.demo.coiipa;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -16,6 +16,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import giis.demo.dto.RegistrationDisplayDTO;
 import giis.demo.util.SwingUtil;
 
 public class RegistrationCancellationController {

@@ -1,4 +1,4 @@
-package giis.demo.tkrun;
+package giis.demo.coiipa;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -13,6 +13,9 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
+import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.CourseInfoDisplayDTO;
+import giis.demo.dto.PaymentDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;

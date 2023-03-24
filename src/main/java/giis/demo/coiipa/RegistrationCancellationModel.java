@@ -1,8 +1,9 @@
-package giis.demo.tkrun;
+package giis.demo.coiipa;
 
 import java.util.Date;
 import java.util.List;
 
+import giis.demo.dto.RegistrationDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 import giis.demo.util.Util;
