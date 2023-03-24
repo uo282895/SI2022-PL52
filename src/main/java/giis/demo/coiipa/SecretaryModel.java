@@ -181,13 +181,13 @@ public class SecretaryModel {
 	//Method to send a fictitious mail to the person which has correctly paid (by creating a .txt)
 	public void sendMail(String name, String surnames, String coursename) {
 		try {
-			String str = name+"_"+surnames+"_"+"_"+coursename;
+			String str = name+"_"+surnames+"_"+"_"+coursename+".txt";
             File file = new File(str);
             FileWriter writer = new FileWriter(file);
-            writer.write("To: "+ name + surnames 
+            writer.write("To: "+ name + " "+ surnames +"\n\n"
             		+ "Concept: Correct inscription to a course\n\n"
-            		+"Congratulations! The College has received your payment to the course " + coursename + 
-            		" and you have now a place assigned.");
+            		+"Congratulations! The College has received your payment to the course " + coursename + "\n" +
+            		"and you have now a place assigned.");
             writer.close();
 
             System.out.println("File created successfully.");
