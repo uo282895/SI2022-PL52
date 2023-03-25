@@ -27,7 +27,7 @@ public class SecretaryModel {
 			"SELECT course_name, reg_name, reg_surnames, reg_email, "
 			+ "course_fee, reg_date, reg_time "
 			+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
-			+ "WHERE course_state = 'Active' AND reg_state = 'Received'";
+			+ "WHERE course_state = 'Active' AND reg_state = ?";
 	
 	public static final String SQL_LIST_COURSES=
 			"SELECT course_id, course_name, course_state, course_start_period, "
@@ -40,11 +40,20 @@ public class SecretaryModel {
 			+ "invoice_id, reg_id) values(?, ?, ?, ?,'Professional registration',null, ?)";
 	
 	/**
-	 * Obtains the list of pending payments
+	 * Obtains the list of payments of the desired type
 	 */
-	public List<PaymentDisplayDTO> getListPayments() {
-		String sql= SQL_LIST_PAYMENTS;
-		return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+	public List<PaymentDisplayDTO> getListPayments(String state) {
+		
+		if (state.compareTo("--All--") == 0) {//all the payments must be shown
+			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
+					+ "course_fee, reg_date, reg_time "
+					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
+					+ "WHERE course_state = 'Active'";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+		}else {
+			String sql= SQL_LIST_PAYMENTS;
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, state);
+		}
 	}
 	
 	/**

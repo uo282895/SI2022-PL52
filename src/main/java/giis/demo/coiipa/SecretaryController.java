@@ -69,11 +69,22 @@ public class SecretaryController {
 		//recharge the data of the table after a correct inscription
 		viewPayments.getBtnRefresh().addActionListener(e -> SwingUtil.exceptionWrapper(() -> getListPayments()));
 		
+		//recharge the data of the table after changing the value of the combo box
+		viewPayments.getcbType().addActionListener(e -> SwingUtil.exceptionWrapper(() -> getListPayments()));
+				
 		viewPayments.getTablePayments().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				int sel = viewPayments.getTablePayments().getSelectedRow();
-				if (viewPayments.getTablePayments().isRowSelected(sel)) {
+				//Default initialization of the buttons (disabled)
+				viewPayments.getTFAmount().setEnabled(false);
+			    viewPayments.getTFDate().setEnabled(false);
+			    viewPayments.getTFHour().setEnabled(false);
+			    
+				int sel = viewPayments.getTablePayments().getSelectedRow();//index of the table selected
+				int regid = getRegIdUtil();//get the ID of a registration
+				String state = model.getRegistration(regid).getReg_state();//state of a registration		
+				
+				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0)) {
 				    viewPayments.getTFAmount().setEnabled(true);
 				    viewPayments.getTFDate().setEnabled(true);
 				    viewPayments.getTFHour().setEnabled(true);
@@ -120,7 +131,8 @@ public class SecretaryController {
 	
 	//Method listing all the pending payments coming from the POJO object
 	public void getListPayments() {
-		List<PaymentDisplayDTO> payments = model.getListPayments();
+		String state = (String) viewPayments.getcbType().getSelectedItem();
+		List<PaymentDisplayDTO> payments = model.getListPayments(state);
 		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(payments, new String[] {"course_name", "reg_name", "reg_surnames", "reg_email", "course_fee", "reg_date","reg_time"});
 		Object[] newHeaders = {"Course name", "Professional name", "Professional surnames", "email", "Course fee", "Date of registration", "Hour of registration"};
 		tmodel.setColumnIdentifiers(newHeaders);
@@ -188,6 +200,8 @@ public class SecretaryController {
 		} else hour = viewPayments.getTFHour().getText();
 		
 		
+		String state = (String) viewPayments.getcbType().getSelectedItem();
+		
 		//Get the fee of the selected course
 		int index = viewPayments.getTablePayments().getSelectedRow();//index of the selected row
 		int fee = -1;
@@ -197,12 +211,12 @@ public class SecretaryController {
 		String regSurnames = "";
 		String regHour = "";
 		if (index >=0) {//No errors if the fields are not selected
-			fee = model.getListPayments().get(index).getCourse_fee();
-			courseName = model.getListPayments().get(index).getCourse_name();
-			regDate = model.getListPayments().get(index).getReg_date();
-			regName = model.getListPayments().get(index).getReg_name();
-			regSurnames = model.getListPayments().get(index).getReg_surnames();
-			regHour = model.getListPayments().get(index).getReg_time();
+			fee = model.getListPayments(state).get(index).getCourse_fee();
+			courseName = model.getListPayments(state).get(index).getCourse_name();
+			regDate = model.getListPayments(state).get(index).getReg_date();
+			regName = model.getListPayments(state).get(index).getReg_name();
+			regSurnames = model.getListPayments(state).get(index).getReg_surnames();
+			regHour = model.getListPayments(state).get(index).getReg_time();
 		}
 		
 		//Get the course places, depending on which course the registration is associated
@@ -255,5 +269,22 @@ public class SecretaryController {
 					+ "and at this moment there are no free places.","Wrong data",0);
 		}
 	}//end method
+	
+	//method to get the registration id from some values selected on the table
+	public int getRegIdUtil() {
+		int sel = viewPayments.getTablePayments().getSelectedRow();//index of the table selected
+		String state = (String) viewPayments.getcbType().getSelectedItem();//state selected on the table
+		
+		String courseName = "";
+		String regDate = "";
+		String regName = "";
+		if (sel >=0) {//No errors if the fields are not selected
+			courseName = model.getListPayments(state).get(sel).getCourse_name();
+			regDate = model.getListPayments(state).get(sel).getReg_date();
+			regName = model.getListPayments(state).get(sel).getReg_name();
+		}
+		return model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
+	}
+	
 }
 	

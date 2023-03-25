@@ -14,6 +14,8 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextField;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class PaymentsView {
 
@@ -26,6 +28,8 @@ public class PaymentsView {
 	private JTextField tfHour;
 	private JButton btnRefresh;
 	private JLabel lblTodaysDate;
+	@SuppressWarnings("rawtypes")
+	private JComboBox comboBoxType;
 
 	/**
 	 * Launch the application.
@@ -53,6 +57,7 @@ public class PaymentsView {
 	/**
 	 * Initialize the contents of the frame.
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Registration of payments");
@@ -132,7 +137,7 @@ public class PaymentsView {
 		tfHour.setColumns(10);
 		
 		btnRefresh = new JButton("Refresh list");
-		btnRefresh.setBounds(776, 11, 140, 23);
+		btnRefresh.setBounds(780, 271, 140, 23);
 		frame.getContentPane().add(btnRefresh);
 		
 		JLabel lblFormatHour = new JLabel("(Format: \"HH:MM:SS\")");
@@ -141,8 +146,14 @@ public class PaymentsView {
 		frame.getContentPane().add(lblFormatHour);
 		
 		lblTodaysDate = new JLabel("");
-		lblTodaysDate.setBounds(510, 11, 154, 14);
+		lblTodaysDate.setBounds(438, 11, 154, 14);
 		frame.getContentPane().add(lblTodaysDate);
+		
+		comboBoxType = new JComboBox();
+		comboBoxType.setModel(new DefaultComboBoxModel(new String[] {"--All--", "Received", "Confirmed", "Wrong", "Cancelled"}));
+		comboBoxType.setSelectedIndex(1);
+		comboBoxType.setBounds(658, 8, 262, 22);
+		frame.getContentPane().add(comboBoxType);
 	}
 	
 	
@@ -155,6 +166,9 @@ public class PaymentsView {
 	public JButton getBtnCancel() {return this.btnCancel;}
 	public JButton getBtnConfirm() {return this.btnConfirm;}
 	public JButton getBtnRefresh() {return this.btnRefresh;}
+	@SuppressWarnings("rawtypes")
+	public JComboBox getcbType() {return this.comboBoxType;}
+	
 	
 	//Set today's date
 	public void setTodayDate(String date) {this.lblTodaysDate.setText("Today's date: "+date);}
