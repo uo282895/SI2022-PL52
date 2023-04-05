@@ -38,10 +38,10 @@ public class ReportOfExpensesController {
 	public void getListExpenses(String date_start, String date_end) {
 		List<ReportOfExpensesDisplayDTO> expenses = model.getListExpenses(date_start, date_end);
 		DefaultTableModel tmodel = (DefaultTableModel) SwingUtil.getTableModelFromPojos(expenses, 
-				new String[] {"course_id", "course_name", "course_date", "teacher_paid_invoices_sum", "teacher_invoices_sum", 
+				new String[] {"course_id", "course_name", "teacher_paid_invoices_sum", "teacher_invoices_sum", 
 						"registration_paid_invoices_sum", "registration_invoices_sum"});
 		
-		Object[] newHeaders = {"ID", "Course name", "Course date", "Confirmed teachers' outcomes", "Estimated teacher's outcomes", 
+		Object[] newHeaders = {"ID", "Course name", "Confirmed teachers' outcomes", "Estimated teacher's outcomes", 
 				"Confirmed registrations' incomes", "Estimated registrations' incomes"};
 		tmodel.setColumnIdentifiers(newHeaders);
 		view.getExpenses_JTable().setModel(tmodel);

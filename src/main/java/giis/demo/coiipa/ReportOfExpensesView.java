@@ -51,7 +51,7 @@ public class ReportOfExpensesView {
 	private void initialize() {
 		
 		frame = new JFrame();
-		frame.setBounds(100, 100, 999, 477);
+		frame.setBounds(100, 100, 924, 477);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Report of Expenses of the courses");
@@ -80,7 +80,7 @@ public class ReportOfExpensesView {
 		
 		//Scroll panel and table to show the headers
 		JScrollPane courses_expenses_scrollPane = new JScrollPane();
-		courses_expenses_scrollPane.setBounds(10, 101, 963, 234);
+		courses_expenses_scrollPane.setBounds(10, 101, 878, 234);
 		frame.getContentPane().add(courses_expenses_scrollPane);
 		
 		Expenses_JTable = new JTable();
