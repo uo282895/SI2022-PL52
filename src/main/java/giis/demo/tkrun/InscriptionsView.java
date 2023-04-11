@@ -19,18 +19,20 @@ import javax.swing.JPanel;
 import javax.swing.JTable;
 import java.awt.event.ActionListener;
 import java.lang.ModuleLayer.Controller;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuBar;
 import javax.swing.JMenu;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 
 public class InscriptionsView {
 
 	private JFrame frame;
 	private JTextField nameField;
 	private JTextField surnamesField;
-	private JTextField dniField;
 	private JTextField phoneField;
 	private JTextField emailField;
 	private JTable table;
@@ -65,15 +67,17 @@ public class InscriptionsView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
+		frame.setTitle("Inscription screen");
 		frame.getContentPane().setName("");
 		frame.setBounds(100, 100, 680, 507);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
+		frame.setResizable(false);
 		
-		JLabel csLabel = new JLabel("Course selection:");
+		JLabel csLabel = new JLabel("Please, select a course:");
 		csLabel.setSize(new Dimension(10, 10));
 		csLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-		csLabel.setBounds(new Rectangle(56, 10, 130, 42));
+		csLabel.setBounds(new Rectangle(56, 10, 151, 42));
 		csLabel.setAlignmentX(Component.CENTER_ALIGNMENT);
 		frame.getContentPane().add(csLabel);
 		
@@ -101,11 +105,6 @@ public class InscriptionsView {
 		lblNewLabel_7.setBounds(251, 307, 67, 13);
 		frame.getContentPane().add(lblNewLabel_7);
 		
-		JLabel lblNewLabel_8 = new JLabel("DNI:");
-		lblNewLabel_8.setFont(new Font("Arial", Font.PLAIN, 12));
-		lblNewLabel_8.setBounds(56, 330, 45, 13);
-		frame.getContentPane().add(lblNewLabel_8);
-		
 		JLabel lblNewLabel_9 = new JLabel("Phone:");
 		lblNewLabel_9.setFont(new Font("Arial", Font.PLAIN, 12));
 		lblNewLabel_9.setBounds(56, 353, 45, 13);
@@ -126,11 +125,6 @@ public class InscriptionsView {
 		frame.getContentPane().add(surnamesField);
 		surnamesField.setColumns(10);
 		
-		dniField = new JTextField();
-		dniField.setBounds(94, 327, 96, 19);
-		frame.getContentPane().add(dniField);
-		dniField.setColumns(10);
-		
 		phoneField = new JTextField();
 		phoneField.setBounds(111, 350, 96, 19);
 		frame.getContentPane().add(phoneField);
@@ -141,7 +135,7 @@ public class InscriptionsView {
 		frame.getContentPane().add(emailField);
 		emailField.setColumns(10);
 		
-		confirmButton = new JButton("Confirm and formalize");
+		confirmButton = new JButton("ENROLL!");
 		confirmButton.setFont(new Font("Arial", Font.BOLD, 12));
 		confirmButton.setBounds(481, 406, 175, 30);
 		frame.getContentPane().add(confirmButton);
@@ -169,6 +163,13 @@ public class InscriptionsView {
 		
 		
 		table = new JTable();
+		table.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"C1", "C2", "C3", "C4", "C5"
+			}
+		));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		table.setDefaultEditor(Object.class, null);
 		scrollPane.setViewportView(table);
@@ -183,31 +184,13 @@ public class InscriptionsView {
 		
 		description = new JTable();
 		scrollPane_1.setViewportView(description);
-		
-		JMenuBar menuBar = new JMenuBar();
-		frame.setJMenuBar(menuBar);
-		
-		JMenu mnNewMenu = new JMenu("File");
-		menuBar.add(mnNewMenu);
-		
-		JMenuItem mntmNewMenuItem = new JMenuItem("Exit");
-		mnNewMenu.add(mntmNewMenuItem);
-		mntmNewMenuItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				int confirm = JOptionPane.showConfirmDialog(null, "Are you sure?");
-				if (confirm == JOptionPane.YES_OPTION) {
-					frame.dispose();
-				}
-			}
-		});
-		
-		
-		JMenu mnNewMenu_1 = new JMenu("Edit");
-		menuBar.add(mnNewMenu_1);	
 	}
 	
 	public String getFechaHoy()  { 
-		return "2023-03-14";
+		LocalDate currentDate = LocalDate.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
+		String date = currentDate.format(formatter);
+		return date;			
 	}
 	
 	public JFrame getFrame() { return this.frame; }
@@ -217,7 +200,6 @@ public class InscriptionsView {
 	public JButton getConfirm() { return this.confirmButton; }
 	public JTextField getnameField() { return this.nameField; }
 	public JTextField getsurnamesField() { return this.surnamesField; }
-	public JTextField getdniField() { return this.dniField; }
 	public JTextField getphoneField() { return this.phoneField; }
 	public JTextField getemailField() { return this.emailField; }
 

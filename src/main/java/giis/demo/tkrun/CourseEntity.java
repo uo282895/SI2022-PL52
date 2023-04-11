@@ -3,10 +3,10 @@ package giis.demo.tkrun;
 public class CourseEntity {
 	private String course_id;
 	private String course_name; //las fechas son string (vienen de sqlite)
-	private String course_date;
+	private String course_start_date;
+	private String course_end_date;
 	private String course_start_period;
 	private String course_end_period;
-	private String place;
 	private String description;
 	private int course_fee;
 	private int available_places;
@@ -23,17 +23,17 @@ public class CourseEntity {
 	public void setCourse_name(String course_name) {
 		this.course_name = course_name;
 	}
-	public String getCourse_date() {
-		return course_date;
+	public String getCourse_start_date() {
+		return course_start_date;
 	}
-	public void setCourse_date(String course_date) {
-		this.course_date = course_date;
+	public void setCourse_start_date(String course_start_date) {
+		this.course_start_date = course_start_date;
 	}
-	public String getPlace() {
-		return place;
+	public String getCourse_end_date() {
+		return course_end_date;
 	}
-	public void setPlace(String place) {
-		this.place = place;
+	public void setCourse_end_date(String course_end_date) {
+		this.course_end_date = course_end_date;
 	}
 	public int getCourse_fee() {
 		return course_fee;

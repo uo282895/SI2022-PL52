@@ -7,6 +7,7 @@ import java.awt.event.MouseEvent;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
@@ -37,9 +38,11 @@ public class InscriptionController {
 		//	}
 		//});
 		insview.getConfirm().addActionListener(new ActionListener() {
+			Object[] options = {"Yes", "No"};
 			public void actionPerformed(ActionEvent e) {
-				int confirm = JOptionPane.showConfirmDialog(null, "Are you sure you want to formalize the inscription?"
-						+ "\nThis is not reversible and will generate a debt according to the price of the selected formative action.");
+				int confirm = JOptionPane.showOptionDialog(null, "Are you sure you want to formalize the inscription?"
+						+ "\nThis is not reversible and will generate a debt according to the price of the selected formative action.", "Confirm?", 
+						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 				if (confirm == JOptionPane.YES_OPTION) {
 					insertNewProffessional();
 					insview.getFrame().dispose();
@@ -65,14 +68,12 @@ public class InscriptionController {
 	
 	public void getListCourses() {
 		List<CourseDisplayDTO> courses=insmodel.getListCourses(Util.isoStringToDate(insview.getFechaHoy()));
-		DefaultTableModel tmodel= (DefaultTableModel) SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id", "course_name", "course_date", "place", "course_fee"});
-		Object[] newHeader = {"ID", "Name", "Date", "Place", "Tax"};
-		tmodel.setColumnIdentifiers(newHeader);
+		DefaultTableModel tmodel= (DefaultTableModel) SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id", "course_name", "course_start_date", "course_end_date", "course_fee"});
+		Object[] newHeader = {"ID", "Name", "Starts", "Ends", "Fee"};
+		tmodel.setColumnIdentifiers(newHeader);	
 		insview.getTableCourses().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(insview.getTableCourses());
 		
-		//Como se guarda la clave del ultimo elemento seleccionado, restaura la seleccion de los detalles
-		//this.restoreDetail();
 	}
 	
 	public void insertNewProffessional() {
@@ -83,20 +84,23 @@ public class InscriptionController {
 		String date = insview.getFechaHoy();
 		String time = "12:00:00";
 		String state = "Received";
-		int course_id = insview.getTableCourses().getSelectedRow();
+		int course_id = insview.getTableCourses().getSelectedRow() + 1;
 		if (insview.getnameField().getText().isBlank() || insview.getsurnamesField().getText().isBlank() 
 				|| insview.getphoneField().getText().isBlank() || insview.getemailField().getText().isBlank()) {
 			throw new ApplicationException("Be careful, you must fill all the gaps");
 		}
-		 int index = insview.getListCourses().getSelectedRow();
-		 
+		 int index = insview.getTableCourses().getSelectedRow() + 1;
+		 int newid = insmodel.getLastID() + 1;
+		
 		 int places = insmodel.getPlacesCourse(index);
 		 if (places > 0) {
-			 insmodel.insertNewProffessional(1, name, surnames, phone, email, date, time, state, course_id);
+			 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, time, state, course_id);
+			 JOptionPane.showOptionDialog(null, "You have been registered successfully", "Everything seems correct", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
 			 System.out.println("Inscription success");
-			 System.out.println(1 + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + time + " " + state + " " + course_id);
+			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + time + " " + state + " " + course_id);
+			 System.out.println("Places left:" + (places - 1));
 		 } else {
-			 throw new ApplicationException("The formative action chosen has no places left");
+			 JOptionPane.showOptionDialog(null, "There are no places left for the selected formative action", "Sorry, no places left", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] {"OK"}, "OK");
 		 }
 	}
 	
@@ -114,7 +118,7 @@ public class InscriptionController {
 		
 		//Detalles de la carrera seleccionada
 		CourseEntity course=insmodel.getCourse(idCourse);
-		TableModel tmodel=SwingUtil.getRecordModelFromPojo(course, new String[] {"course_name", "description", "course_start_period", "course_end_period", "total_places", "available_places"});
+		TableModel tmodel=SwingUtil.getRecordModelFromPojo(course, new String[] {"course_name", "description", "course_start_period", "course_end_period", "course_start_date", "course_end_date", "total_places", "available_places"});
 		insview.getDetalleCourses().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(insview.getDetalleCourses());
 	}
