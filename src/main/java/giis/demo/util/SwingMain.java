@@ -69,6 +69,15 @@ public class SwingMain {
 				db.createDatabase(false);
 			}
 		});
+		
+		JButton btnEjecutarTkrun_1 = new JButton("Ejecutar consulta de estado");
+		btnEjecutarTkrun_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConsultController controller=new ConsultController(new ConsultModel(), new ConsultView());
+				controller.initController();
+			}
+		});
+		frame.getContentPane().add(btnEjecutarTkrun_1);
 		frame.getContentPane().add(btnInicializarBaseDeDatos);
 			
 		JButton btnCargarDatosIniciales = new JButton("Cargar Datos Iniciales para Pruebas");

@@ -67,7 +67,7 @@ public class InscriptionsView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("Inscription screen");
+		frame.setTitle("Consult screen");
 		frame.getContentPane().setName("");
 		frame.setBounds(100, 100, 680, 507);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
