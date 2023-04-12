@@ -82,7 +82,7 @@ public class SecretaryController {
 				int regid = getRegIdUtil();//get the ID of a registration
 				String state = model.getRegistration(regid).getReg_state();//state of a registration
 				
-				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0 || state.compareTo("Incomplete")==0 || state.compareTo("Compensate")==0)) {
+				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0 || state.compareTo("Incomplete")==0 || state.compareTo("Compensate")==0 || state.compareTo("Cancelled - Compensate")==0)) {
 				    viewPayments.getTFAmount().setEnabled(true);
 				    viewPayments.getTFDate().setEnabled(true);
 				    viewPayments.getTFHour().setEnabled(true);
@@ -252,19 +252,29 @@ public class SecretaryController {
 
 		
 		int totalamount = model.getAmountPaid(regid);
-		//Process of inserting all the payments
-		if (state.compareTo("Confirmed") == 0) { //Only confirmed inputs that have to be solved can be input
+		
+		int togive = (int) RegistrationCancellationController.getAmountPaid();
+		
+/***********************************************Process of inserting all the payments**********************************/
+		
+		if (state.compareTo("Confirmed") == 0) { //Only for compensations
 			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			if (totalamount - quant >= fee){
 				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			}
-		}else { //Normal payment
+		}else if (state.compareTo("Cancelled") == 0){ //Cancellations
+			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			if (quant == togive) {
+				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			}
+		}
+		else { //Normal payment
 			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 		}
 		
 		totalamount = model.getAmountPaid(regid);
-		System.out.printf("Total amount:%d; Quant: %d; Course fee: %d\n",totalamount, quant, fee);
+		
 		//All the different possibilities according to courses
 		if (state.compareTo("Confirmed")==0) {//CORRECT
 			if (totalamount  == fee) {
@@ -272,10 +282,23 @@ public class SecretaryController {
 						"Correct compensation of the payment", 1);
 				model.updateCompToCorrect(regid);
 			}else if (totalamount  > fee) {
-				SwingUtil.showMessage("The college must compensate the teacher again.\n"
+				SwingUtil.showMessage("The college must compensate the professional again.\n"
 						+ "COIIPA must give him back " + Integer.toString(totalamount - fee) + " €.\n"
 								+ "This is due to an incomplete compensation or a wrong compensation (more money than necessary has been paid).", 
 						"Wrong compensation of the payment", 0);
+			}
+		}
+		else if (state.compareTo("Cancelled") == 0) {
+			if (quant == togive) {
+				SwingUtil.showMessage("The professional has received the money after cancelling its registration to a course.\n"
+						+ "The money paid will be given back, according to the criteria.", "Cancellation paid", 1);
+				model.updateCompToCancelled(regid);
+			}
+			else {
+				SwingUtil.showMessage("The college must compensate the professional's cancellation again.\n"
+						+ "COIIPA must give him back " + Integer.toString(togive) + " €.\n"
+								+ "Please, input the correct amount of money.", 
+						"Wrong compensation of the cancellation", 0);
 			}
 		}
 		else if (totalamount == fee && days) {//CORRECT

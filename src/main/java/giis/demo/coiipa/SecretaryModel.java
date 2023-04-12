@@ -24,12 +24,6 @@ public class SecretaryModel {
 	
 	private Database db=new Database();
 	
-	public static final String SQL_LIST_PAYMENTS=
-			"SELECT course_name, reg_name, reg_surnames, reg_email, "
-			+ "course_fee, reg_date, reg_time "
-			+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
-			+ "WHERE course_state = 'Active' AND reg_state = ?";
-	
 	public static final String SQL_LIST_COURSES=
 			"SELECT course_id, course_name, course_state, course_start_period, "
 			+ "course_end_period, total_places, available_places,"
@@ -84,8 +78,12 @@ public class SecretaryModel {
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
 		}
 		else { //Cancelled
-			String sql= SQL_LIST_PAYMENTS;
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, state);
+			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
+					+ "course_fee, reg_date, reg_time "
+					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
+					+ "WHERE course_state = 'Active' "
+					+ "AND reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate'";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
 		}
 	}
 	
@@ -187,7 +185,12 @@ public class SecretaryModel {
 		db.executeUpdate(sql_stateComp, regid);
 	}
 	
-	
+	//Method to change the state of a cancellation (when it is compensated correctly)
+	public void updateCompToCancelled(int regid) {
+			String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
+					+ "set reg_state = 'Cancelled' where reg_id = ?";
+			db.executeUpdate(sql_stateComp, regid);
+	}
 	
 	//Get places from a course associated to a registration
 	public int getPlacesCourse(int regid) {

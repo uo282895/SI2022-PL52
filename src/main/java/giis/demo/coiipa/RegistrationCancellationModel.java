@@ -27,8 +27,18 @@ public class RegistrationCancellationModel {
 			+ "SET reg_state = 'Cancelled' "
 			+ "WHERE reg_id = ?;";
 	
+	public static final String SQL_UPDATE_CANCELLATION_COMPENSATE=
+			"UPDATE Registration "
+			+ "SET reg_state = 'Cancelled - Compensate' "
+			+ "WHERE reg_id = ?;";
+	
 	public void insertCancellation(int id) {
 		String sql = SQL_UPDATE_CANCELLATION;
+		db.executeUpdate(sql, id);
+	}
+	
+	public void insertCancellationCompensate(int id) {
+		String sql = SQL_UPDATE_CANCELLATION_COMPENSATE;
 		db.executeUpdate(sql, id);
 	}
 	

@@ -97,16 +97,16 @@ VALUES
 -- Payment corresponding to the invoice
 INSERT INTO Payment (payment_id, amount, payment_date, payment_time, payment_type, invoice_id, reg_id)
 VALUES
-  --(1, 100, '2023-03-01', '14:30:00', 'Bank transfer', 1, 1),
-  --(2, 50, '2023-03-02', '10:15:00', 'Bank transfer', 1, 2),
-  --(3, 80, '2023-03-03', '11:45:00', 'Bank transfer', 1, 3),
-  --(4, 120, '2023-03-04', '15:00:00', 'Bank transfer', 1, 4),
-  --(5, 90, '2023-03-05', '09:00:00', 'Bank transfer', 1, 5),
-  --(6, 60, '2023-03-06', '13:30:00', 'Bank transfer', 1, 6),
-  --(7, 110, '2023-03-07', '16:00:00', 'Bank transfer', 1, 7),
-  --(8, 70, '2023-03-08', '08:45:00', 'Bank transfer', 1, 8),
-  --(9, 130, '2023-03-09', '12:15:00', 'Bank transfer', 1, 9),
-  --(10, 85, '2023-03-10', '17:30:00', 'Bank transfer', 1, 10);
+  (1, 100, '2023-03-01', '14:30:00', 'Bank transfer', 1, 1),
+  (2, 700, '2023-03-02', '10:15:00', 'Professional registration', 1, 2),
+  (3, 80, '2023-03-03', '11:45:00', 'Bank transfer', 1, 3),
+  (4, 120, '2023-03-04', '15:00:00', 'Bank transfer', 1, 4),
+  (5, 90, '2023-03-05', '09:00:00', 'Bank transfer', 1, 5),
+  (6, 60, '2023-03-06', '13:30:00', 'Bank transfer', 1, 6),
+  (7, 110, '2023-03-07', '16:00:00', 'Bank transfer', 1, 7),
+  (8, 70, '2023-03-08', '08:45:00', 'Bank transfer', 1, 8),
+  (9, 130, '2023-03-09', '12:15:00', 'Bank transfer', 1, 9),
+  (10, 85, '2023-03-10', '17:30:00', 'Bank transfer', 1, 10);
 
 
 
