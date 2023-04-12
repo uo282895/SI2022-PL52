@@ -26,10 +26,10 @@ public class PaymentsView {
 	private JButton btnCancel; 
 	private JButton btnConfirm;
 	private JTextField tfHour;
-	private JButton btnRefresh;
 	private JLabel lblTodaysDate;
 	@SuppressWarnings("rawtypes")
 	private JComboBox comboBoxType;
+	private JTable table_1;
 
 	/**
 	 * Launch the application.
@@ -65,7 +65,7 @@ public class PaymentsView {
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-		JLabel lblInfo = new JLabel("These are the pending payments for active courses:");
+		JLabel lblInfo = new JLabel("These are the payments for active courses:");
 		lblInfo.setFont(new Font("Tahoma", Font.BOLD, 12));
 		lblInfo.setBounds(10, 11, 373, 14);
 		frame.getContentPane().add(lblInfo);
@@ -136,10 +136,6 @@ public class PaymentsView {
 		frame.getContentPane().add(tfHour);
 		tfHour.setColumns(10);
 		
-		btnRefresh = new JButton("Refresh list");
-		btnRefresh.setBounds(780, 271, 140, 23);
-		frame.getContentPane().add(btnRefresh);
-		
 		JLabel lblFormatHour = new JLabel("(Format: \"HH:MM:SS\")");
 		lblFormatHour.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblFormatHour.setBounds(364, 369, 173, 14);
@@ -150,26 +146,38 @@ public class PaymentsView {
 		frame.getContentPane().add(lblTodaysDate);
 		
 		comboBoxType = new JComboBox();
-		comboBoxType.setModel(new DefaultComboBoxModel(new String[] {"--All--", "Received", "Confirmed", "Wrong", "Cancelled"}));
+		comboBoxType.setModel(new DefaultComboBoxModel(new String[] {"--All--", "Pending", "Confirmed", "Wrong", "Cancelled"}));
 		comboBoxType.setSelectedIndex(1);
 		comboBoxType.setBounds(658, 8, 262, 22);
 		frame.getContentPane().add(comboBoxType);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(658, 293, 136, 102);
+		frame.getContentPane().add(scrollPane_1);
+		
+		table_1 = new JTable();
+		table_1.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		scrollPane_1.setViewportView(table_1);
+		
+		JLabel lblHistory = new JLabel("Payments history on the selected registration:");
+		lblHistory.setFont(new Font("Tahoma", Font.BOLD, 11));
+		lblHistory.setBounds(611, 271, 285, 14);
+		frame.getContentPane().add(lblHistory);
 	}
 	
 	
 	//Getters and setters used in the controller
 	public JFrame getFrame() { return this.frame; }
 	public JTable getTablePayments() { return this.table; }
-	public JFormattedTextField getTFAmount() {return this.tfAmount;}
-	public JTextField getTFDate() {return this.tfDate;}
-	public JTextField getTFHour() {return this.tfHour;}
-	public JButton getBtnCancel() {return this.btnCancel;}
-	public JButton getBtnConfirm() {return this.btnConfirm;}
-	public JButton getBtnRefresh() {return this.btnRefresh;}
+	public JFormattedTextField getTFAmount() { return this.tfAmount; }
+	public JTextField getTFDate() { return this.tfDate; }
+	public JTextField getTFHour() { return this.tfHour; }
+	public JButton getBtnCancel() { return this.btnCancel; }
+	public JButton getBtnConfirm() { return this.btnConfirm; }
+	public JTable getTableAdditionalPayments() { return this.table_1; }
 	@SuppressWarnings("rawtypes")
 	public JComboBox getcbType() {return this.comboBoxType;}
 	
-	
-	//Set today's date
+	//Setters
 	public void setTodayDate(String date) {this.lblTodaysDate.setText("Today's date: "+date);}
 }

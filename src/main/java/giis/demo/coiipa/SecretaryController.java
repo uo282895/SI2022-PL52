@@ -9,12 +9,14 @@ import java.util.List;
 
 
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
 import giis.demo.dto.CourseDisplayDTO;
 import giis.demo.dto.CourseInfoDisplayDTO;
+import giis.demo.dto.PaymentAdditionalDisplayDTO;
 import giis.demo.dto.PaymentDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
@@ -65,10 +67,6 @@ public class SecretaryController {
 	
 	//Controller initialization (payments)
 	public void initControllerPayments() {
-		
-		//recharge the data of the table after a correct inscription
-		viewPayments.getBtnRefresh().addActionListener(e -> SwingUtil.exceptionWrapper(() -> getListPayments()));
-		
 		//recharge the data of the table after changing the value of the combo box
 		viewPayments.getcbType().addActionListener(e -> SwingUtil.exceptionWrapper(() -> getListPayments()));
 				
@@ -82,13 +80,15 @@ public class SecretaryController {
 			    
 				int sel = viewPayments.getTablePayments().getSelectedRow();//index of the table selected
 				int regid = getRegIdUtil();//get the ID of a registration
-				String state = model.getRegistration(regid).getReg_state();//state of a registration		
+				String state = model.getRegistration(regid).getReg_state();//state of a registration
 				
-				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0)) {
+				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0 || state.compareTo("Incomplete")==0 || state.compareTo("Compensate")==0)) {
 				    viewPayments.getTFAmount().setEnabled(true);
 				    viewPayments.getTFDate().setEnabled(true);
 				    viewPayments.getTFHour().setEnabled(true);
 				}
+				
+				SwingUtil.exceptionWrapper(()-> getListPaymentsAdditional());
 			}
 		});
 		
@@ -106,6 +106,10 @@ public class SecretaryController {
 		    public void mouseClicked(MouseEvent e) {
 		        //A dialog appears, it can be a right or a wrong registration
 		    	SwingUtil.exceptionWrapper(() -> manageConfirm());
+		    	SwingUtil.exceptionWrapper(() -> getListPayments());
+		    	viewPayments.getTFAmount().setText("");
+		    	viewPayments.getTFDate().setText("");
+		    	viewPayments.getTFHour().setText("");
 		    }
 		});
 	}
@@ -139,6 +143,22 @@ public class SecretaryController {
 		viewPayments.getTablePayments().setModel(tmodel);
 		
 		SwingUtil.autoAdjustColumns(viewPayments.getTablePayments());
+	}
+	
+	//Method listing all the payments done for a specific registration
+	public void getListPaymentsAdditional() {
+		List <PaymentAdditionalDisplayDTO> paymentsadd = model.getListPaymentsAdditional(model.getCourseId(getRegIdUtil()), getRegIdUtil());
+		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(paymentsadd, new String[] {"amount","payment_date","payment_type"});
+		Object[] newHeaders = {"Amount","Payment date","Payment type"};
+		tmodel.setColumnIdentifiers(newHeaders);
+		viewPayments.getTableAdditionalPayments().setModel(tmodel);
+		
+		SwingUtil.autoAdjustColumns(viewPayments.getTableAdditionalPayments());
+		
+		//Hide the 3rd column, not necessary
+		TableColumnModel columnModel = viewPayments.getTableAdditionalPayments().getColumnModel();
+		TableColumn column = columnModel.getColumn(2);
+		columnModel.removeColumn(column);
 	}
 	
 	//Method listing all the courses coming from the POJO object
@@ -227,48 +247,78 @@ public class SecretaryController {
 		int payid = model.getLastPaymentId();
 		payid++;
 		
+		//True if the difference is smaller or equal than 48 hours
 		boolean days = model.differenceDatesHour(Util.isoStringToDate(regDate), Util.isoStringToDate(date), Util.isoStringToHour(regHour), Util.isoStringToHour(hour));
+
 		
-		//All the different possibilities according to courses
-		if (quant == fee && days) {//CORRECT
+		int totalamount = model.getAmountPaid(regid);
+		//Process of inserting all the payments
+		if (state.compareTo("Confirmed") == 0) { //Only confirmed inputs that have to be solved can be input
 			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			if (totalamount - quant >= fee){
+				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			}
+		}else { //Normal payment
+			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+		}
+		
+		totalamount = model.getAmountPaid(regid);
+		System.out.printf("Total amount:%d; Quant: %d; Course fee: %d\n",totalamount, quant, fee);
+		//All the different possibilities according to courses
+		if (state.compareTo("Confirmed")==0) {//CORRECT
+			if (totalamount  == fee) {
+				SwingUtil.showMessage("The money has been correctly compensated.", 
+						"Correct compensation of the payment", 1);
+				model.updateCompToCorrect(regid);
+			}else if (totalamount  > fee) {
+				SwingUtil.showMessage("The college must compensate the teacher again.\n"
+						+ "COIIPA must give him back " + Integer.toString(totalamount - fee) + " €.\n"
+								+ "This is due to an incomplete compensation or a wrong compensation (more money than necessary has been paid).", 
+						"Wrong compensation of the payment", 0);
+			}
+		}
+		else if (totalamount == fee && days) {//CORRECT
 			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.", 
 					"Correct registration of the payment", 1);
-			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.updateTable(regid);
 			model.sendMail(regName, regSurnames, courseName);
-		} else if (quant == fee && places > 0 && !days) {//CORRECT
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+		} else if (totalamount == fee && places > 0 && !days) {//CORRECT
 			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.\n"
 					+ "The payment has been done more than 48 hours after the registration but there where available places in the course.", 
 					"Correct registration of the payment", 1);
-			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.updateTable(regid);
 			model.sendMail(regName, regSurnames, courseName);
-		} else if (quant > fee && days) {//CORRECT
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+		} else if (totalamount > fee && days) {//CORRECT
 			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.\n"
-					+ "In addition, COIIPA must give back the professional the additional money he has paid: " + Integer.toString(quant - fee) + " €", 
+					+ "In addition, COIIPA must give back the professional the additional money he has paid: " + Integer.toString(totalamount - fee) + " €", 
 					"Correct registration of the payment", 1);
-			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.updateComp(regid);
 			model.sendMail(regName, regSurnames, courseName);
-		} else if (quant > fee && places > 0 && !days) {//CORRECT
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+		} else if (totalamount > fee && places > 0 && !days) {//CORRECT
 			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.\n"
 					+ "The payment has been done more than 48 hours after the registration but there were available places."
-					+ "In addition, COIIPA must give back the professional the additional money he has paid: " + Integer.toString(quant - fee) + " €", 
+					+ "In addition, COIIPA must give back the professional the additional money he has paid: " + Integer.toString(totalamount - fee) + " €", 
 					"Correct registration of the payment", 1);
-			model.updateTable(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.updateComp(regid);
 			model.sendMail(regName, regSurnames, courseName);
-		} 
-		//WRONG
-		else if (quant < fee) {
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			SwingUtil.showMessage("The professional cannot be assigned a place for the course. Please, warn her/him to pay the whole fee.", "Wrong data", 0);//WRONG
-		} else if (quant >= fee && !days && places == 0) {
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			SwingUtil.showMessage("The professional cannot be assigned a place for the course. He/she has paid more than 2 days after the registration date."
-					+ "and at this moment there are no free places.","Wrong data",0);
 		}
-	}//end method
+		//WRONG
+		else if (places == 0) { //There are no places left
+			SwingUtil.showMessage("The professional cannot be assigned a place for the course because there are no places left.\n"
+					+ "The money paid will be given back.", "Course full", 0);//WRONG
+			model.updateFull(regid); 
+		}
+		else if (totalamount < fee) { //Paying less
+			int option = JOptionPane.showConfirmDialog(null, "The whole fee is not being paid. Are you sure that this is the correct amount?", "Confirmation", JOptionPane.YES_NO_OPTION);
+
+			if (option == JOptionPane.YES_OPTION) {
+			    // perform the operation
+				model.updateWrong(regid);
+				SwingUtil.showMessage("The professional cannot be assigned a place for the course. Please, warn her/him to pay the whole fee.", "Wrong data", 0);//WRONG
+			}
+		}
+	}
 	
 	//method to get the registration id from some values selected on the table
 	public int getRegIdUtil() {

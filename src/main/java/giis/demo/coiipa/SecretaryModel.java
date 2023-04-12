@@ -12,6 +12,7 @@ import java.util.List;
 
 import giis.demo.dto.CourseDisplayDTO;
 import giis.demo.dto.CourseInfoDisplayDTO;
+import giis.demo.dto.PaymentAdditionalDisplayDTO;
 import giis.demo.dto.PaymentDisplayDTO;
 import giis.demo.dto.PaymentInputDTO;
 import giis.demo.dto.RegistrationEntity;
@@ -39,6 +40,16 @@ public class SecretaryModel {
 			"INSERT into Payment(payment_id, amount, payment_date, payment_time, payment_type, "
 			+ "invoice_id, reg_id) values(?, ?, ?, ?,'Professional registration',null, ?)";
 	
+	public static final String SQL_LIST_PAYMENTS_ADDITIONAL=
+			"select p.amount, p.payment_date, p.payment_type from Payment p "
+			+ "INNER JOIN Registration r on p.reg_id = r.reg_id "
+			+ "INNER JOIN Course c on r.course_id = c.course_id "
+			+ "where c.course_id = ? AND r.reg_id = ?";
+	
+	public static final String SQL_INSERT_AMOUNTDATEHOUR_DEVOLUTION = 
+			"INSERT into Payment(payment_id, amount, payment_date, payment_time, payment_type, "
+			+ "invoice_id, reg_id) values(?, ?, ?, ?,'Devolution',null, ?)";
+	
 	/**
 	 * Obtains the list of payments of the desired type
 	 */
@@ -50,10 +61,40 @@ public class SecretaryModel {
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active'";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
-		}else {
+		}else if (state.compareTo("Wrong") == 0){//Only wrong payments shown
+			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
+					+ "course_fee, reg_date, reg_time "
+					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
+					+ "WHERE course_state = 'Active' "
+					+ "AND reg_state = 'Incomplete' OR reg_state = 'Full'";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+		}else if (state.compareTo("Pending")==0){
+			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
+					+ "course_fee, reg_date, reg_time "
+					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
+					+ "WHERE course_state = 'Active' "
+					+ "AND reg_state = 'Received'";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+		}else if (state.compareTo("Confirmed")==0){
+			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
+					+ "course_fee, reg_date, reg_time "
+					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
+					+ "WHERE course_state = 'Active' "
+					+ "AND reg_state = 'Confirmed' OR reg_state = 'Compensate'";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+		}
+		else { //Cancelled
 			String sql= SQL_LIST_PAYMENTS;
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, state);
 		}
+	}
+	
+	/**
+	 * Obtains the list of all the payments done to complete (or not) a registration
+	 */
+	public List<PaymentAdditionalDisplayDTO> getListPaymentsAdditional(int courseid, int regid) {
+		String sql= SQL_LIST_PAYMENTS_ADDITIONAL;
+		return db.executeQueryPojo(PaymentAdditionalDisplayDTO.class, sql, courseid, regid);
 	}
 	
 	/**
@@ -74,13 +115,28 @@ public class SecretaryModel {
 		Date regdate = Util.isoStringToDate(registration.getReg_date());
 		
 		validateCondition(paydate.compareTo(today) <= 0, "You cannot input future dates. Please, enter a valid date.");
-		validateCondition(regdate.compareTo(paydate) <= 0, "The payment date must be after the registration date");
+		validateCondition(regdate.compareTo(paydate) < 0, "The payment date must be after the registration date");
 	}
 	
-	//Updates the database with the changes performed on the a
-	public void updateTable(int payid, int amount, Date paydate, Date payhour, int regid) {
-		String sql = SQL_INSERT_AMOUNTDATEHOUR;
+	//Method to insert into the DB each payment of type registration
+	public void insertPaymentReg(int payid, int amount, Date paydate, Date payhour, int regid) {
+		String d = Util.dateToIsoString(paydate);
+		String h = Util.hourToIsoString(payhour);
 		
+		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR, payid, amount, d, h, regid);
+	}
+	
+	//Method to insert into the DB each payment of type devolution
+	public void insertPaymentDev(int payid, int amount, Date paydate, Date payhour, int regid) {
+		String d = Util.dateToIsoString(paydate);
+		String h = Util.hourToIsoString(payhour);
+		
+		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR_DEVOLUTION, payid, - amount, d, h, regid);//Negative amount because it is a devolution
+	}
+	
+	
+	//Updates the database with the changes performed on the input of data
+	public void updateTable(int regid) {
 		String sql_updatestate = "UPDATE Registration " //Update the state (it is now correctly registered)
 				+ "set reg_state = 'Confirmed' where reg_id = ?";
 		String sql_updateplaces = "UPDATE Course " //Update the available places (-1 because someone has been registered9
@@ -88,15 +144,50 @@ public class SecretaryModel {
 		
 		int places = getPlacesCourse(regid);//places of the course associated to the registration
 		int courseid = getCourseId(regid);//id of the course 
-		
-		
-		String d = Util.dateToIsoString(paydate);
-		String h = Util.hourToIsoString(payhour);
-		
-		db.executeUpdate(sql, payid, amount, d, h, regid);
+
 		db.executeUpdate(sql_updatestate, regid);
 		db.executeUpdate(sql_updateplaces, places - 1, courseid);
 	}
+	
+	//Method to change the state of a payment when it has to be compensated 
+	public void updateWrong(int regid) {
+		String sql_stateWrong = "UPDATE Registration " //Update the state (it is now wrong)
+				+ "set reg_state = 'Incomplete' where reg_id = ?";
+		
+		db.executeUpdate(sql_stateWrong, regid);
+	}
+	
+	//Method to change the state of a payment when there are no places left
+	public void updateFull(int regid) {
+		String sql_stateFull = "UPDATE Registration " //Update the state (it is now wrong)
+				+ "set reg_state = 'Full' where reg_id = ?";
+		
+		db.executeUpdate(sql_stateFull, regid);
+	}
+	
+	//Method to change the state of a payment when the college must compensate the prof. with money
+	public void updateComp(int regid) {
+		String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
+				+ "set reg_state = 'Compensate' where reg_id = ?";
+		String sql_updateplaces = "UPDATE Course " //Update the available places (-1 because someone has been registered)
+				+ "set available_places = ? where course_id = ?";
+		
+		int places = getPlacesCourse(regid);//places of the course associated to the registration
+		int courseid = getCourseId(regid);//id of the course 
+		
+		db.executeUpdate(sql_stateComp, regid);
+		db.executeUpdate(sql_updateplaces, places - 1, courseid);
+	}
+	
+	//Method to change the state of a payment when it becomes correct after compensations (places are not decremented
+	//because they have already been)
+	public void updateCompToCorrect(int regid) {
+		String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
+				+ "set reg_state = 'Confirmed' where reg_id = ?";
+		db.executeUpdate(sql_stateComp, regid);
+	}
+	
+	
 	
 	//Get places from a course associated to a registration
 	public int getPlacesCourse(int regid) {
@@ -158,6 +249,16 @@ public class SecretaryModel {
 		return courses.get(0);
 	}
 	
+	//Method to get the amount paid of a given registration (to handle wrong payments)
+	public Integer getAmountPaid(int regid) {
+		String sql = "select sum(p.amount) from Payment p inner join "
+				+ "Registration r on p.reg_id = r.reg_id where r.reg_id = ?";
+		Integer res = db.executeScalarQuery(Integer.class, sql, regid);
+		if (res == null) {
+			return 0;
+		}else return res;
+	}
+	
 	/* General use for object validation */
 	public void validateNotNull(Object obj, String message) {
 		if (obj==null)
@@ -204,4 +305,12 @@ public class SecretaryModel {
             e.printStackTrace();
         }
 	}
+	
+	//Updates the database with the changes performed on the input of data
+		public void updateState(int regid) {
+			String sql_updatestate = "UPDATE Registration " //Update the state (it is now correctly registered)
+					+ "set reg_state = 'Confirmed' where reg_id = ?";
+
+			db.executeUpdate(sql_updatestate, regid);
+		}
 }

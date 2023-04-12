@@ -43,7 +43,7 @@ public class SwingUtil {
 		//no usa el metodo estatico showMessageDialog de JOptionPane 
 		//y establece la posicion para que no aparezca en el centro de la pantalla
 	    JOptionPane pane = new JOptionPane(message,type,JOptionPane.DEFAULT_OPTION);
-	    pane.setOptions(new Object[] {"ACEPTAR"}); //fija este valor para que no dependa del idioma
+	    pane.setOptions(new Object[] {"ACCEPT"}); //fija este valor para que no dependa del idioma
 	    JDialog d = pane.createDialog(pane, title);
 	    d.setLocation(200,200);
 	    d.setVisible(true);
