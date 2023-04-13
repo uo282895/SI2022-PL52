@@ -11,7 +11,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import giis.demo.dto.RegistrationDisplayDTO;
 import giis.demo.dto.ReportOfExpensesDisplayDTO;
 import giis.demo.util.SwingUtil;
 
