@@ -127,6 +127,12 @@ public class InvoiceModel {
 		db.executeUpdate(sql_state, invid);
 	}
 	
+	public void updateFinished(int courseid) {
+		String sql = "UPDATE Course " //Update the state (it is now wrong)
+				+ "set course_state = 'Finished' where course_id = ?";
+		db.executeUpdate(sql, courseid);
+	}
+	
 	/* General use for object validation */
 	public void validateNotNull(Object obj, String message) {
 		if (obj==null)

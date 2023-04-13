@@ -163,6 +163,7 @@ public class InvoiceController {
 			
 			//INSERT THE INVOICE
 			model.InsertInvoice(invid, rem, teacherId, courseId);
+			model.updateFinished(courseId);
 		}
 		else {
 			SwingUtil.showMessage("You must select a row of the table.", "Error", 0);
@@ -219,6 +220,9 @@ public class InvoiceController {
 				model.insertPayment(payid, - quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), invid);
 				SwingUtil.showMessage("The invoice has been correctly paid.", "Successful payment of an invoice", 1);
 				model.updateState(invid);
+				view.getTFAmount().setEnabled(false);
+			    view.getTFDate().setEnabled(false);
+			    view.getTFHour().setEnabled(false);
 			}else {
 				SwingUtil.showMessage("Please, introduce the correct amount to be paid to the teacher.", "Wrong payment", 0);
 			}
