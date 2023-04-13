@@ -308,12 +308,4 @@ public class SecretaryModel {
             e.printStackTrace();
         }
 	}
-	
-	//Updates the database with the changes performed on the input of data
-		public void updateState(int regid) {
-			String sql_updatestate = "UPDATE Registration " //Update the state (it is now correctly registered)
-					+ "set reg_state = 'Confirmed' where reg_id = ?";
-
-			db.executeUpdate(sql_updatestate, regid);
-		}
 }

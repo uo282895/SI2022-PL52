@@ -26,6 +26,7 @@ public class InvoiceView {
 	private JTextField tfHour;
 	private JLabel lblTodaysDate;
 	private JTable table_1;
+	private JButton btnRegisterInvoice;
 
 	/**
 	 * Launch the application.
@@ -67,7 +68,7 @@ public class InvoiceView {
 		
 		//Scroll panel and table to show the headers
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 49, 471, 211);
+		scrollPane.setBounds(10, 49, 445, 179);
 		frmManageInvoices.getContentPane().add(scrollPane);
 		
 		table = new JTable();
@@ -141,7 +142,7 @@ public class InvoiceView {
 		frmManageInvoices.getContentPane().add(lblTodaysDate);
 		
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(554, 90, 362, 130);
+		scrollPane_1.setBounds(625, 88, 291, 130);
 		frmManageInvoices.getContentPane().add(scrollPane_1);
 		
 		table_1 = new JTable();
@@ -150,8 +151,12 @@ public class InvoiceView {
 		
 		JLabel lblNewLabel = new JLabel("Invoice info");
 		lblNewLabel.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblNewLabel.setBounds(708, 75, 82, 14);
+		lblNewLabel.setBounds(746, 74, 82, 14);
 		frmManageInvoices.getContentPane().add(lblNewLabel);
+		
+		btnRegisterInvoice = new JButton("Register invoice");
+		btnRegisterInvoice.setBounds(478, 139, 137, 23);
+		frmManageInvoices.getContentPane().add(btnRegisterInvoice);
 	}
 	
 	
@@ -164,6 +169,7 @@ public class InvoiceView {
 	public JButton getBtnCancel() { return this.btnCancel; }
 	public JButton getBtnConfirm() { return this.btnConfirm; }
 	public JTable getTableInvoice() { return this.table_1; }
+	public JButton getBtnRegister() { return this.btnRegisterInvoice;}
 	
 	//Setters
 	public void setTodayDate(String date) {this.lblTodaysDate.setText("Today's date: "+date);}

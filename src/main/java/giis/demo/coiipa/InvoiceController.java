@@ -9,15 +9,12 @@ import java.util.List;
 
 
 import javax.swing.JButton;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 
-import giis.demo.dto.CourseDisplayDTO;
-import giis.demo.dto.CourseInfoDisplayDTO;
-import giis.demo.dto.PaymentAdditionalDisplayDTO;
-import giis.demo.dto.PaymentDisplayDTO;
+
+import giis.demo.dto.InvoiceDisplayDTO;
 import giis.demo.dto.TeacherInvoiceDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
@@ -28,6 +25,8 @@ public class InvoiceController {
 	private InvoiceModel model;
 	private InvoiceView view;
 	private String lastSelectedKey=""; //remembers the last selected row to show info about it
+	private String lastSelectedKey2=""; //remembers the last selected row to show info about it
+	
 	
 	//Constructor
 	public InvoiceController(InvoiceModel m, InvoiceView v) {
@@ -50,38 +49,42 @@ public class InvoiceController {
 		view.getFrame().setVisible(true); 
 	}
 	
-	
-	/*
-	//Controller initialization (payments)
-	public void initControllerPayments() {
-				
-		viewPayments.getTablePayments().addMouseListener(new MouseAdapter() {
+	//Controller initialization (courses)
+	public void initController() {
+		view.getTableTeachers().addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseReleased(MouseEvent e) {
-				//Default initialization of the buttons (disabled)
-				viewPayments.getTFAmount().setEnabled(false);
-			    viewPayments.getTFDate().setEnabled(false);
-			    viewPayments.getTFHour().setEnabled(false);
+				SwingUtil.exceptionWrapper(() -> getInvoice());
+				
+				view.getTFAmount().setEnabled(false);
+			    view.getTFDate().setEnabled(false);
+			    view.getTFHour().setEnabled(false);
 			    
-				int sel = viewPayments.getTablePayments().getSelectedRow();//index of the table selected
-				int regid = getRegIdUtil();//get the ID of a registration
-				String state = model.getRegistration(regid).getReg_state();//state of a registration
-				
-				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0 || state.compareTo("Incomplete")==0 || state.compareTo("Compensate")==0 || state.compareTo("Cancelled - Compensate")==0)) {
-				    viewPayments.getTFAmount().setEnabled(true);
-				    viewPayments.getTFDate().setEnabled(true);
-				    viewPayments.getTFHour().setEnabled(true);
+			    String lsk =SwingUtil.getSelectedKey(view.getTableTeachers());
+				int courseId = Integer.parseInt(lsk);
+			    
+				if(model.hasInvoice(courseId).compareTo("Yes") == 0) {
+					view.getTFAmount().setEnabled(true);
+				    view.getTFDate().setEnabled(true);
+				    view.getTFHour().setEnabled(true);
 				}
-				
-				SwingUtil.exceptionWrapper(()-> getListPaymentsAdditional());
 			}
 		});
-		
+				
 		JButton btnCancel = view.getBtnCancel();
 		btnCancel.addMouseListener(new MouseAdapter() {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		        view.getFrame().dispose();//Close the window
+		    }
+		});
+		
+		JButton btnInvoice = view.getBtnRegister();
+		btnInvoice.addMouseListener(new MouseAdapter() {
+		    @Override
+		    public void mouseClicked(MouseEvent e) {
+		        SwingUtil.exceptionWrapper(() -> insertInvoice());
+		        SwingUtil.exceptionWrapper(() -> getInvoice());//for automatic refresh
 		    }
 		});
 		
@@ -90,268 +93,134 @@ public class InvoiceController {
 		    @Override
 		    public void mouseClicked(MouseEvent e) {
 		        //A dialog appears, it can be a right or a wrong registration
-		    	//SwingUtil.exceptionWrapper(() -> manageConfirm());
-		    	SwingUtil.exceptionWrapper(() -> getListTeachers());
+		    	SwingUtil.exceptionWrapper(() -> manageConfirm());
 		    	view.getTFAmount().setText("");
 		    	view.getTFDate().setText("");
 		    	view.getTFHour().setText("");
 		    }
 		});
-	}*/
-	
-	//Controller initialization (courses)
-	public void initController() {
-		view.getTableTeachers().addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseReleased(MouseEvent e) {
-				//SwingUtil.exceptionWrapper(() -> updateDetailCourses());
-			}
-		});
-		
-		JButton btnCancel = view.getBtnCancel();
-		btnCancel.addMouseListener(new MouseAdapter() {
-		    @Override
-		    public void mouseClicked(MouseEvent e) {
-		        view.getFrame().dispose();//Close the window
-		    }
-		});
-		
-		
+			
 	}
 	
 
 	//Method listing all the pending payments coming from the POJO object
 	public void getListTeachers() {
 		List<TeacherInvoiceDisplayDTO> teachers = model.getListTeachers();
-		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(teachers, new String[] {"teacher_name", "teacher_surnames", "course_name"});
-		Object[] newHeaders = {"Teacher name", "Teacher surnames", "Course name"};
+		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(teachers, new String[] {"course_id", "teacher_id", "teacher_name", "teacher_surnames", "course_name"});
+		Object[] newHeaders = {"Course id", "Teacher id", "Teacher name", "Teacher surnames", "Course name"};
 		tmodel.setColumnIdentifiers(newHeaders);
 		view.getTableTeachers().setModel(tmodel);
 		
 		SwingUtil.autoAdjustColumns(view.getTableTeachers());
-	}
-	
-	/*
-	//Method listing all the payments done for a specific registration
-	public void getListPaymentsAdditional() {
-		List <PaymentAdditionalDisplayDTO> paymentsadd = model.getListPaymentsAdditional(model.getCourseId(getRegIdUtil()), getRegIdUtil());
-		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(paymentsadd, new String[] {"amount","payment_date","payment_type"});
-		Object[] newHeaders = {"Amount","Payment date","Payment type"};
-		tmodel.setColumnIdentifiers(newHeaders);
-		viewPayments.getTableAdditionalPayments().setModel(tmodel);
 		
-		SwingUtil.autoAdjustColumns(viewPayments.getTableAdditionalPayments());
-		
-		//Hide the 3rd column, not necessary
-		TableColumnModel columnModel = viewPayments.getTableAdditionalPayments().getColumnModel();
-		TableColumn column = columnModel.getColumn(2);
-		columnModel.removeColumn(column);
-	}
-	*/
-	
-	/*
-	//Method listing all the courses coming from the POJO object
-	public void getListCourses() {
-		List<CourseDisplayDTO> courses = model.getListCourses();
-		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id","course_name", "course_state", "course_start_period", "course_end_period", "total_places", "available_places","course_date","course_time"});
-		Object[] newHeaders = {"Course id", "Course name", "Status", "Start of enrollement period", "End of enrollement period", "Total places", "Places left", "Course date", "Course starting time"};
-		tmodel.setColumnIdentifiers(newHeaders);
-		viewCourses.getTableCourses().setModel(tmodel);
-		//Hide the column of the course id (the user doesn't want to see it)
-		TableColumnModel columnModel = viewCourses.getTableCourses().getColumnModel();
+		//Remove the 2 unwanted columns
+		TableColumnModel columnModel = view.getTableTeachers().getColumnModel();
 		TableColumn column = columnModel.getColumn(0);
 		columnModel.removeColumn(column);
-		
-		SwingUtil.autoAdjustColumns(viewCourses.getTableCourses());
+		TableColumn other = columnModel.getColumn(0);
+		columnModel.removeColumn(other);
 	}
-	*/
 	
-	/*
-	//Updates the additional info grid depending on the selection of the course (upper table)
-	public void updateDetailCourses() {
-		//Obtains the selected key (the id of the selected row in this case)
-		this.lastSelectedKey=SwingUtil.getSelectedKey(viewCourses.getTableCourses());
-		int courseId = Integer.parseInt(this.lastSelectedKey);
-		
-		//Course details
-		CourseInfoDisplayDTO course = model.getCourse(courseId);
-		DefaultTableModel tmodel=SwingUtil.getRecordModelFromPojo(course, new String[] {"objectives", "description", "place", "teacher_name","teacher_surnames"});
-		Object[] newHeaders = {"Objectives", "Contents", "Place", "Teacher name", "Teacher surnames"};
-		for(int i = 0; i < 5; i++) {
-			tmodel.setValueAt(newHeaders[i],i,0);
+	
+	//Method showing the desired invoice
+	public void getInvoice() {
+		if (view.getTableTeachers().getSelectedRow() >= 0) {
+			//Obtains the selected key (the id of the selected row in this case)
+			this.lastSelectedKey=SwingUtil.getSelectedKey(view.getTableTeachers());
+			System.out.println(lastSelectedKey);
+			int courseId = Integer.parseInt(this.lastSelectedKey);
+			
+			//Invoice details
+			InvoiceDisplayDTO invoice = model.getInvoice(courseId);
+			DefaultTableModel tmodel=SwingUtil.getRecordModelFromPojo(invoice, new String[] {"invoice_id", "teacher_name", "teacher_surnames", "fiscal_number","teacher_address", "invoice_quantity"});
+			Object[] newHeaders = {"Invoice ID", "Teacher name", "Teacher surnames", "Fiscal number", "Teacher's address", "To pay"};
+			for(int i = 0; i < 6; i++) {
+				tmodel.setValueAt(newHeaders[i],i,0);
+			}
+			view.getTableInvoice().setModel(tmodel);
+			SwingUtil.autoAdjustColumns(view.getTableInvoice());
 		}
-		viewCourses.getTableMore().setModel(tmodel);
-		SwingUtil.autoAdjustColumns(viewCourses.getTableMore());
 	}
-	*/
+	
+	//Method listing all the payments done for a specific registration
+	public void insertInvoice() {
+		if (view.getTableTeachers().getSelectedRow() >= 0) {
+			//Obtains the selected key (the id of the selected row in this case)
+			this.lastSelectedKey=SwingUtil.getSelectedKey(view.getTableTeachers());
+			System.out.println(lastSelectedKey);
+			int courseId = Integer.parseInt(this.lastSelectedKey);
+			
+			this.lastSelectedKey2 = SwingUtil.getSelectedKeySecond(view.getTableTeachers());
+			System.out.println(lastSelectedKey2);
+			int teacherId = Integer.parseInt(this.lastSelectedKey);
+			
+			//Get a correct id (the last one + 1)
+			int invid = model.getLastInvoiceId();
+			invid++;
+			
+			//Get the teacher's remuneration
+			int rem = model.getRemuneration(courseId);
+			
+			//INSERT THE INVOICE
+			model.InsertInvoice(invid, rem, teacherId, courseId);
+		}
+		else {
+			SwingUtil.showMessage("You must select a row of the table.", "Error", 0);
+		}
+	}
 
 	/*
 	* Method encharged of all the database insertions and 
-	* messages when registering a new payment
+	* messages when registering a new invoice payment
 	*/ 
-	/*
 	public void manageConfirm() {
 		//Initializations
 		String strquant = "";
 		String date = "";
 		String hour = "";
 		
-		/*
+		int quant = 0;
+		
 		//Initializations preventing exceptions
-		if (viewPayments.getTFAmount().getText().isEmpty()) {
+		if (view.getTFAmount().getText().isEmpty()) {
 			throw new ApplicationException("Be careful, you must fill the amount gap");
-		} else strquant = viewPayments.getTFAmount().getText();
-		int quant = Integer.parseInt(strquant);
+		} else strquant = view.getTFAmount().getText();
+		boolean containsDot = strquant.contains(".");
+		if (containsDot) {
+		    String cleanedString = strquant.replace(".", "");
+		    quant = Integer.parseInt(cleanedString);
+		}else {
+			quant = Integer.parseInt(strquant);
+		}
 		
-		if (viewPayments.getTFDate().getText().isEmpty()) {
+		if (view.getTFDate().getText().isEmpty()) {
 			throw new ApplicationException("Be careful, you must fill the date gap");
-		} else date = viewPayments.getTFDate().getText();
+		} else date = view.getTFDate().getText();
 		
-		if (viewPayments.getTFHour().getText().isEmpty()) {
+		if (view.getTFHour().getText().isEmpty()) {
 			throw new ApplicationException("Be careful, you must fill the hour gap");
-		} else hour = viewPayments.getTFHour().getText();
+		} else hour = view.getTFHour().getText();
 		
-		
-		String state = (String) viewPayments.getcbType().getSelectedItem();
-		
-		//Get the fee of the selected course
-		int index = viewPayments.getTablePayments().getSelectedRow();//index of the selected row
-		int fee = -1;
+		if (view.getTableTeachers().getSelectedRow() >= 0) { //Valid index
+			this.lastSelectedKey = SwingUtil.getSelectedKey(view.getTableTeachers());
+			int courseId = Integer.parseInt(this.lastSelectedKey);
 
-		String courseName = "";
-		String regDate = "";
-		String regName = "";
-		String regSurnames = "";
-		String regHour = "";
-		if (index >=0) {//No errors if the fields are not selected
-			fee = model.getListPayments(state).get(index).getCourse_fee();
-			courseName = model.getListPayments(state).get(index).getCourse_name();
-			regDate = model.getListPayments(state).get(index).getReg_date();
-			regName = model.getListPayments(state).get(index).getReg_name();
-			regSurnames = model.getListPayments(state).get(index).getReg_surnames();
-			regHour = model.getListPayments(state).get(index).getReg_time();
-		}
-		
-		//Get the course places, depending on which course the registration is associated
-		int regid = model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
-		int places = model.getPlacesCourse(regid);
-		
-		//Get a correct id (the last one + 1)
-		int payid = model.getLastPaymentId();
-		payid++;
-		
-		//True if the difference is smaller or equal than 48 hours
-		boolean days = model.differenceDatesHour(Util.isoStringToDate(regDate), Util.isoStringToDate(date), Util.isoStringToHour(regHour), Util.isoStringToHour(hour));
-
-		
-		int totalamount = model.getAmountPaid(regid);
-		
-		int togive = (int) RegistrationCancellationController.getAmountPaid();
-		
-/***********************************************Process of inserting all the payments**********************************/
-		/*
-		if (state.compareTo("Confirmed") == 0) { //Only for compensations
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			if (totalamount - quant >= fee){
-				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			}
-		}else if (state.compareTo("Cancelled") == 0){ //Cancellations
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			if (quant == togive) {
-				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			}
-		}
-		else { //Normal payment
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-		}
-		
-		totalamount = model.getAmountPaid(regid);
-		
-		//All the different possibilities according to courses
-		if (state.compareTo("Confirmed")==0) {//CORRECT
-			if (totalamount  == fee) {
-				SwingUtil.showMessage("The money has been correctly compensated.", 
-						"Correct compensation of the payment", 1);
-				model.updateCompToCorrect(regid);
-			}else if (totalamount  > fee) {
-				SwingUtil.showMessage("The college must compensate the professional again.\n"
-						+ "COIIPA must give him back " + Integer.toString(totalamount - fee) + " €.\n"
-								+ "This is due to an incomplete compensation or a wrong compensation (more money than necessary has been paid).", 
-						"Wrong compensation of the payment", 0);
-			}
-		}
-		else if (state.compareTo("Cancelled") == 0) {
-			if (quant == togive) {
-				SwingUtil.showMessage("The professional has received the money after cancelling its registration to a course.\n"
-						+ "The money paid will be given back, according to the criteria.", "Cancellation paid", 1);
-				model.updateCompToCancelled(regid);
-			}
-			else {
-				SwingUtil.showMessage("The college must compensate the professional's cancellation again.\n"
-						+ "COIIPA must give him back " + Integer.toString(togive) + " €.\n"
-								+ "Please, input the correct amount of money.", 
-						"Wrong compensation of the cancellation", 0);
-			}
-		}
-		else if (totalamount == fee && days) {//CORRECT
-			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.", 
-					"Correct registration of the payment", 1);
-			model.updateTable(regid);
-			model.sendMail(regName, regSurnames, courseName);
-		} else if (totalamount == fee && places > 0 && !days) {//CORRECT
-			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.\n"
-					+ "The payment has been done more than 48 hours after the registration but there where available places in the course.", 
-					"Correct registration of the payment", 1);
-			model.updateTable(regid);
-			model.sendMail(regName, regSurnames, courseName);
-		} else if (totalamount > fee && days) {//CORRECT
-			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.\n"
-					+ "In addition, COIIPA must give back the professional the additional money he has paid: " + Integer.toString(totalamount - fee) + " €", 
-					"Correct registration of the payment", 1);
-			model.updateComp(regid);
-			model.sendMail(regName, regSurnames, courseName);
-		} else if (totalamount > fee && places > 0 && !days) {//CORRECT
-			SwingUtil.showMessage("The professional has been correctly registered to the course and he has been assigned a place.\n"
-					+ "The payment has been done more than 48 hours after the registration but there were available places."
-					+ "In addition, COIIPA must give back the professional the additional money he has paid: " + Integer.toString(totalamount - fee) + " €", 
-					"Correct registration of the payment", 1);
-			model.updateComp(regid);
-			model.sendMail(regName, regSurnames, courseName);
-		}
-		//WRONG
-		else if (places == 0) { //There are no places left
-			SwingUtil.showMessage("The professional cannot be assigned a place for the course because there are no places left.\n"
-					+ "The money paid will be given back.", "Course full", 0);//WRONG
-			model.updateFull(regid); 
-		}
-		else if (totalamount < fee) { //Paying less
-			int option = JOptionPane.showConfirmDialog(null, "The whole fee is not being paid. Are you sure that this is the correct amount?", "Confirmation", JOptionPane.YES_NO_OPTION);
-
-			if (option == JOptionPane.YES_OPTION) {
-			    // perform the operation
-				model.updateWrong(regid);
-				SwingUtil.showMessage("The professional cannot be assigned a place for the course. Please, warn her/him to pay the whole fee.", "Wrong data", 0);//WRONG
+			int rem = model.getRemuneration(courseId);
+			
+			//Get a correct id (the last one + 1)
+			int payid = model.getLastPaymentId();
+			payid++;
+			
+			int invid = model.getInvoice(courseId).getInvoice_id();
+			
+			model.validateDate(Util.isoStringToDate(date));
+			
+			if (quant == rem) {//The payment of the invoice must be exact
+				model.insertPayment(payid, - quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), invid);
+				SwingUtil.showMessage("The invoice has been correctly paid.", "Successful payment of an invoice", 1);
+			}else {
+				SwingUtil.showMessage("Please, introduce the correct amount to be paid to the teacher.", "Wrong payment", 0);
 			}
 		}
 	}
-	*/
-	
-	/*
-	//method to get the registration id from some values selected on the table
-	public int getRegIdUtil() {
-		int sel = viewPayments.getTablePayments().getSelectedRow();//index of the table selected
-		String state = (String) viewPayments.getcbType().getSelectedItem();//state selected on the table
-		
-		String courseName = "";
-		String regDate = "";
-		String regName = "";
-		if (sel >=0) {//No errors if the fields are not selected
-			courseName = model.getListPayments(state).get(sel).getCourse_name();
-			regDate = model.getListPayments(state).get(sel).getReg_date();
-			regName = model.getListPayments(state).get(sel).getReg_name();
-		}
-		return model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
-	}*/
-	
 }

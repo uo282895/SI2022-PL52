@@ -70,6 +70,17 @@ public class SwingUtil {
 	}
 	
 	/** 
+	 * Obtiene la key (primera columna) de la fila seleccionada en la tabla de carreras o string vacio (si no existe)
+	 */
+	public static String getSelectedKeySecond(JTable table) {
+		int row=table.getSelectedRow(); //el item de primera columna es el id de carrera
+		if (row>=0)
+			return (String)table.getModel().getValueAt(row,1);
+		else //no hay filas seleccionadas
+			return "";
+	}
+	
+	/** 
 	 * Selecciona la fila de la tabla con la clave indicada y devuelve el valor la clave de la fila seleccionada resultante
 	 * (la misma clave o string vacio si no existe la fila)
 	 */

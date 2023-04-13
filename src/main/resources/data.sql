@@ -32,22 +32,22 @@ insert into Registration values(2,"Lucas", "Palacios Miguélez", "64156721", "lp
 insert into Registration values(3,"Marta", "Álvarez Pérez", "64156721", "martalv@hotmail.com", "2021-06-18", "07:56:49", "Received", 2);
 insert into Registration values(4,"Miguel", "Roque Arcos", "64156721", "migroque@hotmail.com", "2023-03-01", "22:59:12", "Received", 3);
 
-INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email) 
-VALUES (1, 'John', 'Doe', '123456789', 'johndoe@email.com');
-INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email) 
-VALUES (2, 'Mary', 'Smith', '987654321', 'marysmith@email.com');
-INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email) 
-VALUES (3, 'Peter', 'Johnson', '555555555', 'peterjohnson@email.com');
+INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email, fiscal_number, teacher_address) 
+VALUES (1, 'John', 'Doe', '123456789', 'johndoe@email.com', "17819", "Calle Uría");
+INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email, fiscal_number, teacher_address) 
+VALUES (2, 'Mary', 'Smith', '987654321', 'marysmith@email.com', "181712", "Calle Uría");
+INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email, fiscal_number, teacher_address) 
+VALUES (3, 'Peter', 'Johnson', '555555555', 'peterjohnson@email.com', "182772", "Calle Uría");
 
 
 -- Insert 5 random entries into Teacher table
-INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email)
+INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email, fiscal_number, teacher_address)
 VALUES 
-  (4, 'John', 'Smith', '555123456', 'john.smith@example.com'),
-  (5, 'Mary', 'Johnson', '555987654', 'mary.johnson@example.com'),
-  (6, 'David', 'Brown', '555456789', 'david.brown@example.com'),
-  (7, 'Sarah', 'Taylor', '555234567', 'sarah.taylor@example.com'),
-  (8, 'James', 'Miller', '555345678', 'james.miller@example.com');
+  (4, 'John', 'Smith', '555123456', 'john.smith@example.com', "12891","Calle Uría"),
+  (5, 'Mary', 'Johnson', '555987654', 'mary.johnson@example.com', "19128", "Calle Uría"),
+  (6, 'David', 'Brown', '555456789', 'david.brown@example.com', "190192", "Calle Uría"),
+  (7, 'Sarah', 'Taylor', '555234567', 'sarah.taylor@example.com', "19910", "Calle Uría"),
+  (8, 'James', 'Miller', '555345678', 'james.miller@example.com', "188127", "Calle Uría");
 
 
 -- Insert 5 random entries into Registration table
@@ -64,13 +64,13 @@ VALUES
 
 
 -- Insert 5 random entries into Teacher table
-INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email)
-VALUES 
-  (9, 'John', 'Smith', '555123456', 'john.smith@example.com'),
-  (10, 'Mary', 'Johnson', '555987654', 'mary.johnson@example.com'),
-  (11, 'David', 'Brown', '555456789', 'david.brown@example.com'),
-  (12, 'Sarah', 'Taylor', '555234567', 'sarah.taylor@example.com'),
-  (13, 'James', 'Miller', '555345678', 'james.miller@example.com');
+--INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email)
+--VALUES 
+--  (9, 'John', 'Smith', '555123456', 'john.smith@example.com'),
+--  (10, 'Mary', 'Johnson', '555987654', 'mary.johnson@example.com'),
+--  (11, 'David', 'Brown', '555456789', 'david.brown@example.com'),
+--  (12, 'Sarah', 'Taylor', '555234567', 'sarah.taylor@example.com'),
+--  (13, 'James', 'Miller', '555345678', 'james.miller@example.com');
 
 -- Insert 5 random entries into Course table
 INSERT INTO Course (course_id, course_name, description, objectives, course_hours, course_start_date, course_end_date, course_start_period, course_end_period, total_places, available_places, course_fee, course_state, teacher_id, teacher_remuneration)
@@ -91,9 +91,9 @@ VALUES
     (19, 'Amelia', 'Rodriguez', '456789123', 'amelia.rodriguez@email.com', '2023-03-31', '16:00:00', 'Registered', 10),
     (20, 'Sophia', 'Garcia', '789123456', 'sophia.garcia@email.com', '2023-04-01', '10:00:00', 'Registered', 10);
 
-INSERT INTO Invoice (invoice_id, invoice_number, invoice_date, invoice_quantity, invoice_state, teacher_id, course_id)
-VALUES
-  (1, 1001, '2023-03-01', 100, 'Paid', null, 1);
+--INSERT INTO Invoice (invoice_id, invoice_quantity, teacher_id, course_id)
+--VALUES
+--  (1, 100, 1, 1);
 
 -- Payment corresponding to the invoice
 INSERT INTO Payment (payment_id, amount, payment_date, payment_time, payment_type, invoice_id, reg_id)

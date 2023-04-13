@@ -205,11 +205,19 @@ public class SecretaryController {
 		String date = "";
 		String hour = "";
 		
+		int quant = 0;
+		
 		//Initializations preventing exceptions
 		if (viewPayments.getTFAmount().getText().isEmpty()) {
 			throw new ApplicationException("Be careful, you must fill the amount gap");
 		} else strquant = viewPayments.getTFAmount().getText();
-		int quant = Integer.parseInt(strquant);
+		boolean containsDot = strquant.contains(".");
+		if (containsDot) {
+		    String cleanedString = strquant.replace(".", "");
+		    quant = Integer.parseInt(cleanedString);
+		}else {
+			quant = Integer.parseInt(strquant);
+		}
 		
 		if (viewPayments.getTFDate().getText().isEmpty()) {
 			throw new ApplicationException("Be careful, you must fill the date gap");
