@@ -91,33 +91,20 @@ VALUES
     (19, 'Amelia', 'Rodriguez', '456789123', 'amelia.rodriguez@email.com', '2023-03-31', '16:00:00', 'Registered', 10),
     (20, 'Sophia', 'Garcia', '789123456', 'sophia.garcia@email.com', '2023-04-01', '10:00:00', 'Registered', 10);
 
---INSERT INTO Invoice (invoice_id, invoice_quantity, teacher_id, course_id)
---VALUES
---  (1, 100, 1, 1);
-
---INSERT INTO Invoice (invoice_id, invoice_number, invoice_date, invoice_quantity, invoice_state, teacher_id, course_id)
---VALUES
-  --(1, 1001, '2023-03-01', 100, 'Paid', null, 1),
- -- (2, 1002, '2023-03-01', 100, 'Paid', null, 2),
- -- (3, 1003, '2023-03-01', 100, 'Paid', null, 3),
-  --(4, 1004, '2023-03-01', 100, 'Paid', null, 4),
-  --(5, 1005, '2023-03-01', 100, 'Paid', null, 5),
- -- (6, 1006, '2023-03-01', 100, 'Paid', null, 6);
-
 
 -- Payment corresponding to the invoice
 INSERT INTO Payment (payment_id, amount, payment_date, payment_time, payment_type, invoice_id, reg_id)
 VALUES
-  (1, 100, '2023-03-01', '14:30:00', 'Bank transfer', 1, 1),
-  (2, 700, '2023-03-02', '10:15:00', 'Professional registration', 1, 2),
-  (3, 80, '2023-03-03', '11:45:00', 'Bank transfer', 1, 3),
-  (4, 120, '2023-03-04', '15:00:00', 'Bank transfer', 1, 4),
-  (5, 90, '2023-03-05', '09:00:00', 'Bank transfer', 1, 5),
-  (6, 60, '2023-03-06', '13:30:00', 'Bank transfer', 1, 6),
-  (7, 110, '2023-03-07', '16:00:00', 'Bank transfer', 1, 7),
-  (8, 70, '2023-03-08', '08:45:00', 'Bank transfer', 1, 8),
-  (9, 130, '2023-03-09', '12:15:00', 'Bank transfer', 1, 9),
-  (10, 85, '2023-03-10', '17:30:00', 'Bank transfer', 1, 10);
+  (1, 100, '2023-03-01', '14:30:00', 'Professional registration', null, 1),
+-- (2, 700, '2023-03-02', '10:15:00', 'Professional registration', null, 2),
+  (3, 80, '2023-03-03', '11:45:00', 'Professional registration', null, 3),
+ -- (4, 120, '2023-03-04', '15:00:00', 'Professional registration', null, 4),
+  (5, 90, '2023-03-05', '09:00:00', 'Professional registration', null, 5),
+  (6, 60, '2023-03-06', '13:30:00', 'Professional registration', null, 6),
+  (7, 110, '2023-03-07', '16:00:00', 'Professional registration', null, 7),
+  (8, 70, '2023-03-08', '08:45:00', 'Professional registration', null, 8),
+  (9, 130, '2023-03-09', '12:15:00', 'Professional registration', null, 9),
+  (10, 85, '2023-03-10', '17:30:00', 'Professional registration', null, 10);
 
 -- Insert teachers
 -- Insert teachers

@@ -261,7 +261,6 @@ public class SecretaryController {
 		
 		int totalamount = model.getAmountPaid(regid);
 		
-		int togive = (int) RegistrationCancellationController.getAmountPaid();
 		
 /***********************************************Process of inserting all the payments**********************************/
 		
@@ -271,6 +270,7 @@ public class SecretaryController {
 				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			}
 		}else if (state.compareTo("Cancelled") == 0){ //Cancellations
+			int togive = (int) RegistrationCancellationController.getAmountPaid();
 			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
 			if (quant == togive) {
 				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
@@ -297,6 +297,7 @@ public class SecretaryController {
 			}
 		}
 		else if (state.compareTo("Cancelled") == 0) {
+			int togive = (int) RegistrationCancellationController.getAmountPaid();
 			if (quant == togive) {
 				SwingUtil.showMessage("The professional has received the money after cancelling its registration to a course.\n"
 						+ "The money paid will be given back, according to the criteria.", "Cancellation paid", 1);
