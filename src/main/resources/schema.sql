@@ -14,7 +14,8 @@ teacher_name varchar(50) not null,
 teacher_surnames varchar(50) not null, 
 teacher_phone varchar (9) not null, 
 teacher_email varchar(100) not null,
-teacher_address varchar(100));
+teacher_address varchar(100),
+fiscal_number varchar (10));
 
 create table Course 
 (course_id int primary key not null, 

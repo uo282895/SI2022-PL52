@@ -132,14 +132,15 @@ public class RegistrationCancellationController {
 					}
 				}
 				
-			    int reg_id = (int)view.getTable().getValueAt(sel, 0);
+			    //int reg_id = (int)view.getTable().getValueAt(sel, 0);
+			    int reg_id = SwingUtil.getSelectedKeyInteger(view.getTable());
 			    if (refund != 0.0) {
 			    	model.insertCancellationCompensate(reg_id); // Updating the DB with the cancelled registration to compensate
 			    }else {
 			    	model.insertCancellation(reg_id); // Not going to be compensated
 			    }
 
-			    double amount_paid = (double)view.getTable().getValueAt(sel, 10); // Amount paid by the Professional for the course enrol	    
+			    double amount_paid = (double)view.getTable().getValueAt(sel, 8); // Amount paid by the Professional for the course enrol	    
 
 			    JOptionPane.showMessageDialog(null, "The refund amount must be " + refund*100 + "% of the payed fee, that is " + refund*amount_paid + "€");
 				
@@ -189,7 +190,7 @@ public class RegistrationCancellationController {
 	    }
 
 	    DateTimeFormatter formatter_date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    String course_start_date_string = (String) view.getTable().getValueAt(sel, 8); // Course start date in String
+	    String course_start_date_string = (String) view.getTable().getValueAt(sel, 7); // Course start date in String
 	    LocalDate course_start = LocalDate.parse(course_start_date_string, formatter_date); // Course end time in LocalTime
 
 	    Calendar course_s = Calendar.getInstance();
@@ -220,7 +221,7 @@ public class RegistrationCancellationController {
 	        }
 	    }
 
-	    double amount_paid = (double) view.getTable().getValueAt(sel, 10); // Amount paid by the Professional for the course enrol
+	    double amount_paid = (double) view.getTable().getValueAt(sel, 8); // Amount paid by the Professional for the course enrol
 	    double refund_amount = refund * amount_paid;
 	    
 	    view.getFrame().setVisible(false);
