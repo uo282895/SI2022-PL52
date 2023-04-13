@@ -112,7 +112,7 @@ INSERT INTO Course (course_id, course_name, description, objectives, course_hour
 VALUES
 (1000, 'Introduction to Programming', 'An introduction to computer programming', 'To learn programming basics', 60, '2023-12-01', '2023-12-01',  '2023-04-01', '2023-06-01', 20, 20, 1000, 'Active', 1000, 500),
 (1001, 'Advanced Programming', 'A course on advanced programming concepts', 'To learn advanced programming techniques', 60, '2023-12-01', '2023-12-01',  '2023-06-01', '2023-07-01', 15, 15, 1500, 'Active', 1001, 750),
-(1002, 'Web Development', 'A course on web development', 'To learn web development basics', 60, '2023-07-01', '2023-07-01', '2023-03-01', '2023-06-01', 25, 25, 1200, 'Active', 1002, 600);
+(1008, 'Web Development', 'A course on web development', 'To learn web development basics', 60, '2023-07-01', '2023-07-01', '2023-03-01', '2023-06-01', 25, 25, 1200, 'Active', 1002, 600);
 
 -- Insert invoices
 INSERT INTO Invoice (invoice_id, invoice_number, invoice_date, invoice_quantity, invoice_state, teacher_id, course_id)

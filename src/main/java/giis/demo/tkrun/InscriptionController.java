@@ -4,9 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 import javax.swing.JButton;
@@ -21,6 +23,7 @@ public class InscriptionController {
 	private InscriptionModel insmodel;
 	private InscriptionsView insview;
 	private String lastSelectedKey="";
+	ArrayList<Integer> ids = new ArrayList<Integer>();
 	
 	public InscriptionController (InscriptionModel m, InscriptionsView v) {
 		this.insmodel = m;
@@ -74,6 +77,14 @@ public class InscriptionController {
 		insview.getTableCourses().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(insview.getTableCourses());
 		
+		TableColumnModel columnModel = insview.getTableCourses().getColumnModel();
+		
+		for(int i=0; i<insview.getTableCourses().getRowCount(); i++) {
+			ids.add(Integer.valueOf(insview.getTableCourses().getValueAt(i, 0).toString()));
+		}
+		TableColumn column = columnModel.getColumn(0);
+		columnModel.removeColumn(column);
+		
 	}
 	
 	public void insertNewProffessional() {
@@ -88,16 +99,17 @@ public class InscriptionController {
 		if (insview.getnameField().getText().isBlank() || insview.getsurnamesField().getText().isBlank() 
 				|| insview.getphoneField().getText().isBlank() || insview.getemailField().getText().isBlank()) {
 			throw new ApplicationException("Be careful, you must fill all the gaps");
-		}
-		 int index = insview.getTableCourses().getSelectedRow() + 1;
+		}	
+		
+		 int index = ids.get(insview.getTableCourses().getSelectedRow());
 		 int newid = insmodel.getLastID() + 1;
 		
 		 int places = insmodel.getPlacesCourse(index);
 		 if (places > 0) {
-			 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, time, state, course_id);
+			 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, time, state, index);
 			 JOptionPane.showOptionDialog(null, "You have been registered successfully", "Everything seems correct", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
 			 System.out.println("Inscription success");
-			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + time + " " + state + " " + course_id);
+			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + time + " " + state + " " + index);
 			 System.out.println("Places left:" + (places - 1));
 		 } else {
 			 JOptionPane.showOptionDialog(null, "There are no places left for the selected formative action", "Sorry, no places left", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] {"OK"}, "OK");

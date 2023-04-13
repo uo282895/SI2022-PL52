@@ -1,5 +1,7 @@
 package giis.demo.tkrun;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import giis.demo.util.Util;
 import giis.demo.util.ApplicationException;
@@ -41,7 +43,7 @@ public class InscriptionModel {
 		        throw e;
 		    }
 			
-			db.executeUpdate(sql, regid2, name, surnames, phone, email, "2023-04-03","12:00:00",1);
+			db.executeUpdate(sql, regid2, name, surnames, phone, email, getFechaHoy(),"12:00:00",course_id);
 			db.executeUpdate(sql_updateplaces, course_id);
 		}
 		
@@ -65,6 +67,13 @@ public class InscriptionModel {
 		public int getLastID() {
 			String sql = SQL_Last_ID;
 			return db.executeQueryPojo(RegisterMaxDisplayDTO.class, sql).get(0).getReg_id();
+		}
+		
+		public String getFechaHoy()  { 
+			LocalDate currentDate = LocalDate.now();
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
+			String date = currentDate.format(formatter);
+			return date;			
 		}
 		
 }
