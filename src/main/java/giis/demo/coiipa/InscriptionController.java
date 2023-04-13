@@ -14,7 +14,7 @@ import javax.swing.table.TableModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
-import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.CoursesDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
@@ -71,7 +71,7 @@ public class InscriptionController {
 	}
 	
 	public void getListCourses() {
-		List<CourseDisplayDTO> courses=insmodel.getListCourses(Util.isoStringToDate(insview.getFechaHoy()));
+		List<CoursesDisplayDTO> courses=insmodel.getListCourses(Util.isoStringToDate(insview.getFechaHoy()));
 		DefaultTableModel tmodel= (DefaultTableModel) SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id", "course_name", "course_start_date", "course_end_date", "course_fee"});
 		Object[] newHeader = {"ID", "Name", "Starts", "Ends", "Fee"};
 		tmodel.setColumnIdentifiers(newHeader);	

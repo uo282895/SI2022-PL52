@@ -4,7 +4,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import giis.demo.util.Util;
-import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.CoursesDisplayDTO;
 import giis.demo.dto.RegisterMaxDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
@@ -27,9 +27,9 @@ public class InscriptionModel {
 
 		
 		
-		public List<CourseDisplayDTO> getListCourses(Date fechaInsc){
+		public List<CoursesDisplayDTO> getListCourses(Date fechaInsc){
 			String sql = SQL_List_Courses;
-			return db.executeQueryPojo(CourseDisplayDTO.class, sql);
+			return db.executeQueryPojo(CoursesDisplayDTO.class, sql);
 		}
 		
 		public void insertNewProffessional(int regid, String name, String surnames, String phone, String email, String date, String time, String state, int course_id) {
@@ -63,7 +63,7 @@ public class InscriptionModel {
 		
 		public int getPlacesCourse(int id) {
 			String sql = "SELECT available_places from Course WHERE course_id = ?;";
-			return db.executeQueryPojo(CourseDisplayDTO.class, sql, id).get(0).getAvailable_places();
+			return db.executeQueryPojo(CoursesDisplayDTO.class, sql, id).get(0).getAvailable_places();
 		}
 		
 		public int getLastID() {

@@ -9,7 +9,6 @@ import javax.swing.JDialog;
 import javax.swing.JOptionPane;
 import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 import org.apache.commons.beanutils.PropertyUtils;
 
 /**
@@ -39,12 +38,12 @@ public class SwingUtil {
 			showMessage(e.toString(), "Excepcion no controlada",JOptionPane.ERROR_MESSAGE);
 		}
 	}	 
-	private static void showMessage(String message, String title, int type) {
+	public static void showMessage(String message, String title, int type) {
 		//Como este metodo no recibe el contexto de la ventana de la aplicacion, 
 		//no usa el metodo estatico showMessageDialog de JOptionPane 
 		//y establece la posicion para que no aparezca en el centro de la pantalla
 	    JOptionPane pane = new JOptionPane(message,type,JOptionPane.DEFAULT_OPTION);
-	    pane.setOptions(new Object[] {"ACEPTAR"}); //fija este valor para que no dependa del idioma
+	    pane.setOptions(new Object[] {"ACCEPT"}); //fija este valor para que no dependa del idioma
 	    JDialog d = pane.createDialog(pane, title);
 	    d.setLocation(200,200);
 	    d.setVisible(true);
@@ -71,6 +70,25 @@ public class SwingUtil {
 	}
 	
 	/** 
+	 * Obtiene la key (primera columna) de la fila seleccionada en la tabla de carreras o string vacio (si no existe)
+	 */
+	public static String getSelectedKeySecond(JTable table) {
+		int row=table.getSelectedRow(); //el item de primera columna es el id de carrera
+		if (row>=0)
+			return (String)table.getModel().getValueAt(row,1);
+		else //no hay filas seleccionadas
+			return "";
+	}
+	
+	public static int getSelectedKeyInteger(JTable table) {
+		int row=table.getSelectedRow(); //el item de primera columna es el id de carrera
+		if (row>=0)
+			return (int)table.getModel().getValueAt(row,0);
+		else //no hay filas seleccionadas
+			return -1;
+	}
+	
+	/** 
 	 * Selecciona la fila de la tabla con la clave indicada y devuelve el valor la clave de la fila seleccionada resultante
 	 * (la misma clave o string vacio si no existe la fila)
 	 */
@@ -93,10 +111,10 @@ public class SwingUtil {
 	 * @param colProperties Los nombres de atributo de los objetos (ordenados) que se incluiran en el tablemodel
 	 * (cada uno debe disponer del correspondiente getter)
 	 */
-	public static <E> TableModel getTableModelFromPojos(List<E> pojos, String[] colProperties) {
+	public static <E> DefaultTableModel getTableModelFromPojos(List<E> pojos, String[] colProperties) {
 		//Creacion inicial del tablemodel y dimensionamiento
 		//tener en cuenta que para que la tabla pueda mostrar las columnas debera estar dentro de un JScrollPane
-		TableModel tm;
+		DefaultTableModel tm;
 		if (pojos==null) //solo las columnas (p.e. para inicializaciones)
 			return new DefaultTableModel(colProperties,0);
 		else
@@ -115,11 +133,11 @@ public class SwingUtil {
 		}
 		return tm;
 	}
-	public static <E> TableModel getRecordModelFromPojo(E pojo, String[] colProperties) {
+	public static <E> DefaultTableModel getRecordModelFromPojo(E pojo, String[] colProperties) {
 		//Creacion inicial del tablemodel y dimensionamiento
 		//como solo habra dos columnas pongo una cabecera con dos valores vacios, de forma que 
 		//aparezca muy reducida pero con el handler necesario para poder redimensionarla
-		TableModel tm;
+		DefaultTableModel tm;
 		tm=new DefaultTableModel(new String[] {"",""}, colProperties.length);
 		//carga cada uno de los valores de pojos usando PropertyUtils (de apache coommons beanutils)
 			for (int j=0; j<colProperties.length; j++) {
