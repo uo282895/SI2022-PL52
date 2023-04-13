@@ -40,6 +40,7 @@ check (course_end_period < course_start_date));
 create table Invoice 
 (invoice_id int primary key not null, 
 invoice_quantity int not null, 
+invoice_state varchar(50) not null,
 teacher_id int, 
 course_id int UNIQUE, 
 foreign key(teacher_id) references Teacher(teacher_id), 

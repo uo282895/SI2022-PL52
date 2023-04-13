@@ -11,9 +11,9 @@ public class ReportOfExpensesModel {
 
 	public static final String SQL_LIST_OF_EXPENSES=
 			"SELECT c.course_id, c.course_name, "
-			+ "SUM(CASE WHEN i.invoice_state = 'paid' THEN i.invoice_quantity ELSE 0 END) AS teacher_paid_invoices_sum, "
+			+ "SUM(CASE WHEN i.invoice_state = 'Paid' THEN i.invoice_quantity ELSE 0 END) AS teacher_paid_invoices_sum, "
 			+ "c.teacher_remuneration AS teacher_invoices_sum, "
-			+ "SUM(CASE WHEN p.payment_type = 'Registration' AND i.invoice_state = 'paid' THEN i.invoice_quantity ELSE 0 END) "
+			+ "SUM(CASE WHEN p.payment_type = 'Registration' AND i.invoice_state = 'Paid' THEN i.invoice_quantity ELSE 0 END) "
 			+ "AS registration_paid_invoices_sum, "
 			+ "(SELECT SUM(i2.invoice_quantity) FROM Invoice i2 INNER JOIN Registration r ON i2.course_id = r.course_id WHERE "
 			+ "r.course_id = c.course_id) AS registration_invoices_sum "

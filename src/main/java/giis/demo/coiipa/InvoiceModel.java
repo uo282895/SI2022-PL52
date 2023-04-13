@@ -32,7 +32,7 @@ public class InvoiceModel {
 			+ "WHERE c.course_id = ?";
 	
 	public static final String SQL_INSERT_INVOICE = "INSERT into Invoice(invoice_id, invoice_quantity, "
-			+ "teacher_id, course_id) values(?, ?, ?, ?)";
+			+ "invoice_state, teacher_id, course_id) values(?, ?,'Received', ?, ?)";
 	
 	public static final String SQL_REMUNERATION = "SELECT c.teacher_remuneration "+
 			"FROM Course c "+  
@@ -101,7 +101,7 @@ public class InvoiceModel {
 		
 		return db.executeQueryPojo(HelpInvoiceDTO.class, sql, courseid).get(0).getHas_invoice();
 	}
-	
+
 
 	//Method encharged of the validation of dates (both registration and payment)
 	public void validateDate(Date paydate) {
@@ -119,6 +119,12 @@ public class InvoiceModel {
 		String h = Util.hourToIsoString(payhour);
 		
 		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR, payid, amount, d, h, invid);
+	}
+	
+	public void updateState(int invid) {
+		String sql_state = "UPDATE Invoice " //Update the state (it is now wrong)
+				+ "set invoice_state = 'Paid' where invoice_id = ?";
+		db.executeUpdate(sql_state, invid);
 	}
 	
 	/* General use for object validation */

@@ -218,6 +218,7 @@ public class InvoiceController {
 			if (quant == rem) {//The payment of the invoice must be exact
 				model.insertPayment(payid, - quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), invid);
 				SwingUtil.showMessage("The invoice has been correctly paid.", "Successful payment of an invoice", 1);
+				model.updateState(invid);
 			}else {
 				SwingUtil.showMessage("Please, introduce the correct amount to be paid to the teacher.", "Wrong payment", 0);
 			}
