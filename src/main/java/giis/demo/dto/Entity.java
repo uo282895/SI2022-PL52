@@ -1,4 +1,4 @@
-package giis.demo.jdbc;
+package giis.demo.dto;
 
 public class Entity {
 	private Integer id;

@@ -1,4 +1,4 @@
-package giis.demo.tkrun;
+package giis.demo.dto;
 
 public class CourseDisplayDTO {
 	

@@ -2,7 +2,7 @@ package giis.demo.tkrun.ut;
 import org.junit.*;
 import static org.junit.Assert.assertEquals;
 
-import giis.demo.tkrun.*;
+import giis.demo.coiipa.*;
 import giis.demo.util.*;
 
 import java.util.List;

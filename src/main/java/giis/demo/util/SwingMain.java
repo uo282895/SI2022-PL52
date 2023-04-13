@@ -2,11 +2,13 @@ package giis.demo.util;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
+
+import giis.demo.coiipa.*;
+
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import giis.demo.tkrun.*;
 
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 

@@ -1,4 +1,4 @@
-package giis.demo.tkrun;
+package giis.demo.coiipa;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -14,6 +14,8 @@ import javax.swing.table.TableModel;
 import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
+import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.RegistrationDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;

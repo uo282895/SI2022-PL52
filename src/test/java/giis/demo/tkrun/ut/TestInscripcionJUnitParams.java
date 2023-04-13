@@ -5,8 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.runner.RunWith;
 import junitparams.Parameters;
 import junitparams.JUnitParamsRunner;
-
-import giis.demo.tkrun.*;
+import giis.demo.coiipa.*;
 import giis.demo.util.*;
 
 import java.util.Date;

@@ -1,6 +1,6 @@
 package giis.demo.jdbc.ut;
 
-import giis.demo.jdbc.DemoJdbc;
+import giis.demo.dto.DemoJdbc;
 import junit.framework.TestCase;
 /**
  * Ejecuta las demo de acceso a base de datos con JDBC

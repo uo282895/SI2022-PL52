@@ -1,9 +1,12 @@
-package giis.demo.tkrun;
+package giis.demo.coiipa;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import giis.demo.util.Util;
+import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.RegisterMaxDisplayDTO;
+import giis.demo.dto.RegistrationDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 

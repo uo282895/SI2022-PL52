@@ -6,7 +6,7 @@ import org.junit.rules.ExpectedException;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
-import giis.demo.tkrun.*;
+import giis.demo.coiipa.*;
 import giis.demo.util.*;
 import giis.visualassert.VisualAssert;
 
