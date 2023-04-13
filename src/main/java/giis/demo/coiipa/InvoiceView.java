@@ -89,7 +89,7 @@ public class InvoiceView {
 		frmManageInvoices.getContentPane().add(tfDate);
 		tfDate.setColumns(10);
 		
-		JLabel lblInfo2 = new JLabel("Input data related to the payment associated to the selected registration: ");
+		JLabel lblInfo2 = new JLabel("Input data related to the payment associated to the selected invoice: ");
 		lblInfo2.setBounds(20, 279, 434, 14);
 		frmManageInvoices.getContentPane().add(lblInfo2);
 		

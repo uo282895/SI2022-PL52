@@ -111,6 +111,7 @@ public class InvoiceModel {
 		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		
 		validateCondition(!paydate.before(today), "You cannot input past dates. Please, enter a valid date.");
+		validateCondition(!paydate.after(today), "You cannot input future dates. Please, enter a valid date.");
 	}
 	
 	//Method to insert into the DB each payment of an invoice
