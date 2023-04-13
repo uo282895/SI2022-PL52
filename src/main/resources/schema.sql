@@ -36,9 +36,7 @@ check(course_start_period <= course_end_period),
 check (course_end_period < course_start_date));
 
 create table Invoice 
-(invoice_id int primary key not null, 
-invoice_number int not null, 
-invoice_date date, 
+(invoice_id int primary key not null,  
 invoice_quantity int not null, 
 invoice_state varchar(50) not null, 
 teacher_id int, 
