@@ -72,7 +72,7 @@ public class CoursesCreationView {
 	@SuppressWarnings("unchecked")
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 794, 742);
+		frame.setBounds(100, 100, 794, 672);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Plan a new Formative Action");
@@ -99,7 +99,7 @@ public class CoursesCreationView {
 		frame.getContentPane().add(Teachers_name_label_1);
 		
 		course_description_textArea = new JTextArea();
-		course_description_textArea.setBounds(25, 444, 721, 81);
+		course_description_textArea.setBounds(25, 444, 721, 46);
 		course_description_textArea.setWrapStyleWord(true);
 		course_description_textArea.setLineWrap(true);
 		frame.getContentPane().add(course_description_textArea);
@@ -109,12 +109,12 @@ public class CoursesCreationView {
 		frame.getContentPane().add(course_description_label);
 		
 		JLabel course_main_contents_label = new JLabel("Course main contents:");
-		course_main_contents_label.setBounds(25, 536, 166, 17);
+		course_main_contents_label.setBounds(25, 501, 166, 17);
 		frame.getContentPane().add(course_main_contents_label);
 		
 		course_main_contents_textArea = new JTextArea();
 		course_main_contents_textArea.setWrapStyleWord(true);
-		course_main_contents_textArea.setBounds(25, 564, 721, 81);
+		course_main_contents_textArea.setBounds(25, 529, 721, 46);
 		course_main_contents_textArea.setLineWrap(true);
 		frame.getContentPane().add(course_main_contents_textArea);
 		
@@ -185,7 +185,7 @@ public class CoursesCreationView {
 		
 		close_NewButton = new JButton("Close");
 		
-		close_NewButton.setBounds(25, 656, 159, 36);
+		close_NewButton.setBounds(25, 586, 159, 36);
 		frame.getContentPane().add(close_NewButton);
 		
 		course_teacher_comboBox = new JComboBox();
@@ -211,7 +211,7 @@ public class CoursesCreationView {
 		accept_NewButton = new JButton("Check and accept");
 		
 		
-		accept_NewButton.setBounds(587, 656, 159, 36);
+		accept_NewButton.setBounds(587, 586, 159, 36);
 		frame.getContentPane().add(accept_NewButton);
 		
 		JLabel course_begining_date_begining_label_1 = new JLabel("Date of the session:");
