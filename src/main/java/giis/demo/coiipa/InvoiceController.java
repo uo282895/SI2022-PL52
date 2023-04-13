@@ -152,7 +152,7 @@ public class InvoiceController {
 			
 			this.lastSelectedKey2 = SwingUtil.getSelectedKeySecond(view.getTableTeachers());
 			System.out.println(lastSelectedKey2);
-			int teacherId = Integer.parseInt(this.lastSelectedKey);
+			int teacherId = Integer.parseInt(this.lastSelectedKey2);
 			
 			//Get a correct id (the last one + 1)
 			int invid = model.getLastInvoiceId();
