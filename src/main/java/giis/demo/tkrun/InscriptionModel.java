@@ -44,7 +44,7 @@ public class InscriptionModel {
 		    }
 			
 			db.executeUpdate(sql, regid2, name, surnames, phone, email, getFechaHoy(),"12:00:00",course_id);
-			db.executeUpdate(sql_updateplaces, course_id);
+			//db.executeUpdate(sql_updateplaces, course_id);
 		}
 		
 		public CourseEntity getCourse(int id) {
