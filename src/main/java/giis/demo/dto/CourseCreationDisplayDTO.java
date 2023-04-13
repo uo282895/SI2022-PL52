@@ -7,21 +7,19 @@ public class CourseCreationDisplayDTO {
 	private String description;
 	private String objectives;
 	private int course_hours;
-	private String course_date;
-	private String course_time;
+	private String course_start_date;
 	private String course_start_period;
 	private String course_end_period;
 	private int total_places;
 	private int available_places;
 	private float course_fee;
-	private String place;
 	private String course_state;
 	private int teacher_id;
 		
 	public CourseCreationDisplayDTO() {}
 	public CourseCreationDisplayDTO(int course_id, String course_name, String description, String objectives,
-			int course_hours, String course_date, String course_time, String course_start_period,
-			String course_end_period, int total_places, int available_places, float course_fee, String place,
+			int course_hours, String course_start_date, String course_start_period,
+			String course_end_period, int total_places, int available_places, float course_fee,
 			String course_state, int teacher_id) {
 		
 		this.course_id = course_id;
@@ -29,14 +27,12 @@ public class CourseCreationDisplayDTO {
 		this.description = description;
 		this.objectives = objectives;
 		this.course_hours = course_hours;
-		this.course_date = course_date;
-		this.course_time = course_time;
+		this.course_start_date = course_start_date;
 		this.course_start_period = course_start_period;
 		this.course_end_period = course_end_period;
 		this.total_places = total_places;
 		this.available_places = available_places;
 		this.course_fee = course_fee;
-		this.place = place;
 		this.course_state = course_state;
 		this.teacher_id = teacher_id;
 	}
@@ -79,17 +75,11 @@ public class CourseCreationDisplayDTO {
 	public void setCourse_hours(int course_hours) {
 		this.course_hours = course_hours;
 	}
-	public String getCourse_date() {
-		return course_date;
+	public String getCourse_start_date() {
+		return course_start_date;
 	}
-	public void setCourse_date(String course_date) {
-		this.course_date = course_date;
-	}
-	public String getCourse_time() {
-		return course_time;
-	}
-	public void setCourse_time(String course_time) {
-		this.course_time = course_time;
+	public void setCourse_start_date(String course_start_date) {
+		this.course_start_date = course_start_date;
 	}
 	public String getCourse_start_period() {
 		return course_start_period;
@@ -120,12 +110,6 @@ public class CourseCreationDisplayDTO {
 	}
 	public void setCourse_fee(float course_fee) {
 		this.course_fee = course_fee;
-	}
-	public String getPlace() {
-		return place;
-	}
-	public void setPlace(String place) {
-		this.place = place;
 	}
 	public String getCourse_state() {
 		return course_state;

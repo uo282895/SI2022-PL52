@@ -125,6 +125,16 @@ public class AdministrationWindow {
 		separator.setBounds(20, 71, 551, 18);
 		frame.getContentPane().add(separator);
 		
+		JButton btnManageInvoices = new JButton("Manage invoices");
+		btnManageInvoices.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
+			public void actionPerformed(ActionEvent e) {
+				InvoiceController controller = new InvoiceController(new InvoiceModel(), new InvoiceView());
+				controller.initController();
+			}
+		});
+		btnManageInvoices.setBounds(334, 242, 237, 41);
+		frame.getContentPane().add(btnManageInvoices);
+		
 	}
 
 	public JFrame getFrame() { return this.frame; }

@@ -14,7 +14,7 @@ public class RegistrationCancellationModel {
 	
 	public static final String SQL_LIST_REGISTRATIONS=
 			"SELECT Registration.reg_id, Course.course_name, Registration.reg_name, Registration.reg_surnames, Registration.reg_email, "
-			+ "Registration.reg_phone, Registration.reg_date, Registration.reg_time, Course.course_date, Course.course_time, "
+			+ "Registration.reg_phone, Registration.reg_date, Registration.reg_time, Course.course_start_date, "
 			+ "Payment.amount "
 			+ "FROM Course "
 			+ "INNER JOIN Registration ON Course.course_id = Registration.course_id "

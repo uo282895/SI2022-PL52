@@ -50,9 +50,9 @@ public class RegistrationCancellationController {
 		List<RegistrationDisplayDTO> registrations = model.getListRegistrations();
 		DefaultTableModel tmodel = (DefaultTableModel) SwingUtil.getTableModelFromPojos(registrations, 
 				new String[] {"reg_id", "course_name", "reg_name", "reg_surnames", "reg_email", "reg_phone", "reg_date",
-						"reg_time", "course_date", "course_time", "amount"});
+						"reg_time", "course_start_date", "amount"});
 		Object[] newHeaders = {"ID", "Course name", "Professional name", "Professional surnames", "email", "phone", "Date of registration", "Hour of registration",
-				"Course start date", "Course start hour", "amount paid"};
+				"Course start date", "amount paid"};
 		tmodel.setColumnIdentifiers(newHeaders);
 		view.getTable().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTable());

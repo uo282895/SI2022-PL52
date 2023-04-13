@@ -16,19 +16,20 @@ import giis.demo.dto.PaymentAdditionalDisplayDTO;
 import giis.demo.dto.PaymentDisplayDTO;
 import giis.demo.dto.PaymentInputDTO;
 import giis.demo.dto.RegistrationEntity;
+import giis.demo.dto.TeacherInvoiceDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
 import giis.demo.util.Util;
 
-public class SecretaryModel {
+public class InvoiceModel {
 	
 	private Database db=new Database();
 	
-	public static final String SQL_LIST_COURSES=
-			"SELECT course_id, course_name, course_state, course_start_period, "
-			+ "course_end_period, total_places, available_places, "
-			+ "course_start_date "
-			+ "FROM Course c";
+	public static final String SQL_LIST_TEACHERS=
+			"SELECT t.teacher_name, t.teacher_surnames, c.course_name "+
+			"FROM Teacher t "+ 
+			"INNER JOIN Course c ON t.teacher_id = c.teacher_id "+ 
+			"WHERE c.course_end_date < CURRENT_DATE";
 	
 	public static final String SQL_INSERT_AMOUNTDATEHOUR=
 			"INSERT into Payment(payment_id, amount, payment_date, payment_time, payment_type, "
@@ -96,11 +97,11 @@ public class SecretaryModel {
 	}
 	
 	/**
-	 * Obtains the list of courses (formative actions)
+	 * Obtains the list of teachers that have taught the last session of a course
 	 */
-	public List<CourseDisplayDTO> getListCourses() {
-		String sql= SQL_LIST_COURSES;
-		return db.executeQueryPojo(CourseDisplayDTO.class, sql);
+	public List<TeacherInvoiceDisplayDTO> getListTeachers() {
+		String sql= SQL_LIST_TEACHERS;
+		return db.executeQueryPojo(TeacherInvoiceDisplayDTO.class, sql);
 	}
 	
 	//Method encharged of the validation of dates (both registration and payment)
@@ -244,7 +245,7 @@ public class SecretaryModel {
 	
 	//Obtains the necessary ADDITIONAL data to show of the selected course
 	public CourseInfoDisplayDTO getCourse(int courseid) {
-		String sql="SELECT c.objectives, c.description, t.teacher_name, t.teacher_surnames "
+		String sql="SELECT c.objectives, c.description, c.place, t.teacher_name, t.teacher_surnames "
 				+ "from Course c INNER JOIN Teacher t on c.teacher_id = t.teacher_id "
 				+ "where c.course_id = ?";
 		List<CourseInfoDisplayDTO> courses = db.executeQueryPojo(CourseInfoDisplayDTO.class, sql, courseid);

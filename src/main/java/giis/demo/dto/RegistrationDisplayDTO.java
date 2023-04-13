@@ -10,13 +10,12 @@ public class RegistrationDisplayDTO {
 	private String reg_phone;
 	private String reg_date;
 	private String reg_time;
-	private String course_date;
-	private String course_time;
+	private String course_start_date;
 	private double amount;
 	
 	public RegistrationDisplayDTO(){}
 	public RegistrationDisplayDTO(int reg_id, String course_name, String reg_name, String reg_surnames, String reg_email, String reg_phone,
-			String reg_date, String reg_time, String course_date, String course_time, double amount) {
+			String reg_date, String reg_time, String course_start_date, double amount) {
 		super();
 		this.reg_id = reg_id;
 		this.course_name = course_name;
@@ -26,8 +25,7 @@ public class RegistrationDisplayDTO {
 		this.reg_phone = reg_phone;
 		this.reg_date = reg_date;
 		this.reg_time = reg_time;
-		this.course_date = course_date;
-		this.course_time = course_time;
+		this.course_start_date = course_start_date;
 		this.amount = amount;
 	}
 	
@@ -44,17 +42,11 @@ public class RegistrationDisplayDTO {
 		this.amount = amount;
 	}
 	
-	public String getCourse_date() {
-		return course_date;
+	public String getCourse_start_date() {
+		return course_start_date;
 	}
-	public void setCourse_date(String course_date) {
-		this.course_date = course_date;
-	}
-	public String getCourse_time() {
-		return course_time;
-	}
-	public void setCourse_time(String course_time) {
-		this.course_time = course_time;
+	public void setCourse_start_date(String course_start_date) {
+		this.course_start_date = course_start_date;
 	}
 	public String getCourse_name() {
 		return course_name;

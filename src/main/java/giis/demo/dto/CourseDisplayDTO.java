@@ -9,14 +9,13 @@ public class CourseDisplayDTO {
 	private String course_end_period;
 	private int total_places;
 	private int available_places;
-	private String course_date;
-	private String course_time;
+	private String course_start_date;
 	private String course_id;
 	
 	//Constructors
 	public CourseDisplayDTO() {}
 	public CourseDisplayDTO(String course_name, String course_state, String course_start_period,
-			String course_end_period, int total_places, int available_places, String course_date, String course_time, String course_id) {
+			String course_end_period, int total_places, int available_places, String course_start_date, String course_id) {
 		super();
 		this.course_name = course_name;
 		this.course_state = course_state;
@@ -24,8 +23,7 @@ public class CourseDisplayDTO {
 		this.course_end_period = course_end_period;
 		this.total_places = total_places;
 		this.available_places = available_places;
-		this.course_date = course_date;
-		this.course_time = course_time;
+		this.course_start_date = course_start_date;
 		this.course_id = course_id;
 	}
 	
@@ -66,17 +64,11 @@ public class CourseDisplayDTO {
 	public void setAvailable_places(int available_places) {
 		this.available_places = available_places;
 	}
-	public String getCourse_date() {
-		return course_date;
+	public String getCourse_start_date() {
+		return course_start_date;
 	}
-	public void setCourse_date(String course_date) {
-		this.course_date = course_date;
-	}
-	public String getCourse_time() {
-		return course_time;
-	}
-	public void setCourse_time(String course_time) {
-		this.course_time = course_time;
+	public void setCourse_start_date(String course_start_date) {
+		this.course_start_date = course_start_date;
 	}
 	public String getCourse_id() {
 		return course_id;
