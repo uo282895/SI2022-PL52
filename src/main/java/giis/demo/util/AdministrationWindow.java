@@ -125,6 +125,7 @@ public class AdministrationWindow {
 		separator.setBounds(20, 71, 551, 18);
 		frame.getContentPane().add(separator);
 		
+
 		JButton btnManageInvoices = new JButton("Manage invoices");
 		btnManageInvoices.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
@@ -134,6 +135,18 @@ public class AdministrationWindow {
 		});
 		btnManageInvoices.setBounds(334, 242, 237, 41);
 		frame.getContentPane().add(btnManageInvoices);
+		
+		JButton ReportOfExpensesButton = new JButton("Show a report of expenses");
+		ReportOfExpensesButton.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ReportOfExpensesController controller = new ReportOfExpensesController(new ReportOfExpensesView(),
+						new ReportOfExpensesModel());
+				controller.initController();
+			}
+		});
+		ReportOfExpensesButton.setBounds(27, 236, 237, 41);
+		frame.getContentPane().add(ReportOfExpensesButton);
 		
 	}
 

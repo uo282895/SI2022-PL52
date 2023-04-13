@@ -1,7 +1,11 @@
 package giis.demo.util;
 import java.io.FileInputStream;
 import java.io.IOException;
-
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.Properties;
 
 import org.apache.commons.dbutils.DbUtils;
@@ -57,5 +61,27 @@ public class Database extends DbUtil {
 	public void loadDatabase() {
 		executeScript(SQL_LOAD);
 	}
+	
+	 public int getSessionCount(int courseId) {
+	        String sql = "SELECT COUNT(*) FROM Session WHERE course_id = ?";
+	        int sessionCount = 0;
+
+	        try (Connection conn = DriverManager.getConnection(url);
+	             PreparedStatement pstmt = conn.prepareStatement(sql)) {
+
+	            pstmt.setInt(1, courseId);
+
+	            try (ResultSet rs = pstmt.executeQuery()) {
+	                if (rs.next()) {
+	                    sessionCount = rs.getInt(1);
+	                }
+	            }
+
+	        } catch (SQLException e) {
+	            throw new ApplicationException("Error executing query: " + e.getMessage());
+	        }
+
+	        return sessionCount;
+	    }
 	
 }

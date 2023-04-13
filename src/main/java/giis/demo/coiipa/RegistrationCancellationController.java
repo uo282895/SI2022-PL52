@@ -14,6 +14,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.ListSelectionModel;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
+import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
 
 import giis.demo.dto.RegistrationDisplayDTO;
@@ -36,16 +38,11 @@ public class RegistrationCancellationController {
 		// Insert the registrations data into the JTable
 		this.getListRegistrations();
 		this.initController();
-		/*
-		TableModel selected_index = view.getTable().getModel();
-		String course_selected = (String)selected_index.getValueAt(0, 0);
-		view.getSelected_registration_label().setText(course_selected);
-		*/
+		
 		//Abre la ventana (sustituye al main generado por WindowBuilder)
 		view.getFrame().setVisible(true); 
 	}
-	
-	
+
 	public void getListRegistrations() {
 		List<RegistrationDisplayDTO> registrations = model.getListRegistrations();
 		DefaultTableModel tmodel = (DefaultTableModel) SwingUtil.getTableModelFromPojos(registrations, 
@@ -56,9 +53,13 @@ public class RegistrationCancellationController {
 		tmodel.setColumnIdentifiers(newHeaders);
 		view.getTable().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(view.getTable());
+		
+		/*Hiding the column of the ID*/
+		TableColumnModel columnModel = view.getTable().getColumnModel();
+		TableColumn column = columnModel.getColumn(0);
+		columnModel.removeColumn(column);
 	}
-	
-	
+		
 	public void initController() {
 		
 		
@@ -100,7 +101,7 @@ public class RegistrationCancellationController {
 				}
 				
 				DateTimeFormatter formatter_date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				String course_start_date_string = (String)view.getTable().getValueAt(sel, 8); // Course start date in String
+				String course_start_date_string = (String)view.getTable().getValueAt(sel, 7); // Course start date in String
 			    LocalDate course_start = LocalDate.parse(course_start_date_string, formatter_date); // Course end time in LocalTime
 			    
 			    Calendar course_s = Calendar.getInstance();
@@ -139,6 +140,7 @@ public class RegistrationCancellationController {
 			    }
 
 			    double amount_paid = (double)view.getTable().getValueAt(sel, 10); // Amount paid by the Professional for the course enrol	    
+
 			    JOptionPane.showMessageDialog(null, "The refund amount must be " + refund*100 + "% of the payed fee, that is " + refund*amount_paid + "€");
 				
 				view.getFrame().setVisible(false);
@@ -150,10 +152,10 @@ public class RegistrationCancellationController {
 			public void mouseReleased(MouseEvent e) {
 				view.getCancellation_dateJDateChooser().setCalendar(null);
 				int sel = view.getTable().getSelectedRow();
-				int id = (int)view.getTable().getValueAt(sel, 0);
-				String course_name = (String)view.getTable().getValueAt(sel, 1); // Get the course name from the table
-				String reg_name = (String)view.getTable().getValueAt(sel, 2); // Get the Professional name from the table
-				String reg_surname = (String)view.getTable().getValueAt(sel, 3); // Get the Professional surname from the table
+				int id = SwingUtil.getSelectedKeyInteger(view.getTable());
+				String course_name = (String)view.getTable().getValueAt(sel, 0); // Get the course name from the table
+				String reg_name = (String)view.getTable().getValueAt(sel, 1); // Get the Professional name from the table
+				String reg_surname = (String)view.getTable().getValueAt(sel, 2); // Get the Professional surname from the table
 				view.getSelected_registration_label().setText("ID " + id + " from "+ reg_name + " "
 				+ reg_surname + " for " + course_name + " course");
 			}
