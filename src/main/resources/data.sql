@@ -95,16 +95,16 @@ VALUES
 -- Payment corresponding to the invoice
 INSERT INTO Payment (payment_id, amount, payment_date, payment_time, payment_type, invoice_id, reg_id)
 VALUES
-  (1, 100, '2023-03-01', '14:30:00', 'Professional registration', null, 1),
+  (1, 700, '2023-03-01', '14:30:00', 'Professional registration', null, 1),
 -- (2, 700, '2023-03-02', '10:15:00', 'Professional registration', null, 2),
   (3, 80, '2023-03-03', '11:45:00', 'Professional registration', null, 3),
  -- (4, 120, '2023-03-04', '15:00:00', 'Professional registration', null, 4),
-  (5, 90, '2023-03-05', '09:00:00', 'Professional registration', null, 5),
-  (6, 60, '2023-03-06', '13:30:00', 'Professional registration', null, 6),
+  (5, 700, '2023-03-05', '09:00:00', 'Professional registration', null, 5),
+  (6, 700, '2023-03-06', '13:30:00', 'Professional registration', null, 6),
   (7, 110, '2023-03-07', '16:00:00', 'Professional registration', null, 7),
   (8, 70, '2023-03-08', '08:45:00', 'Professional registration', null, 8),
-  (9, 130, '2023-03-09', '12:15:00', 'Professional registration', null, 9),
-  (10, 85, '2023-03-10', '17:30:00', 'Professional registration', null, 10);
+  (9, 500, '2023-03-09', '12:15:00', 'Professional registration', null, 9),
+  (10, 500, '2023-03-10', '17:30:00', 'Professional registration', null, 10);
 
 -- Insert teachers
 -- Insert teachers
