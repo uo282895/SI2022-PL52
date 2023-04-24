@@ -39,8 +39,8 @@ public class InvoiceModel {
 			"WHERE c.course_id = ?";
 	
 	public static final String SQL_INSERT_AMOUNTDATEHOUR=
-			"INSERT into Payment(payment_id, amount, payment_date, payment_time, payment_type, "
-			+ "invoice_id, reg_id) values(?, ?, ?, ?,'Invoice payment',?, null)";
+			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
+			+ "invoice_id, reg_id) values(?, ?, ?,'Invoice payment',?, null)";
 	
 	/**
 	 * Obtains the list of teachers that have taught the last session of a course
@@ -115,11 +115,10 @@ public class InvoiceModel {
 	}
 	
 	//Method to insert into the DB each payment of an invoice
-	public void insertPayment(int payid, int amount, Date paydate, Date payhour, int invid) {
+	public void insertPayment(int payid, int amount, Date paydate, int invid) {
 		String d = Util.dateToIsoString(paydate);
-		String h = Util.hourToIsoString(payhour);
 		
-		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR, payid, amount, d, h, invid);
+		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR, payid, amount, d, invid);
 	}
 	
 	public void updateState(int invid) {
