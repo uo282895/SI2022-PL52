@@ -11,7 +11,6 @@ public class CourseCreationDisplayDTO {
 	private String course_start_period;
 	private String course_end_period;
 	private int total_places;
-	private int available_places;
 	private float course_fee;
 	private String course_state;
 	private int teacher_id;
@@ -19,7 +18,7 @@ public class CourseCreationDisplayDTO {
 	public CourseCreationDisplayDTO() {}
 	public CourseCreationDisplayDTO(int course_id, String course_name, String description, String objectives,
 			int course_hours, String course_start_date, String course_start_period,
-			String course_end_period, int total_places, int available_places, float course_fee,
+			String course_end_period, int total_places, float course_fee,
 			String course_state, int teacher_id) {
 		
 		this.course_id = course_id;
@@ -31,7 +30,6 @@ public class CourseCreationDisplayDTO {
 		this.course_start_period = course_start_period;
 		this.course_end_period = course_end_period;
 		this.total_places = total_places;
-		this.available_places = available_places;
 		this.course_fee = course_fee;
 		this.course_state = course_state;
 		this.teacher_id = teacher_id;
@@ -98,12 +96,6 @@ public class CourseCreationDisplayDTO {
 	}
 	public void setTotal_places(int total_places) {
 		this.total_places = total_places;
-	}
-	public int getAvailable_places() {
-		return available_places;
-	}
-	public void setAvailable_places(int available_places) {
-		this.available_places = available_places;
 	}
 	public float getCourse_fee() {
 		return course_fee;

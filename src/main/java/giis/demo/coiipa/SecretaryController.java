@@ -78,7 +78,6 @@ public class SecretaryController {
 				//Default initialization of the buttons (disabled)
 				viewPayments.getTFAmount().setEnabled(false);
 			    viewPayments.getTFDate().setEnabled(false);
-			    viewPayments.getTFHour().setEnabled(false);
 			    
 				int sel = viewPayments.getTablePayments().getSelectedRow();//index of the table selected
 				int regid = getRegIdUtil();//get the ID of a registration
@@ -87,7 +86,6 @@ public class SecretaryController {
 				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0 || state.compareTo("Incomplete")==0 || state.compareTo("Compensate")==0 || state.compareTo("Cancelled - Compensate")==0)) {
 				    viewPayments.getTFAmount().setEnabled(true);
 				    viewPayments.getTFDate().setEnabled(true);
-				    viewPayments.getTFHour().setEnabled(true);
 				}
 				
 				SwingUtil.exceptionWrapper(()-> getListPaymentsAdditional());
@@ -111,7 +109,6 @@ public class SecretaryController {
 		    	SwingUtil.exceptionWrapper(() -> getListPayments());
 		    	viewPayments.getTFAmount().setText("");
 		    	viewPayments.getTFDate().setText("");
-		    	viewPayments.getTFHour().setText("");
 		    }
 		});
 	}
@@ -225,10 +222,6 @@ public class SecretaryController {
 			throw new ApplicationException("Be careful, you must fill the date gap");
 		} else date = viewPayments.getTFDate().getText();
 		
-		if (viewPayments.getTFHour().getText().isEmpty()) {
-			throw new ApplicationException("Be careful, you must fill the hour gap");
-		} else hour = viewPayments.getTFHour().getText();
-		
 		
 		String state = (String) viewPayments.getcbType().getSelectedItem();
 		
@@ -251,15 +244,16 @@ public class SecretaryController {
 		
 		//Get the course places, depending on which course the registration is associated
 		int regid = model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
-		int places = model.getPlacesCourse(regid);
+		int courseid = model.getCourseId(regid);
+		int places = model.getPlacesCourse(courseid);
 		
 		//Get a correct id (the last one + 1)
 		int payid = model.getLastPaymentId();
 		payid++;
 		
 		//True if the difference is smaller or equal than 48 hours
-		boolean days = model.differenceDatesHour(Util.isoStringToDate(regDate), Util.isoStringToDate(date), Util.isoStringToHour(regHour), Util.isoStringToHour(hour));
-
+		//boolean days = model.differenceDatesHour(Util.isoStringToDate(regDate), Util.isoStringToDate(date), Util.isoStringToHour(regHour), Util.isoStringToHour(hour));
+		boolean days = true;
 		
 		int totalamount = model.getAmountPaid(regid);
 		
@@ -267,20 +261,20 @@ public class SecretaryController {
 /***********************************************Process of inserting all the payments**********************************/
 		
 		if (state.compareTo("Confirmed") == 0) { //Only for compensations
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.validateDate(Util.isoStringToDate(date), regid);
 			if (totalamount - quant >= fee){
-				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), regid);
 			}
 		}else if (state.compareTo("Cancelled") == 0){ //Cancellations
 			int togive = (int) RegistrationCancellationController.getAmountPaid();
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.validateDate(Util.isoStringToDate(date), regid);
 			if (quant == togive) {
-				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), regid);
 			}
 		}
 		else { //Normal payment
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.validateDate(Util.isoStringToDate(date), regid);
+			model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), regid);
 		}
 		
 		totalamount = model.getAmountPaid(regid);
