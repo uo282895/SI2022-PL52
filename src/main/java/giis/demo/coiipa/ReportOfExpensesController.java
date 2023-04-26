@@ -22,6 +22,8 @@ public class ReportOfExpensesController {
 	private boolean null_date = false;
 	private boolean error = false;
 	
+	private Date today;
+	
 	public ReportOfExpensesController(ReportOfExpensesView v, ReportOfExpensesModel m) {
 		this.view = v;
 		this.model = m;
@@ -102,6 +104,10 @@ public class ReportOfExpensesController {
 			}
 		});
 	
+	}
+
+	public void updateSystemDate(Date system_date) {
+		this.today = system_date;
 	}
 	
 	

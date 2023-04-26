@@ -29,6 +29,8 @@ public class SecretaryController {
 	private CoursesView viewCourses;
 	private String lastSelectedKey=""; //remembers the last selected row to show info about it
 	
+	private Date today;
+	
 	//Constructors (one for each view)
 	public SecretaryController(SecretaryModel m, PaymentsView v) {
 		this.model = m;
@@ -48,7 +50,7 @@ public class SecretaryController {
 	public void initViewPayments() {
 		//Sets today's date to the current value (TODAY)
 		LocalDate localdate = LocalDate.now();
-		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+		today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		viewPayments.setTodayDate(Util.dateToIsoString(today));
 		
 		this.getListPayments();
@@ -366,6 +368,11 @@ public class SecretaryController {
 			regName = model.getListPayments(state).get(sel).getReg_name();
 		}
 		return model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
+	}
+
+	public void updateSystemDate(Date system_date) {
+		this.today = system_date;
+		
 	}
 	
 }

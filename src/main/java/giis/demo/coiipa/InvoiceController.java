@@ -27,6 +27,7 @@ public class InvoiceController {
 	private String lastSelectedKey=""; //remembers the last selected row to show info about it
 	private String lastSelectedKey2=""; //remembers the last selected row to show info about it
 	
+	private Date today;	
 	
 	//Constructor
 	public InvoiceController(InvoiceModel m, InvoiceView v) {
@@ -40,7 +41,7 @@ public class InvoiceController {
 	public void initView() {
 		//Sets today's date to the current value (TODAY)
 		LocalDate localdate = LocalDate.now();
-		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+		today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		view.setTodayDate(Util.dateToIsoString(today));
 		
 		this.getListTeachers();
@@ -227,5 +228,10 @@ public class InvoiceController {
 				SwingUtil.showMessage("Please, introduce the correct amount to be paid to the teacher.", "Wrong payment", 0);
 			}
 		}
+	}
+
+	public void updateSystemDate(Date system_date) {
+		this.today = system_date;
+		
 	}
 }

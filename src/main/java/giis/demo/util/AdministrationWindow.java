@@ -7,11 +7,15 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JSeparator;
 
+import com.toedter.calendar.JDateChooser;
+
 import giis.demo.coiipa.*;
+import javax.swing.JLabel;
 
 /**
  * Punto de entrada principal que incluye botones para la ejecucion de las pantallas 
@@ -23,6 +27,16 @@ import giis.demo.coiipa.*;
 public class AdministrationWindow {
 
 	private JFrame frame;
+	
+	private SecretaryController secreatarycontrollerConsultFormativeActions;
+	private SecretaryController SecretaryControllerRegisterPendingPayments;
+	private CoursesCreationController coursescreationcontroller;
+	private RegistrationCancellationController registrationcancellationcontroller;
+	private InvoiceController invoicecontroller;
+	private ReportOfExpensesController reportofexpensescontroller;
+	
+	private Date system_date;
+	private JDateChooser System_timeDateChooser;
 
 	/**
 	 * Launch the application.
@@ -57,7 +71,8 @@ public class AdministrationWindow {
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
-			
+		system_date = new Date();
+		
 		JButton btnInicializarBaseDeDatos = new JButton("Initialize in blank the Data Base");
 		btnInicializarBaseDeDatos.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
@@ -69,15 +84,23 @@ public class AdministrationWindow {
 		JButton btnPayments = new JButton("Register pending payments");
 		btnPayments.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				SecretaryController controller=new SecretaryController(new SecretaryModel(), new PaymentsView());
-				controller.initControllerPayments();
+				SecretaryControllerRegisterPendingPayments =new SecretaryController(new SecretaryModel(), new PaymentsView());
+				SecretaryControllerRegisterPendingPayments.initControllerPayments();
 			}
 		});
-		btnPayments.setBounds(334, 100, 237, 41);
+		btnPayments.setBounds(334, 150, 237, 41);
 		frame.getContentPane().add(btnPayments);
 		btnInicializarBaseDeDatos.setBounds(20, 11, 244, 41);
 		frame.getContentPane().add(btnInicializarBaseDeDatos);
-			
+		
+		
+		System_timeDateChooser = new JDateChooser();
+		System_timeDateChooser.setBounds(201, 94, 161, 20);
+		System_timeDateChooser.setDateFormatString("dd/MM/yy HH:mm");
+		system_date = new Date(); // Today's date by default
+		System_timeDateChooser.setDate(system_date);
+		frame.getContentPane().add(System_timeDateChooser);
+		
 		JButton btnCargarDatosIniciales = new JButton("Load initial data for testing");
 		btnCargarDatosIniciales.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
@@ -92,63 +115,141 @@ public class AdministrationWindow {
 		JButton btnCourses = new JButton("Consult formative actions");
 		btnCourses.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				SecretaryController controller = new SecretaryController(new SecretaryModel(), new CoursesView());
-				controller.initControllerCourses();
+				secreatarycontrollerConsultFormativeActions = new SecretaryController(new SecretaryModel(), new CoursesView());
+				secreatarycontrollerConsultFormativeActions.initControllerCourses();
 			}
 		});
-		btnCourses.setBounds(24, 168, 240, 41);
+		btnCourses.setBounds(20, 202, 240, 41);
 		frame.getContentPane().add(btnCourses);
 		
 		JButton btnNewButton = new JButton("Create a new formative action");
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				CoursesCreationController controller=new CoursesCreationController(new CoursesCreationModel(), new CoursesCreationView());
-				controller.initController();
+				coursescreationcontroller=new CoursesCreationController(new CoursesCreationModel(), new CoursesCreationView());
+				coursescreationcontroller.initController();
 			}
 		});
 		frame.getContentPane().add(btnNewButton);
-		btnNewButton.setBounds(24, 100, 240, 41);
+		btnNewButton.setBounds(20, 150, 240, 41);
 		
 		JButton btnEjecutarTkrun = new JButton("Register cancellations to courses");
 		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				RegistrationCancellationController controller=
+				registrationcancellationcontroller=
 						new RegistrationCancellationController(new RegistrationCancellationModel(), 
 								new RegistrationCancellationView());
 			}
 		});
-		btnEjecutarTkrun.setBounds(334, 168, 237, 41);
+		btnEjecutarTkrun.setBounds(334, 202, 237, 41);
 		frame.getContentPane().add(btnEjecutarTkrun);
 		
 		JSeparator separator = new JSeparator();
 		separator.setBounds(20, 71, 551, 18);
 		frame.getContentPane().add(separator);
 		
-
 		JButton btnManageInvoices = new JButton("Manage invoices");
 		btnManageInvoices.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				InvoiceController controller = new InvoiceController(new InvoiceModel(), new InvoiceView());
-				controller.initController();
+				invoicecontroller = new InvoiceController(new InvoiceModel(), new InvoiceView());
+				invoicecontroller.initController();
 			}
 		});
-		btnManageInvoices.setBounds(334, 242, 237, 41);
+		btnManageInvoices.setBounds(334, 254, 237, 41);
 		frame.getContentPane().add(btnManageInvoices);
 		
 		JButton ReportOfExpensesButton = new JButton("Show a report of expenses");
 		ReportOfExpensesButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ReportOfExpensesController controller = new ReportOfExpensesController(new ReportOfExpensesView(),
+				reportofexpensescontroller = new ReportOfExpensesController(new ReportOfExpensesView(),
 						new ReportOfExpensesModel());
-				controller.initController();
+				reportofexpensescontroller.initController();
 			}
 		});
-		ReportOfExpensesButton.setBounds(27, 236, 237, 41);
+		ReportOfExpensesButton.setBounds(20, 254, 244, 41);
 		frame.getContentPane().add(ReportOfExpensesButton);
+		
+		JLabel lblNewLabel = new JLabel("Set the System Time:");
+		lblNewLabel.setBounds(51, 100, 140, 14);
+		frame.getContentPane().add(lblNewLabel);
+		
+		JButton btnUpdateSystemDate = new JButton("Update system date");
+		btnUpdateSystemDate.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				// First store the system date of the DateChoser
+				
+				system_date = System_timeDateChooser.getDate();
+				if (secreatarycontrollerConsultFormativeActions != null)
+					secreatarycontrollerConsultFormativeActions.updateSystemDate(system_date);
+				if(SecretaryControllerRegisterPendingPayments != null)
+					SecretaryControllerRegisterPendingPayments.updateSystemDate(system_date);
+				if(coursescreationcontroller != null)
+					coursescreationcontroller.updateSystemDate(system_date);
+				if(registrationcancellationcontroller != null)
+					registrationcancellationcontroller.updateSystemDate(system_date);
+				if(invoicecontroller != null)
+					invoicecontroller.updateSystemDate(system_date);
+				if(reportofexpensescontroller != null)
+					reportofexpensescontroller.updateSystemDate(system_date);
+			}
+		});
+		btnUpdateSystemDate.setBounds(409, 84, 162, 35);
+		frame.getContentPane().add(btnUpdateSystemDate);
 		
 	}
 
 	public JFrame getFrame() { return this.frame; }
+
+	public SecretaryController getSecreatarycontrollerConsultFormativeActions() {
+		return secreatarycontrollerConsultFormativeActions;
+	}
+
+	public void setSecreatarycontrollerConsultFormativeActions(
+			SecretaryController secreatarycontrollerConsultFormativeActions) {
+		this.secreatarycontrollerConsultFormativeActions = secreatarycontrollerConsultFormativeActions;
+	}
+
+	public SecretaryController getSecretaryControllerRegisterPendingPayments() {
+		return SecretaryControllerRegisterPendingPayments;
+	}
+
+	public void setSecretaryControllerRegisterPendingPayments(
+			SecretaryController secretaryControllerRegisterPendingPayments) {
+		SecretaryControllerRegisterPendingPayments = secretaryControllerRegisterPendingPayments;
+	}
+
+	public CoursesCreationController getCoursescreationcontroller() {
+		return coursescreationcontroller;
+	}
+
+	public void setCoursescreationcontroller(CoursesCreationController coursescreationcontroller) {
+		this.coursescreationcontroller = coursescreationcontroller;
+	}
+
+	public RegistrationCancellationController getRegistrationcancellationcontroller() {
+		return registrationcancellationcontroller;
+	}
+
+	public void setRegistrationcancellationcontroller(
+			RegistrationCancellationController registrationcancellationcontroller) {
+		this.registrationcancellationcontroller = registrationcancellationcontroller;
+	}
+
+	public InvoiceController getInvoicecontroller() {
+		return invoicecontroller;
+	}
+
+	public void setInvoicecontroller(InvoiceController invoicecontroller) {
+		this.invoicecontroller = invoicecontroller;
+	}
+
+	public ReportOfExpensesController getReportofexpensescontroller() {
+		return reportofexpensescontroller;
+	}
+
+	public void setReportofexpensescontroller(ReportOfExpensesController reportofexpensescontroller) {
+		this.reportofexpensescontroller = reportofexpensescontroller;
+	}
 }

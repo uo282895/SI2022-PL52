@@ -21,6 +21,8 @@ public class RegistrationCancellationController {
 	private static RegistrationCancellationModel model;
 	private static RegistrationCancellationView view;
 	
+	private Date today;
+	
 	public RegistrationCancellationController(RegistrationCancellationModel model, RegistrationCancellationView view) {
 		super();
 		RegistrationCancellationController.model = model;
@@ -221,6 +223,10 @@ public class RegistrationCancellationController {
 	    
 	    view.getFrame().setVisible(false);
 	    return refund_amount;
+	}
+
+	public void updateSystemDate(Date system_date) {
+		this.today = system_date;
 	}
 
 	
