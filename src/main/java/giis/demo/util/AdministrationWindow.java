@@ -53,7 +53,7 @@ public class AdministrationWindow {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Administration Window");
-		frame.setBounds(0, 0, 613, 378);
+		frame.setBounds(0, 0, 613, 430);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -147,6 +147,16 @@ public class AdministrationWindow {
 		});
 		ReportOfExpensesButton.setBounds(27, 236, 237, 41);
 		frame.getContentPane().add(ReportOfExpensesButton);
+		
+		JButton btnInscribeIntoA = new JButton("Inscribe into a formative action");
+		btnInscribeIntoA.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				InscriptionController controller = new InscriptionController(new InscriptionModel(), new InscriptionsView());
+				controller.initController();
+			}
+		});
+		btnInscribeIntoA.setBounds(24, 307, 237, 41);
+		frame.getContentPane().add(btnInscribeIntoA);
 		
 	}
 

@@ -10,12 +10,14 @@ public class CourseDisplayDTO {
 	private int total_places;
 	private int available_places;
 	private String course_start_date;
+	private String course_end_date;
+	private int course_fee;
 	private String course_id;
 	
 	//Constructors
 	public CourseDisplayDTO() {}
 	public CourseDisplayDTO(String course_name, String course_state, String course_start_period,
-			String course_end_period, int total_places, int available_places, String course_start_date, String course_id) {
+			String course_end_period, int total_places, int available_places, int course_fee, String course_start_date, String course_end_date, String course_id) {
 		super();
 		this.course_name = course_name;
 		this.course_state = course_state;
@@ -23,7 +25,9 @@ public class CourseDisplayDTO {
 		this.course_end_period = course_end_period;
 		this.total_places = total_places;
 		this.available_places = available_places;
+		this.course_fee = course_fee;
 		this.course_start_date = course_start_date;
+		this.course_end_date = course_end_date;
 		this.course_id = course_id;
 	}
 	
@@ -75,6 +79,18 @@ public class CourseDisplayDTO {
 	}
 	public void setCourse_id(String course_id) {
 		this.course_id = course_id;
+	}
+	public String getCourse_end_date() {
+		return course_end_date;
+	}
+	public void setCourse_end_date(String course_end_date) {
+		this.course_end_date = course_end_date;
+	}
+	public int getCourse_fee() {
+		return course_fee;
+	}
+	public void setCourse_fee(int course_fee) {
+		this.course_fee = course_fee;
 	}
 	
 	
