@@ -141,12 +141,12 @@ public class CoursesCreationView {
 		
 		Date_of_erollement_begining_dateChooser = new JDateChooser();
 		Date_of_erollement_begining_dateChooser.setBounds(174, 126, 161, 20);
-		Date_of_erollement_begining_dateChooser.setDateFormatString("dd/MM/yy HH:mm");
+		Date_of_erollement_begining_dateChooser.setDateFormatString("dd/MM/yy");
 		frame.getContentPane().add(Date_of_erollement_begining_dateChooser);
 		
 		Date_of_enrollement_end_dateChooser = new JDateChooser();
 		Date_of_enrollement_end_dateChooser.setBounds(587, 127, 159, 20);
-		Date_of_enrollement_end_dateChooser.setDateFormatString("dd/MM/yy HH:mm");
+		Date_of_enrollement_end_dateChooser.setDateFormatString("dd/MM/yy");
 		frame.getContentPane().add(Date_of_enrollement_end_dateChooser);
 		
 		course_fee_formattedTextField = new JFormattedTextField();

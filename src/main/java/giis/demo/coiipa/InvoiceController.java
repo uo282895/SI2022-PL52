@@ -27,6 +27,7 @@ public class InvoiceController {
 	private String lastSelectedKey=""; //remembers the last selected row to show info about it
 	private String lastSelectedKey2=""; //remembers the last selected row to show info about it
 	
+	private Date today;	
 	
 	//Constructor
 	public InvoiceController(InvoiceModel m, InvoiceView v) {
@@ -40,7 +41,7 @@ public class InvoiceController {
 	public void initView() {
 		//Sets today's date to the current value (TODAY)
 		LocalDate localdate = LocalDate.now();
-		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+		today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		view.setTodayDate(Util.dateToIsoString(today));
 		
 		this.getListTeachers();
@@ -58,7 +59,6 @@ public class InvoiceController {
 				
 				view.getTFAmount().setEnabled(false);
 			    view.getTFDate().setEnabled(false);
-			    view.getTFHour().setEnabled(false);
 			    
 			    String lsk =SwingUtil.getSelectedKey(view.getTableTeachers());
 				int courseId = Integer.parseInt(lsk);
@@ -66,7 +66,6 @@ public class InvoiceController {
 				if(model.hasInvoice(courseId).compareTo("Yes") == 0) {
 					view.getTFAmount().setEnabled(true);
 				    view.getTFDate().setEnabled(true);
-				    view.getTFHour().setEnabled(true);
 				}
 			}
 		});
@@ -96,7 +95,6 @@ public class InvoiceController {
 		    	SwingUtil.exceptionWrapper(() -> manageConfirm());
 		    	view.getTFAmount().setText("");
 		    	view.getTFDate().setText("");
-		    	view.getTFHour().setText("");
 		    }
 		});
 			
@@ -178,7 +176,6 @@ public class InvoiceController {
 		//Initializations
 		String strquant = "";
 		String date = "";
-		String hour = "";
 		
 		int quant = 0;
 		
@@ -197,10 +194,7 @@ public class InvoiceController {
 		if (view.getTFDate().getText().isEmpty()) {
 			throw new ApplicationException("Be careful, you must fill the date gap");
 		} else date = view.getTFDate().getText();
-		
-		if (view.getTFHour().getText().isEmpty()) {
-			throw new ApplicationException("Be careful, you must fill the hour gap");
-		} else hour = view.getTFHour().getText();
+
 		
 		if (view.getTableTeachers().getSelectedRow() >= 0) { //Valid index
 			this.lastSelectedKey = SwingUtil.getSelectedKey(view.getTableTeachers());
@@ -217,15 +211,19 @@ public class InvoiceController {
 			model.validateDate(Util.isoStringToDate(date));
 			
 			if (quant == rem) {//The payment of the invoice must be exact
-				model.insertPayment(payid, - quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), invid);
+				model.insertPayment(payid, - quant, Util.isoStringToDate(date), invid);
 				SwingUtil.showMessage("The invoice has been correctly paid.", "Successful payment of an invoice", 1);
 				model.updateState(invid);
 				view.getTFAmount().setEnabled(false);
 			    view.getTFDate().setEnabled(false);
-			    view.getTFHour().setEnabled(false);
 			}else {
 				SwingUtil.showMessage("Please, introduce the correct amount to be paid to the teacher.", "Wrong payment", 0);
 			}
 		}
+	}
+
+	public void updateSystemDate(Date system_date) {
+		this.today = system_date;
+		
 	}
 }

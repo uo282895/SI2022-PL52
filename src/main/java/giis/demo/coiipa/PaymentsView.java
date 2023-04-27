@@ -25,7 +25,6 @@ public class PaymentsView {
 	private JTextField tfDate;
 	private JButton btnCancel; 
 	private JButton btnConfirm;
-	private JTextField tfHour;
 	private JLabel lblTodaysDate;
 	@SuppressWarnings("rawtypes")
 	private JComboBox comboBoxType;
@@ -125,22 +124,6 @@ public class PaymentsView {
 		btnConfirm.setBounds(831, 419, 89, 23);
 		frame.getContentPane().add(btnConfirm);
 		
-		JLabel lblHour = new JLabel("Hour of payment:");
-		lblHour.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblHour.setBounds(85, 369, 130, 14);
-		frame.getContentPane().add(lblHour);
-		
-		tfHour = new JTextField();
-		tfHour.setEnabled(false);
-		tfHour.setBounds(197, 366, 154, 20);
-		frame.getContentPane().add(tfHour);
-		tfHour.setColumns(10);
-		
-		JLabel lblFormatHour = new JLabel("(Format: \"HH:MM:SS\")");
-		lblFormatHour.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblFormatHour.setBounds(364, 369, 173, 14);
-		frame.getContentPane().add(lblFormatHour);
-		
 		lblTodaysDate = new JLabel("");
 		lblTodaysDate.setBounds(438, 11, 154, 14);
 		frame.getContentPane().add(lblTodaysDate);
@@ -171,7 +154,6 @@ public class PaymentsView {
 	public JTable getTablePayments() { return this.table; }
 	public JFormattedTextField getTFAmount() { return this.tfAmount; }
 	public JTextField getTFDate() { return this.tfDate; }
-	public JTextField getTFHour() { return this.tfHour; }
 	public JButton getBtnCancel() { return this.btnCancel; }
 	public JButton getBtnConfirm() { return this.btnConfirm; }
 	public JTable getTableAdditionalPayments() { return this.table_1; }

@@ -1,4 +1,3 @@
-
 delete from Course;
 delete from Registration;
 delete from Payment;
@@ -9,7 +8,7 @@ insert into Course values(3, "Azure Cloud certifications", "A one-day formative 
 
 -- Insert 5 random entries into Course table
 
----INSERT INTO Course (course_id, course_name, description, objectives, course_hours, course_start_date, course_time, course_start_period, course_end_period, total_places, available_places, course_fee, place, course_state, teacher_id)
+---INSERT INTO Course (course_id, course_name, description, objectives, course_hours, course_start_date, course_time, course_start_period, course_end_period, total_places, course_fee, place, course_state, teacher_id)
 --VALUES 
  -- (4, 'English Conversation', 'Improve your spoken English with this course.', 'By the end of the course, students will be able to engage in conversations on various topics.', 20, '2023-12-01', '10:00:00', '2023-04-01', '2023-05-01', 20, 10, 100, 'Online', 'Active', 1),
  -- (5, 'Introduction to Python', 'Learn the basics of Python programming language.', 'By the end of the course, students will be able to write simple programs using Python.', 30, '2023-12-01', '14:00:00', '2023-05-01', '2023-06-01', 30, 20, 150, 'Classroom A', 'Active', 2),
@@ -17,7 +16,7 @@ insert into Course values(3, "Azure Cloud certifications", "A one-day formative 
  -- (7, 'Spanish for Beginners', 'Learn the basics of the Spanish language.', 'By the end of the course, students will be able to introduce themselves and hold simple conversations in Spanish.', 40, '2023-12-01', '18:00:00', '2023-07-01', '2023-08-01', 40, 30, 120, 'Classroom B', 'Active', 2),
  -- (8, 'Data Analysis with Excel', 'Learn how to use Excel to analyze and visualize data.', 'By the end of the course, students will be able to use various Excel tools and functions to analyze and present data.', 20, '2023-10-01', '10:00:00', '2023-08-01', '2023-09-01', 20, 10, 100, 'Classroom C', 'Active', 3);
 
---INSERT INTO Course (course_id, course_name, description, objectives, course_hours, course_date, course_time, course_start_period, course_end_period, total_places, available_places, course_fee, course_state, teacher_id, teacher_remuneration)
+--INSERT INTO Course (course_id, course_name, description, objectives, course_hours, course_date, course_time, course_start_period, course_end_period, total_places, course_fee, course_state, teacher_id, teacher_remuneration)
 --VALUES 
 --  (4, 'English Conversation', 'Improve your spoken English with this course.', 'By the end of the course, students will be able to engage in conversations on various topics.', 20, '2023-12-01', '10:00:00', '2023-04-01', '2023-05-01', 20, 10, 100, 'Active', 1, 2000),
  -- (5, 'Introduction to Python', 'Learn the basics of Python programming language.', 'By the end of the course, students will be able to write simple programs using Python.', 30, '2023-12-01', '14:00:00', '2023-05-01', '2023-06-01', 30, 20, 150, 'Active', 2, 3000),
@@ -96,9 +95,9 @@ VALUES
 INSERT INTO Payment (payment_id, amount, payment_date, payment_type, invoice_id, reg_id)
 VALUES
   (1, 700, '2023-03-01', 'Professional registration', null, 1),
--- (2, 700, '2023-03-02', '10:15:00', 'Professional registration', null, 2),
+-- (2, 700, '2023-03-02', 'Professional registration', null, 2),
   (3, 80, '2023-03-03', 'Professional registration', null, 3),
- -- (4, 120, '2023-03-04', '15:00:00', 'Professional registration', null, 4),
+ -- (4, 120, '2023-03-04', 'Professional registration', null, 4),
   (5, 700, '2023-03-05', 'Professional registration', null, 5),
   (6, 700, '2023-03-06', 'Professional registration', null, 6),
   (7, 110, '2023-03-07',  'Professional registration', null, 7),
@@ -136,17 +135,12 @@ VALUES
 (1001, 'Bob', 'Johnson', '555222222', 'bob.johnson@example.com', '2023-05-04', '14:00:00', 'Paid', 1000),
 (1002, 'Charlie', 'Brown', '555333333', 'charlie.brown@example.com', '2023-05-05', '14:00:00', 'Paid', 1000);
 
---INSERT INTO Payment (payment_id, amount, payment_date, payment_time, payment_type, invoice_id, reg_id)
+--INSERT INTO Payment (payment_id, amount, payment_date, payment_type, invoice_id, reg_id)
 --VALUES
---  (1000, 100, '2023-03-01', '14:30:00', 'Bank transfer', 1000, 1000),
---  (1001, 50, '2023-03-02', '10:15:00', 'Bank transfer', 1001, 1001),
---  (1002, 80, '2023-03-03', '11:45:00', 'Bank transfer', 1002, 1002);
+--  (1000, 100, '2023-03-01', 'Bank transfer', 1000, 1000),
+--  (1001, 50, '2023-03-02', 'Bank transfer', 1001, 1001),
+--  (1002, 80, '2023-03-03', 'Bank transfer', 1002, 1002);
 
 INSERT INTO Session (session_id, session_location, session_date, session_hour, session_hours, course_id)
 VALUES (1, 'Room A', '2023-05-01', '10:00', 2, 1);
-
-
-
-
-
 

@@ -29,6 +29,8 @@ public class SecretaryController {
 	private CoursesView viewCourses;
 	private String lastSelectedKey=""; //remembers the last selected row to show info about it
 	
+	private Date today;
+	
 	//Constructors (one for each view)
 	public SecretaryController(SecretaryModel m, PaymentsView v) {
 		this.model = m;
@@ -47,8 +49,6 @@ public class SecretaryController {
 	//init methods (one for each view)
 	public void initViewPayments() {
 		//Sets today's date to the current value (TODAY)
-		LocalDate localdate = LocalDate.now();
-		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		viewPayments.setTodayDate(Util.dateToIsoString(today));
 		
 		this.getListPayments();
@@ -76,7 +76,6 @@ public class SecretaryController {
 				//Default initialization of the buttons (disabled)
 				viewPayments.getTFAmount().setEnabled(false);
 			    viewPayments.getTFDate().setEnabled(false);
-			    viewPayments.getTFHour().setEnabled(false);
 			    
 				int sel = viewPayments.getTablePayments().getSelectedRow();//index of the table selected
 				int regid = getRegIdUtil();//get the ID of a registration
@@ -85,7 +84,6 @@ public class SecretaryController {
 				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0 || state.compareTo("Incomplete")==0 || state.compareTo("Compensate")==0 || state.compareTo("Cancelled - Compensate")==0)) {
 				    viewPayments.getTFAmount().setEnabled(true);
 				    viewPayments.getTFDate().setEnabled(true);
-				    viewPayments.getTFHour().setEnabled(true);
 				}
 				
 				SwingUtil.exceptionWrapper(()-> getListPaymentsAdditional());
@@ -109,7 +107,6 @@ public class SecretaryController {
 		    	SwingUtil.exceptionWrapper(() -> getListPayments());
 		    	viewPayments.getTFAmount().setText("");
 		    	viewPayments.getTFDate().setText("");
-		    	viewPayments.getTFHour().setText("");
 		    }
 		});
 	}
@@ -203,7 +200,6 @@ public class SecretaryController {
 		//Initializations
 		String strquant = "";
 		String date = "";
-		String hour = "";
 		
 		int quant = 0;
 		
@@ -223,10 +219,6 @@ public class SecretaryController {
 			throw new ApplicationException("Be careful, you must fill the date gap");
 		} else date = viewPayments.getTFDate().getText();
 		
-		if (viewPayments.getTFHour().getText().isEmpty()) {
-			throw new ApplicationException("Be careful, you must fill the hour gap");
-		} else hour = viewPayments.getTFHour().getText();
-		
 		
 		String state = (String) viewPayments.getcbType().getSelectedItem();
 		
@@ -237,27 +229,25 @@ public class SecretaryController {
 		String regDate = "";
 		String regName = "";
 		String regSurnames = "";
-		String regHour = "";
 		if (index >=0) {//No errors if the fields are not selected
 			fee = model.getListPayments(state).get(index).getCourse_fee();
 			courseName = model.getListPayments(state).get(index).getCourse_name();
 			regDate = model.getListPayments(state).get(index).getReg_date();
 			regName = model.getListPayments(state).get(index).getReg_name();
 			regSurnames = model.getListPayments(state).get(index).getReg_surnames();
-			regHour = model.getListPayments(state).get(index).getReg_time();
 		}
 		
 		//Get the course places, depending on which course the registration is associated
 		int regid = model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
-		int places = model.getPlacesCourse(regid);
+		int courseid = model.getCourseId(regid);
+		int places = model.getPlacesCourse(courseid);
 		
 		//Get a correct id (the last one + 1)
 		int payid = model.getLastPaymentId();
 		payid++;
 		
 		//True if the difference is smaller or equal than 48 hours
-		boolean days = model.differenceDatesHour(Util.isoStringToDate(regDate), Util.isoStringToDate(date), Util.isoStringToHour(regHour), Util.isoStringToHour(hour));
-
+		boolean days = model.compareDates(Util.isoStringToDate(regDate), Util.isoStringToHour(date));
 		
 		int totalamount = model.getAmountPaid(regid);
 		
@@ -265,20 +255,20 @@ public class SecretaryController {
 /***********************************************Process of inserting all the payments**********************************/
 		
 		if (state.compareTo("Confirmed") == 0) { //Only for compensations
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.validateDate(Util.isoStringToDate(date), regid);
 			if (totalamount - quant >= fee){
-				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), regid);
 			}
 		}else if (state.compareTo("Cancelled") == 0){ //Cancellations
 			int togive = (int) RegistrationCancellationController.getAmountPaid();
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.validateDate(Util.isoStringToDate(date), regid);
 			if (quant == togive) {
-				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), regid);
 			}
 		}
 		else { //Normal payment
-			model.validateDate(Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
-			model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), Util.isoStringToHour(hour), regid);
+			model.validateDate(Util.isoStringToDate(date), regid);
+			model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), regid);
 		}
 		
 		totalamount = model.getAmountPaid(regid);
@@ -366,6 +356,10 @@ public class SecretaryController {
 			regName = model.getListPayments(state).get(sel).getReg_name();
 		}
 		return model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
+	}
+
+	public void updateSystemDate(Date system_date) {
+		this.today = system_date;
 	}
 	
 }

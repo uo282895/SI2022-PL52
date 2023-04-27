@@ -23,7 +23,6 @@ public class InvoiceView {
 	private JTextField tfDate;
 	private JButton btnCancel; 
 	private JButton btnConfirm;
-	private JTextField tfHour;
 	private JLabel lblTodaysDate;
 	private JTable table_1;
 	private JButton btnRegisterInvoice;
@@ -121,22 +120,6 @@ public class InvoiceView {
 		btnConfirm.setBounds(831, 419, 89, 23);
 		frmManageInvoices.getContentPane().add(btnConfirm);
 		
-		JLabel lblHour = new JLabel("Hour of payment:");
-		lblHour.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblHour.setBounds(85, 369, 130, 14);
-		frmManageInvoices.getContentPane().add(lblHour);
-		
-		tfHour = new JTextField();
-		tfHour.setEnabled(false);
-		tfHour.setBounds(197, 366, 154, 20);
-		frmManageInvoices.getContentPane().add(tfHour);
-		tfHour.setColumns(10);
-		
-		JLabel lblFormatHour = new JLabel("(Format: \"HH:MM:SS\")");
-		lblFormatHour.setFont(new Font("Tahoma", Font.BOLD, 11));
-		lblFormatHour.setBounds(364, 369, 173, 14);
-		frmManageInvoices.getContentPane().add(lblFormatHour);
-		
 		lblTodaysDate = new JLabel("");
 		lblTodaysDate.setBounds(667, 11, 154, 27);
 		frmManageInvoices.getContentPane().add(lblTodaysDate);
@@ -165,7 +148,6 @@ public class InvoiceView {
 	public JTable getTableTeachers() { return this.table; }
 	public JFormattedTextField getTFAmount() { return this.tfAmount; }
 	public JTextField getTFDate() { return this.tfDate; }
-	public JTextField getTFHour() { return this.tfHour; }
 	public JButton getBtnCancel() { return this.btnCancel; }
 	public JButton getBtnConfirm() { return this.btnConfirm; }
 	public JTable getTableInvoice() { return this.table_1; }

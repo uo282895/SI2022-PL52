@@ -1,15 +1,11 @@
 package giis.demo.coiipa;
 
-import java.sql.SQLException;
-import java.util.Date;
 import java.util.List;
 
 import giis.demo.dto.CourseCreationDisplayDTO;
 import giis.demo.dto.SessionDisplayDTO;
 import giis.demo.dto.TeacherDisplayDTO;
-import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
-import giis.demo.util.Util;
 
 public class CoursesCreationModel {
 
@@ -21,8 +17,8 @@ public class CoursesCreationModel {
 	
 	public static final String SQL_INSERT_COURSE=
 			"INSERT INTO Course (course_id, course_name, description, objectives, course_hours, course_start_date, "
-			+ "course_end_date, course_start_period, course_end_period, total_places, available_places, course_fee, "
-			+ "course_state, teacher_id, teacher_remuneration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);";
+			+ "course_end_date, course_start_period, course_end_period, total_places, course_fee, "
+			+ "course_state, teacher_id, teacher_remuneration) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 	public static final String SQL_INSERT_SESSION=
 			"INSERT INTO Session (session_id, session_location, session_date, session_hour, session_hours, course_id) VALUES "
@@ -78,7 +74,7 @@ public class CoursesCreationModel {
 				
 		db.executeUpdate(SQL_INSERT_COURSE, course_id, course_name, course_main_contents, course_objectives, n_hours, 
 				course_start_date, course_end_date, course_enrollement_start_date, course_enrollement_end_date,
-				n_places, n_places, fee, "Active", course_teacher_id, teacher_remuneration);
+				n_places, fee, "Active", course_teacher_id, teacher_remuneration);
 		
 	}
 	

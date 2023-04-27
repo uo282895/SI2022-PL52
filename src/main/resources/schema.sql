@@ -75,6 +75,3 @@ create table Session (
   course_id int not null,
   foreign key (course_id) references Course(course_id)
 );
-
-
-

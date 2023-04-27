@@ -3,12 +3,11 @@ package giis.demo.coiipa;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import giis.demo.dto.CourseDisplayDTO;
 import giis.demo.dto.CourseInfoDisplayDTO;
@@ -25,14 +24,15 @@ public class SecretaryModel {
 	private Database db=new Database();
 	
 	public static final String SQL_LIST_COURSES=
-			"SELECT course_id, course_name, course_state, course_start_period, "
-			+ "course_end_period, total_places, available_places, "
-			+ "course_start_date "
-			+ "FROM Course c";
+			"SELECT c.course_id, c.course_name, c.course_state, c.course_start_period, c.course_end_period, c.total_places, "
+			+ "(c.total_places - COUNT(CASE WHEN r.reg_state = 'Confirmed' OR r.reg_state = 'Compensate' THEN 1 END)) "
+			+ "AS available_places, c.course_start_date "
+			+ "FROM Course c LEFT JOIN Registration r ON c.course_id = r.course_id "
+			+ "GROUP BY c.course_id";
 	
 	public static final String SQL_INSERT_AMOUNTDATEHOUR=
-			"INSERT into Payment(payment_id, amount, payment_date, payment_time, payment_type, "
-			+ "invoice_id, reg_id) values(?, ?, ?, ?,'Professional registration',null, ?)";
+			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
+			+ "invoice_id, reg_id) values(?, ?, ?,'Professional registration',null, ?)";
 	
 	public static final String SQL_LIST_PAYMENTS_ADDITIONAL=
 			"select p.amount, p.payment_date, p.payment_type from Payment p "
@@ -41,8 +41,8 @@ public class SecretaryModel {
 			+ "where c.course_id = ? AND r.reg_id = ?";
 	
 	public static final String SQL_INSERT_AMOUNTDATEHOUR_DEVOLUTION = 
-			"INSERT into Payment(payment_id, amount, payment_date, payment_time, payment_type, "
-			+ "invoice_id, reg_id) values(?, ?, ?, ?,'Devolution',null, ?)";
+			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
+			+ "invoice_id, reg_id) values(?, ?, ?,'Devolution',null, ?)";
 	
 	/**
 	 * Obtains the list of payments of the desired type
@@ -104,7 +104,7 @@ public class SecretaryModel {
 	}
 	
 	//Method encharged of the validation of dates (both registration and payment)
-	public void validateDate(Date paydate, Date payhour, int regid) {
+	public void validateDate(Date paydate, int regid) {
 		RegistrationEntity registration = this.getRegistration(regid);
 		LocalDate localdate = LocalDate.now();
 		
@@ -117,19 +117,17 @@ public class SecretaryModel {
 	}
 	
 	//Method to insert into the DB each payment of type registration
-	public void insertPaymentReg(int payid, int amount, Date paydate, Date payhour, int regid) {
+	public void insertPaymentReg(int payid, int amount, Date paydate, int regid) {
 		String d = Util.dateToIsoString(paydate);
-		String h = Util.hourToIsoString(payhour);
 		
-		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR, payid, amount, d, h, regid);
+		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR, payid, amount, d, regid);
 	}
 	
 	//Method to insert into the DB each payment of type devolution
-	public void insertPaymentDev(int payid, int amount, Date paydate, Date payhour, int regid) {
+	public void insertPaymentDev(int payid, int amount, Date paydate, int regid) {
 		String d = Util.dateToIsoString(paydate);
-		String h = Util.hourToIsoString(payhour);
 		
-		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR_DEVOLUTION, payid, - amount, d, h, regid);//Negative amount because it is a devolution
+		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR_DEVOLUTION, payid, - amount, d, regid);//Negative amount because it is a devolution
 	}
 	
 	
@@ -137,14 +135,8 @@ public class SecretaryModel {
 	public void updateTable(int regid) {
 		String sql_updatestate = "UPDATE Registration " //Update the state (it is now correctly registered)
 				+ "set reg_state = 'Confirmed' where reg_id = ?";
-		String sql_updateplaces = "UPDATE Course " //Update the available places (-1 because someone has been registered9
-				+ "set available_places = ? where course_id = ?";
 		
-		int places = getPlacesCourse(regid);//places of the course associated to the registration
-		int courseid = getCourseId(regid);//id of the course 
-
 		db.executeUpdate(sql_updatestate, regid);
-		db.executeUpdate(sql_updateplaces, places - 1, courseid);
 	}
 	
 	//Method to change the state of a payment when it has to be compensated 
@@ -167,14 +159,8 @@ public class SecretaryModel {
 	public void updateComp(int regid) {
 		String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
 				+ "set reg_state = 'Compensate' where reg_id = ?";
-		String sql_updateplaces = "UPDATE Course " //Update the available places (-1 because someone has been registered)
-				+ "set available_places = ? where course_id = ?";
-		
-		int places = getPlacesCourse(regid);//places of the course associated to the registration
-		int courseid = getCourseId(regid);//id of the course 
 		
 		db.executeUpdate(sql_stateComp, regid);
-		db.executeUpdate(sql_updateplaces, places - 1, courseid);
 	}
 	
 	//Method to change the state of a payment when it becomes correct after compensations (places are not decremented
@@ -192,11 +178,14 @@ public class SecretaryModel {
 			db.executeUpdate(sql_stateComp, regid);
 	}
 	
-	//Get places from a course associated to a registration
-	public int getPlacesCourse(int regid) {
-		String sql = "SELECT available_places from Course c inner join Registration r on "
-				+ "c.course_id = r.course_id where r.reg_id = ?";
-		return db.executeQueryPojo(PaymentInputDTO.class, sql, regid).get(0).getAvailable_places();
+	//Get free places from a course 
+	public int getPlacesCourse(int courseid) {
+		String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed') THEN 1 ELSE 0 END), 0)) "
+				+ "AS available_places FROM Course C "
+				+ "LEFT JOIN Registration R ON C.course_id = R.course_id "
+				+ "WHERE C.course_id = ?"
+				+ "GROUP BY C.course_id";
+		return db.executeQueryPojo(CourseDisplayDTO.class, sql, courseid).get(0).getAvailable_places();
 	}
 	
 	//Get the id from a course associated to a registration
@@ -273,22 +262,10 @@ public class SecretaryModel {
 	}
 	
 	//Method calculating the difference between dates
-	public boolean differenceDatesHour(Date regdate, Date paydate, Date reghour, Date payhour) {
-		// Convert input dates to LocalDateTime objects
-		LocalDateTime regDateTime = LocalDateTime.ofInstant(regdate.toInstant(), ZoneId.systemDefault());
-		LocalDateTime payDateTime = LocalDateTime.ofInstant(paydate.toInstant(), ZoneId.systemDefault());
-		LocalDateTime regHourDateTime = LocalDateTime.ofInstant(reghour.toInstant(), ZoneId.systemDefault());
-		LocalDateTime payHourDateTime = LocalDateTime.ofInstant(payhour.toInstant(), ZoneId.systemDefault());
-		
-		// Combine date and hour into a single LocalDateTime object
-		LocalDateTime regDateTimeWithHour = regDateTime.withHour(regHourDateTime.getHour()).withSecond(regHourDateTime.getSecond());
-		LocalDateTime payDateTimeWithHour = payDateTime.withHour(payHourDateTime.getHour()).withSecond(payHourDateTime.getSecond());
-		
-		// Calculate the duration between the two date-times
-		Duration duration = Duration.between(regDateTimeWithHour, payDateTimeWithHour);
-		
-		// Check if the duration is less than or equal to 48 hours
-		return duration.compareTo(Duration.ofHours(48)) <= 0;
+	public boolean compareDates(Date regdate, Date paydate) {
+	    long difference = Math.abs(regdate.getTime() - paydate.getTime());
+	    long differenceInDays = TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
+	    return differenceInDays <= 2;
 	}
 	
 	//Method to send a fictitious mail to the person which has correctly paid (by creating a .txt)

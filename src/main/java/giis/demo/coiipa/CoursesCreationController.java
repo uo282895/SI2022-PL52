@@ -46,6 +46,8 @@ public class CoursesCreationController {
     private boolean week3_warning = false;
     private boolean date_before_today = false;
     
+    private Date today = new Date();
+    
     private List<SessionDisplayDTO> sessions = new ArrayList<>();
 ;
  	
@@ -262,7 +264,6 @@ public class CoursesCreationController {
 				}
 				
 				if(!null_date){ // Checking that the date is after today
-					Date today = new Date();
 					if(session_date.before(today)) {
 						try {
 							error_adding_session = true;
@@ -348,8 +349,6 @@ public class CoursesCreationController {
 					error_message += "- The course must have at least one session.\n";
 				}
 				
-				
-				Date today = new Date(); // Todays date
 				boolean null_date = false; // Variable to check if any date is null introduced
 				
 				// Storing the course start date and checking null issue
@@ -357,7 +356,7 @@ public class CoursesCreationController {
 				if(!error) {
 					course_start_date = SessionDisplayDTO.getFirstDate(sessions);	
 				}
-				
+	
 				if(course_start_date == null) {
 					error = true;
 					null_date = true;
@@ -520,27 +519,13 @@ public class CoursesCreationController {
 				// Storing the course objectives and checking for errors
 				String course_objectives = view.getcourse_description_textArea().getText();
 				if(course_objectives.isBlank()) {
-					error = true;
-					// JOptionPane.showMessageDialog(null, "The course objectives must be specified");
-					error_message += "- The course objectives must be specified.\n";
-					try {
-						throw new Exception("The course objectives must be specified");
-					}catch (Exception exp){
-						System.err.println(exp.getMessage());
-					}
+					course_objectives = "-";
 				}
 								
 				// Storing the course main contents and checking for errors
 				String course_main_contents = view.getcourse_main_contents_textArea().getText(); 
 				if(course_main_contents.isBlank()) {
-					error = true;
-					// JOptionPane.showMessageDialog(null, "The course main contents must be specified");
-					error_message += "- The course main contents must be specified.\n";
-					try {
-						throw new Exception("The course main contents must be specified");
-					}catch (Exception exp){
-						System.err.println(exp.getMessage());
-					}
+					course_main_contents = "-";
 				}
 				
 				/********************* DATA INTRODUCTION INTO THE DB *************************/
@@ -607,6 +592,10 @@ public class CoursesCreationController {
 				}
 			}
 		});
+	}
+
+	public void updateSystemDate(Date system_date) {
+		this.today = system_date;
 	}
 
 }
