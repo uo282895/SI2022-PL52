@@ -49,8 +49,6 @@ public class SecretaryController {
 	//init methods (one for each view)
 	public void initViewPayments() {
 		//Sets today's date to the current value (TODAY)
-		LocalDate localdate = LocalDate.now();
-		today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		viewPayments.setTodayDate(Util.dateToIsoString(today));
 		
 		this.getListPayments();
@@ -202,7 +200,6 @@ public class SecretaryController {
 		//Initializations
 		String strquant = "";
 		String date = "";
-		String hour = "";
 		
 		int quant = 0;
 		
@@ -232,14 +229,12 @@ public class SecretaryController {
 		String regDate = "";
 		String regName = "";
 		String regSurnames = "";
-		String regHour = "";
 		if (index >=0) {//No errors if the fields are not selected
 			fee = model.getListPayments(state).get(index).getCourse_fee();
 			courseName = model.getListPayments(state).get(index).getCourse_name();
 			regDate = model.getListPayments(state).get(index).getReg_date();
 			regName = model.getListPayments(state).get(index).getReg_name();
 			regSurnames = model.getListPayments(state).get(index).getReg_surnames();
-			regHour = model.getListPayments(state).get(index).getReg_time();
 		}
 		
 		//Get the course places, depending on which course the registration is associated
@@ -252,8 +247,7 @@ public class SecretaryController {
 		payid++;
 		
 		//True if the difference is smaller or equal than 48 hours
-		//boolean days = model.differenceDatesHour(Util.isoStringToDate(regDate), Util.isoStringToDate(date), Util.isoStringToHour(regHour), Util.isoStringToHour(hour));
-		boolean days = true;
+		boolean days = model.compareDates(Util.isoStringToDate(regDate), Util.isoStringToHour(date));
 		
 		int totalamount = model.getAmountPaid(regid);
 		
@@ -366,7 +360,6 @@ public class SecretaryController {
 
 	public void updateSystemDate(Date system_date) {
 		this.today = system_date;
-		
 	}
 	
 }

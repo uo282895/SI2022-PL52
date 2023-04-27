@@ -171,7 +171,7 @@ public class AdministrationWindow {
 		frame.getContentPane().add(ReportOfExpensesButton);
 		
 		JLabel lblNewLabel = new JLabel("Set the System Time:");
-		lblNewLabel.setBounds(51, 100, 140, 14);
+		lblNewLabel.setBounds(65, 94, 131, 20);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JButton btnUpdateSystemDate = new JButton("Update system date");
@@ -195,7 +195,7 @@ public class AdministrationWindow {
 					reportofexpensescontroller.updateSystemDate(system_date);
 			}
 		});
-		btnUpdateSystemDate.setBounds(409, 84, 162, 35);
+		btnUpdateSystemDate.setBounds(382, 87, 162, 35);
 		frame.getContentPane().add(btnUpdateSystemDate);
 		
 	}

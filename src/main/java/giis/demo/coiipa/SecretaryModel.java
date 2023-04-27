@@ -3,12 +3,11 @@ package giis.demo.coiipa;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.Duration;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import giis.demo.dto.CourseDisplayDTO;
 import giis.demo.dto.CourseInfoDisplayDTO;
@@ -263,22 +262,11 @@ public class SecretaryModel {
 	}
 	
 	//Method calculating the difference between dates
-	/*public boolean differenceDatesHour(Date regdate, Date reghour, Date payhour) {
-		// Convert input dates to LocalDateTime objects
-		LocalDateTime regDateTime = LocalDateTime.ofInstant(regdate.toInstant(), ZoneId.systemDefault());
-		LocalDateTime regHourDateTime = LocalDateTime.ofInstant(reghour.toInstant(), ZoneId.systemDefault());
-		LocalDateTime payHourDateTime = LocalDateTime.ofInstant(payhour.toInstant(), ZoneId.systemDefault());
-		
-		// Combine date and hour into a single LocalDateTime object
-		LocalDateTime regDateTimeWithHour = regDateTime.withHour(regHourDateTime.getHour()).withSecond(regHourDateTime.getSecond());
-		LocalDateTime payDateTimeWithHour = payDateTime.withHour(payHourDateTime.getHour()).withSecond(payHourDateTime.getSecond());
-		
-		// Calculate the duration between the two date-times
-		Duration duration = Duration.between(regDateTimeWithHour, payDateTimeWithHour);
-		
-		// Check if the duration is less than or equal to 48 hours
-		return duration.compareTo(Duration.ofHours(48)) <= 0;
-	}*/
+	public boolean compareDates(Date regdate, Date paydate) {
+	    long difference = Math.abs(regdate.getTime() - paydate.getTime());
+	    long differenceInDays = TimeUnit.DAYS.convert(difference, TimeUnit.MILLISECONDS);
+	    return differenceInDays <= 2;
+	}
 	
 	//Method to send a fictitious mail to the person which has correctly paid (by creating a .txt)
 	public void sendMail(String name, String surnames, String coursename) {
