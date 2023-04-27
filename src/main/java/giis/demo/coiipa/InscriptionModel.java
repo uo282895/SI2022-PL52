@@ -16,8 +16,8 @@ public class InscriptionModel {
 				"SELECT course_id, course_name, course_start_date, course_end_date, course_fee from Course";
 		
 		public static final String SQL_Insert_Proffessional=
-				"INSERT into Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_time, reg_state, course_id)"
-				+ "VALUES (?, ?, ?, ?, ?, ?, ?, 'Received', ?)";
+				"INSERT into Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_state, course_id)"
+				+ "VALUES (?, ?, ?, ?, ?, ?, 'Received', ?)";
 		
 		public static final String SQL_Last_ID=
 				"SELECT reg_id FROM Registration WHERE reg_id = (SELECT MAX(reg_id) FROM Registration);";
@@ -29,7 +29,7 @@ public class InscriptionModel {
 			return db.executeQueryPojo(CourseDisplayDTO.class, sql);
 		}
 		
-		public void insertNewProffessional(int regid, String name, String surnames, String phone, String email, String date, String time, String state, int course_id) {
+		public void insertNewProffessional(int regid, String name, String surnames, String phone, String email, String date, String state, int course_id) {
 			String sql = SQL_Insert_Proffessional;	
 			
 			int regid2 = regid++;
@@ -41,7 +41,7 @@ public class InscriptionModel {
 		        throw e;
 		    }
 			
-			db.executeUpdate(sql, regid2, name, surnames, phone, email, getFechaHoy(),"12:00:00",course_id);
+			db.executeUpdate(sql, regid2, name, surnames, phone, email, getFechaHoy(),course_id);
 			//db.executeUpdate(sql_updateplaces, course_id);
 		}
 		

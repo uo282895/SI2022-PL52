@@ -134,8 +134,8 @@ public class SecretaryController {
 	public void getListPayments() {
 		String state = (String) viewPayments.getcbType().getSelectedItem();
 		List<PaymentDisplayDTO> payments = model.getListPayments(state);
-		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(payments, new String[] {"course_name", "reg_name", "reg_surnames", "reg_email", "course_fee", "reg_date","reg_time"});
-		Object[] newHeaders = {"Course name", "Professional name", "Professional surnames", "email", "Course fee", "Date of registration", "Hour of registration"};
+		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(payments, new String[] {"course_name", "reg_name", "reg_surnames", "reg_email", "course_fee", "reg_date"});
+		Object[] newHeaders = {"Course name", "Professional name", "Professional surnames", "email", "Course fee", "Date of registration"};
 		tmodel.setColumnIdentifiers(newHeaders);
 		viewPayments.getTablePayments().setModel(tmodel);
 		

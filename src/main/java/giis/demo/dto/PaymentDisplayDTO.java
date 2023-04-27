@@ -8,19 +8,17 @@ public class PaymentDisplayDTO {
 	private String reg_email;
 	private int course_fee;
 	private String reg_date;
-	private String reg_time;
 	
 	
 	//Constructors
 	public PaymentDisplayDTO(){}
-	public PaymentDisplayDTO(String coursename, String name, String surnames, String email, int fee, String date, String time) {
+	public PaymentDisplayDTO(String coursename, String name, String surnames, String email, int fee, String date) {
 		this.course_name = coursename;
 		this.reg_name = name;
 		this.reg_surnames = surnames;
 		this.reg_email = email;
 		this.course_fee = fee;
 		this.reg_date = date;
-		this.reg_time = time;
 	}
 	
 	
@@ -59,12 +57,6 @@ public class PaymentDisplayDTO {
 	}
 	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
-	}
-	public String getReg_time() {
-		return reg_time;
-	}
-	public void setReg_time(String reg_time) {
-		this.reg_time = reg_time;
 	}
 	
 }

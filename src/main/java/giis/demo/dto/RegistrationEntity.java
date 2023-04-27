@@ -9,7 +9,6 @@ public class RegistrationEntity {
 	private String reg_phone;
 	private String reg_email;
 	private String reg_date;
-	private String reg_time;
 	private String reg_state;
 	
 	//Getters and setters
@@ -48,12 +47,6 @@ public class RegistrationEntity {
 	}
 	public void setReg_date(String reg_date) {
 		this.reg_date = reg_date;
-	}
-	public String getReg_time() {
-		return reg_time;
-	}
-	public void setReg_time(String reg_time) {
-		this.reg_time = reg_time;
 	}
 	public String getReg_state() {
 		return reg_state;

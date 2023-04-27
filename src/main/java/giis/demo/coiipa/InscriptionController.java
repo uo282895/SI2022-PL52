@@ -94,7 +94,6 @@ public class InscriptionController {
 		String phone = insview.getphoneField().getText();
 		String email = insview.getemailField().getText();
 		String date = insview.getFechaHoy();
-		String time = "12:00:00";
 		String state = "Received";
 		//int course_id = insview.getTableCourses().getSelectedRow() + 1;
 		if (insview.getnameField().getText().isBlank() || insview.getsurnamesField().getText().isBlank() 
@@ -107,10 +106,10 @@ public class InscriptionController {
 		
 		 int places = insmodel.getPlacesCourse(index);
 		 if (places > 0) {
-			 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, time, state, index);
+			 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, state, index);
 			 JOptionPane.showOptionDialog(null, "You have been registered successfully", "Everything seems correct", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
 			 System.out.println("Inscription success");
-			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + time + " " + state + " " + index);
+			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + state + " " + index);
 		 } else {
 			 JOptionPane.showOptionDialog(null, "There are no places left for the selected formative action", "Sorry, no places left", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] {"OK"}, "OK");
 		 }

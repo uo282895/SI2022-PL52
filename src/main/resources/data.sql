@@ -26,10 +26,10 @@ insert into Course values(3, "Azure Cloud certifications", "A one-day formative 
 
 
 
-insert into Registration values(1,"Juan", "Núñez Pérez", "64156721", "jnupe@gmail.com", "2023-01-30", "17:33:23", "Confirmed", 1);
-insert into Registration values(2,"Lucas", "Palacios Miguélez", "64156721", "lpalacios@gmail.com", "2023-02-02", "08:39:10", "Received", 1);
-insert into Registration values(3,"Marta", "Álvarez Pérez", "64156721", "martalv@hotmail.com", "2021-06-18", "07:56:49", "Received", 2);
-insert into Registration values(4,"Miguel", "Roque Arcos", "64156721", "migroque@hotmail.com", "2023-03-01", "22:59:12", "Received", 3);
+insert into Registration values(1,"Juan", "Núñez Pérez", "64156721", "jnupe@gmail.com", "2023-01-30", "Confirmed", 1);
+insert into Registration values(2,"Lucas", "Palacios Miguélez", "64156721", "lpalacios@gmail.com", "2023-02-02", "Received", 1);
+insert into Registration values(3,"Marta", "Álvarez Pérez", "64156721", "martalv@hotmail.com", "2021-06-18", "Received", 2);
+insert into Registration values(4,"Miguel", "Roque Arcos", "64156721", "migroque@hotmail.com", "2023-03-01", "Received", 3);
 
 INSERT INTO Teacher (teacher_id, teacher_name, teacher_surnames, teacher_phone, teacher_email, fiscal_number, teacher_address, fiscal_number) 
 VALUES (1, 'John', 'Doe', '123456789', 'johndoe@email.com', "17819", "Calle Uría",'ABC123');
@@ -50,16 +50,16 @@ VALUES
 
 
 -- Insert 5 random entries into Registration table
-INSERT INTO Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_time, reg_state, course_id)
+INSERT INTO Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_state, course_id)
 VALUES 
-    (5, 'John', 'Doe', '123456789', 'john.doe@email.com', '2023-03-13', '10:00:00', 'Confirmed', 1),
-    (6, 'Jane', 'Doe', '987654321', 'jane.doe@email.com', '2023-03-14', '14:00:00', 'Confirmed', 1),
-    (7, 'Michael', 'Johnson', '456789123', 'michael.johnson@email.com', '2023-03-15', '16:00:00', 'Confirmed', 2),
-    (8, 'Sarah', 'Williams', '789123456', 'sarah.williams@email.com', '2023-03-16', '10:00:00', 'Confirmed', 2),
-    (9, 'David', 'Brown', '321654987', 'david.brown@email.com', '2023-03-17', '14:00:00', 'Confirmed', 3),
-    (10, 'Emily', 'Davis', '654987321', 'emily.davis@email.com', '2023-03-18', '16:00:00', 'Confirmed', 3),
-    (11, 'Daniel', 'Wilson', '987321654', 'daniel.wilson@email.com', '2023-03-19', '10:00:00', 'Cancelled', 4),
-    (12, 'Olivia', 'Moore', '321789654', 'olivia.moore@email.com', '2023-03-20', '14:00:00', 'Confirmed', 4);
+    (5, 'John', 'Doe', '123456789', 'john.doe@email.com', '2023-03-13', 'Confirmed', 1),
+    (6, 'Jane', 'Doe', '987654321', 'jane.doe@email.com', '2023-03-14', 'Confirmed', 1),
+    (7, 'Michael', 'Johnson', '456789123', 'michael.johnson@email.com', '2023-03-15', 'Confirmed', 2),
+    (8, 'Sarah', 'Williams', '789123456', 'sarah.williams@email.com', '2023-03-16', 'Confirmed', 2),
+    (9, 'David', 'Brown', '321654987', 'david.brown@email.com', '2023-03-17', 'Confirmed', 3),
+    (10, 'Emily', 'Davis', '654987321', 'emily.davis@email.com', '2023-03-18', 'Confirmed', 3),
+    (11, 'Daniel', 'Wilson', '987321654', 'daniel.wilson@email.com', '2023-03-19', 'Cancelled', 4),
+    (12, 'Olivia', 'Moore', '321789654', 'olivia.moore@email.com', '2023-03-20', 'Confirmed', 4);
 
 
 -- Insert 5 random entries into Teacher table
@@ -78,17 +78,17 @@ VALUES
   (10, 'Database Design with MySQL', 'Learn how to design and create databases using MySQL', 'Learn how to design and implement databases, and how to use SQL to manage data', 30, '2023-12-01', '2023-12-01', '2023-09-01', '2023-10-31', 20, 150, 'Active', 1, 2000);
 
 --Insert 5 random entries into Registration table
-INSERT INTO Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_time, reg_state, course_id)
+INSERT INTO Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_state, course_id)
 VALUES 
     
-    (13, 'Isabella', 'Wilson', '321654987', 'isabella.wilson@email.com', '2023-03-25', '14:00:00', 'Received', 7),
-    (14, 'Liam', 'Davis', '654987321', 'liam.davis@email.com', '2023-03-26', '16:00:00', 'Registered', 7),
-    (15, 'Mason', 'Anderson', '987321654', 'mason.anderson@email.com', '2023-03-27', '10:00:00', 'Registered', 8),
-    (16, 'Evelyn', 'Moore', '321789654', 'evelyn.moore@email.com', '2023-03-28', '14:00:00', 'Registered', 8),
-    (17, 'Noah', 'Martin', '123456789', 'noah.martin@email.com', '2023-03-29', '10:00:00', 'Registered', 9),
-    (18, 'Charlotte', 'Clark', '987654321', 'charlotte.clark@email.com', '2023-03-30', '14:00:00', 'Registered', 9),
-    (19, 'Amelia', 'Rodriguez', '456789123', 'amelia.rodriguez@email.com', '2023-03-31', '16:00:00', 'Registered', 10),
-    (20, 'Sophia', 'Garcia', '789123456', 'sophia.garcia@email.com', '2023-04-01', '10:00:00', 'Registered', 10);
+    (13, 'Isabella', 'Wilson', '321654987', 'isabella.wilson@email.com', '2023-03-25', 'Received', 7),
+    (14, 'Liam', 'Davis', '654987321', 'liam.davis@email.com', '2023-03-26', 'Registered', 7),
+    (15, 'Mason', 'Anderson', '987321654', 'mason.anderson@email.com', '2023-03-27', 'Registered', 8),
+    (16, 'Evelyn', 'Moore', '321789654', 'evelyn.moore@email.com', '2023-03-28', 'Registered', 8),
+    (17, 'Noah', 'Martin', '123456789', 'noah.martin@email.com', '2023-03-29', 'Registered', 9),
+    (18, 'Charlotte', 'Clark', '987654321', 'charlotte.clark@email.com', '2023-03-30', 'Registered', 9),
+    (19, 'Amelia', 'Rodriguez', '456789123', 'amelia.rodriguez@email.com', '2023-03-31', 'Registered', 10),
+    (20, 'Sophia', 'Garcia', '789123456', 'sophia.garcia@email.com', '2023-04-01', 'Registered', 10);
 
 
 -- Payment corresponding to the invoice
@@ -129,11 +129,11 @@ VALUES
 --(1002, 3, '2023-07-05', 1200, 'Pending', 1002, 1002);
 
 -- Insert registrations
-INSERT INTO Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_time, reg_state, course_id)
+INSERT INTO Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_state, course_id)
 VALUES
-(1000, 'Alice', 'Smith', '555111111', 'alice.smith@example.com', '2023-05-03', '14:00:00', 'Pending', 1000),
-(1001, 'Bob', 'Johnson', '555222222', 'bob.johnson@example.com', '2023-05-04', '14:00:00', 'Paid', 1000),
-(1002, 'Charlie', 'Brown', '555333333', 'charlie.brown@example.com', '2023-05-05', '14:00:00', 'Paid', 1000);
+(1000, 'Alice', 'Smith', '555111111', 'alice.smith@example.com', '2023-05-03', 'Pending', 1000),
+(1001, 'Bob', 'Johnson', '555222222', 'bob.johnson@example.com', '2023-05-04', 'Paid', 1000),
+(1002, 'Charlie', 'Brown', '555333333', 'charlie.brown@example.com', '2023-05-05', 'Paid', 1000);
 
 --INSERT INTO Payment (payment_id, amount, payment_date, payment_type, invoice_id, reg_id)
 --VALUES

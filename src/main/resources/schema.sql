@@ -52,7 +52,6 @@ reg_surnames varchar(50) not null,
 reg_phone varchar(9) not null, 
 reg_email varchar(100) not null, 
 reg_date date not null, 
-reg_time date not null, 
 reg_state varchar(50) not null, 
 course_id int, 
 foreign key(course_id) references Course(course_id));

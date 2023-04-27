@@ -51,27 +51,27 @@ public class SecretaryModel {
 		
 		if (state.compareTo("--All--") == 0) {//all the payments must be shown
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
-					+ "course_fee, reg_date, reg_time "
+					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active'";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
 		}else if (state.compareTo("Wrong") == 0){//Only wrong payments shown
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
-					+ "course_fee, reg_date, reg_time "
+					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
 					+ "AND reg_state = 'Incomplete' OR reg_state = 'Full'";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
 		}else if (state.compareTo("Pending")==0){
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
-					+ "course_fee, reg_date, reg_time "
+					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
 					+ "AND reg_state = 'Received'";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
 		}else if (state.compareTo("Confirmed")==0){
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
-					+ "course_fee, reg_date, reg_time "
+					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
 					+ "AND reg_state = 'Confirmed' OR reg_state = 'Compensate'";
@@ -79,7 +79,7 @@ public class SecretaryModel {
 		}
 		else { //Cancelled
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
-					+ "course_fee, reg_date, reg_time "
+					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
 					+ "AND reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate'";
@@ -210,7 +210,7 @@ public class SecretaryModel {
 	//Obtains the id of the registration of the selected values on the table
 	public RegistrationEntity getRegId (String name, Date regdate, String regname){
 		String sql = "select r.reg_id, reg_name, reg_surnames, reg_phone, reg_email,"
-				+ " reg_date, reg_time, reg_state from Registration r inner join "
+				+ " reg_date, reg_state from Registration r inner join "
 				+ "Course c on r.course_id = c.course_id where "
 				+ "c.course_name = ? and r.reg_date = ? and r.reg_name = ?";
 		String d = Util.dateToIsoString(regdate);
@@ -225,7 +225,7 @@ public class SecretaryModel {
 	 */
 	public RegistrationEntity getRegistration(int id) {
 		String sql="SELECT reg_id,reg_name,reg_surnames,reg_phone,reg_email, "
-				+ "reg_date, reg_time, reg_state from Registration where reg_id=?";
+				+ "reg_date, reg_state from Registration where reg_id=?";
 		List<RegistrationEntity> registrations = db.executeQueryPojo(RegistrationEntity.class, sql, id);
 		validateCondition(!registrations.isEmpty(),"Registration ID not found: "+id);
 		return registrations.get(0);
