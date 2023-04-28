@@ -4,6 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -96,7 +97,14 @@ public class InscriptionController {
 		String surnames = insview.getsurnamesField().getText();
 		String phone = insview.getphoneField().getText();
 		String email = insview.getemailField().getText();
-		String date = insview.getFechaHoy();
+		SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+		
+		// Formatting today's day string
+	    String isoString = outputFormat.format(today);
+	    Date isoDate = Util.isoStringToDate(isoString);
+		this.today = isoDate;
+		String date = Util.dateToIsoString(today);
+		
 		String state = "Received";
 		//int course_id = insview.getTableCourses().getSelectedRow() + 1;
 		if (insview.getnameField().getText().isBlank() || insview.getsurnamesField().getText().isBlank() 
@@ -135,6 +143,10 @@ public class InscriptionController {
 		TableModel tmodel=SwingUtil.getRecordModelFromPojo(course, new String[] {"course_name", "description", "course_start_period", "course_end_period", "course_start_date", "course_end_date", "total_places", "available_places"});
 		insview.getDetalleCourses().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(insview.getDetalleCourses());
+	}
+	
+	public void updateSystemDate(Date system_date) {
+		this.today = system_date;
 	}
 
 }

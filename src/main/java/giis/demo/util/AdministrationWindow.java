@@ -34,6 +34,7 @@ public class AdministrationWindow{
 	private RegistrationCancellationController registrationcancellationcontroller;
 	private InvoiceController invoicecontroller;
 	private ReportOfExpensesController reportofexpensescontroller;
+	private InscriptionController inscriptioncontroller;
 	
 	private Date system_date;
 	private JDateChooser System_timeDateChooser;
@@ -204,6 +205,8 @@ public class AdministrationWindow{
 					invoicecontroller.updateSystemDate(system_date);
 				if(reportofexpensescontroller != null)
 					reportofexpensescontroller.updateSystemDate(system_date);
+				if(inscriptioncontroller != null)
+					inscriptioncontroller.updateSystemDate(system_date);
 			}
 		});
 		btnUpdateSystemDate.setBounds(382, 87, 162, 35);
@@ -263,4 +266,13 @@ public class AdministrationWindow{
 	public void setReportofexpensescontroller(ReportOfExpensesController reportofexpensescontroller) {
 		this.reportofexpensescontroller = reportofexpensescontroller;
 	}
+
+	public InscriptionController getInscriptioncontroller() {
+		return inscriptioncontroller;
+	}
+
+	public void setInscriptioncontroller(InscriptionController inscriptioncontroller) {
+		this.inscriptioncontroller = inscriptioncontroller;
+	}
+	
 }

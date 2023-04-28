@@ -38,6 +38,7 @@ public class InscriptionsView {
 	private JTable table;
 	private JTable description;
 	private JButton confirmButton;
+	
 
 	/**
 	 * Launch the application.
@@ -188,7 +189,7 @@ public class InscriptionsView {
 	
 	public String getFechaHoy()  { 
 		LocalDate currentDate = LocalDate.now();
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String date = currentDate.format(formatter);
 		return date;			
 	}
