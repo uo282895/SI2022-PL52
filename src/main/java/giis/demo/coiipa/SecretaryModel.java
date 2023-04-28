@@ -47,43 +47,46 @@ public class SecretaryModel {
 	/**
 	 * Obtains the list of payments of the desired type
 	 */
-	public List<PaymentDisplayDTO> getListPayments(String state) {
+	public List<PaymentDisplayDTO> getListPayments(String state, Date today) {
+		
+		String t = Util.dateToIsoString(today);
 		
 		if (state.compareTo("--All--") == 0) {//all the payments must be shown
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
-					+ "course_fee, reg_date "
+					+ "course_fee, treg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
-					+ "WHERE course_state = 'Active'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "WHERE course_state = 'Active' AND reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}else if (state.compareTo("Wrong") == 0){//Only wrong payments shown
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Incomplete' OR reg_state = 'Full'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "AND reg_state = 'Incomplete' OR reg_state = 'Full' AND reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}else if (state.compareTo("Pending")==0){
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Received'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "AND reg_state = 'Received' AND reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}else if (state.compareTo("Confirmed")==0){
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Confirmed' OR reg_state = 'Compensate'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "AND reg_state = 'Confirmed' OR reg_state = 'Compensate'"
+					+ "AND reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}
 		else { //Cancelled
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "AND reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate' and reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}
 	}
 	
@@ -104,16 +107,13 @@ public class SecretaryModel {
 	}
 	
 	//Method encharged of the validation of dates (both registration and payment)
-	public void validateDate(Date paydate, int regid) {
-		RegistrationEntity registration = this.getRegistration(regid);
-		LocalDate localdate = LocalDate.now();
-		
+	public void validateDate(Date paydate, int regid, Date today) {
 		//Actual date
-		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
+		RegistrationEntity registration = this.getRegistration(regid);
 		Date regdate = Util.isoStringToDate(registration.getReg_date());
 		
 		validateCondition(paydate.compareTo(today) <= 0, "You cannot input future dates. Please, enter a valid date.");
-		validateCondition(regdate.compareTo(paydate) < 0, "The payment date must be after the registration date");
+		validateCondition(regdate.compareTo(paydate) <= 0, "The payment date must be after the registration date");
 	}
 	
 	//Method to insert into the DB each payment of type registration
