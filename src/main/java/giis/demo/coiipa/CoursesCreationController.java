@@ -46,7 +46,7 @@ public class CoursesCreationController {
     private boolean week3_warning = false;
     private boolean date_before_today = false;
     
-    private Date today = new Date();
+    private Date today;
     
     private List<SessionDisplayDTO> sessions = new ArrayList<>();
 ;
@@ -179,6 +179,7 @@ public class CoursesCreationController {
 		//this.getListaCarreras();
 		
 		//Abre la ventana (sustituye al main generado por WindowBuilder)
+		today = new Date();
 		view.getFrame().setVisible(true); 
 	}
 	
