@@ -97,14 +97,12 @@ public class InscriptionController {
 		String surnames = insview.getsurnamesField().getText();
 		String phone = insview.getphoneField().getText();
 		String email = insview.getemailField().getText();
-		SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
 		
-		// Formatting today's day string
-	    String isoString = outputFormat.format(today);
-	    Date isoDate = Util.isoStringToDate(isoString);
-		this.today = isoDate;
-		String date = Util.dateToIsoString(today);
-		
+		// Formatting today's day string		
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // Create a SimpleDateFormat object with the desired pattern
+        String date = formatter.format(today);
+        System.out.println(date);
+        
 		String state = "Received";
 		//int course_id = insview.getTableCourses().getSelectedRow() + 1;
 		if (insview.getnameField().getText().isBlank() || insview.getsurnamesField().getText().isBlank() 
@@ -112,18 +110,18 @@ public class InscriptionController {
 			throw new ApplicationException("Be careful, you must fill all the gaps");
 		}	
 		
-		 int index = ids.get(insview.getTableCourses().getSelectedRow());
-		 int newid = insmodel.getLastID() + 1;
+		int index = ids.get(insview.getTableCourses().getSelectedRow());
+		int newid = insmodel.getLastID() + 1;
 		
-		 int places = insmodel.getPlacesCourse(index);
-		 if (places > 0) {
+		int places = insmodel.getPlacesCourse(index);
+		if (places > 0) {
 			 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, state, index);
 			 JOptionPane.showOptionDialog(null, "You have been registered successfully", "Everything seems correct", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
 			 System.out.println("Inscription success");
 			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + state + " " + index);
-		 } else {
+		} else {
 			 JOptionPane.showOptionDialog(null, "There are no places left for the selected formative action", "Sorry, no places left", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] {"OK"}, "OK");
-		 }
+		}
 	}
 	
 	public void restoreDetail() {
