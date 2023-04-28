@@ -187,12 +187,14 @@ public class InscriptionsView {
 		scrollPane_1.setViewportView(description);
 	}
 	
+	/*
 	public String getFechaHoy()  { 
 		LocalDate currentDate = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String date = currentDate.format(formatter);
 		return date;			
 	}
+	*/
 	
 	public JFrame getFrame() { return this.frame; }
 	public JTable getTableCourses() { return this.table; }

@@ -29,7 +29,7 @@ public class InscriptionModel {
 			return db.executeQueryPojo(CourseDisplayDTO.class, sql);
 		}
 		
-		public void insertNewProffessional(int regid, String name, String surnames, String phone, String email, String date, String state, int course_id) {
+		public void insertNewProffessional(int regid, String name, String surnames, String phone, String email, String today, String state, int course_id) {
 			String sql = SQL_Insert_Proffessional;	
 			
 			int regid2 = regid++;
@@ -41,7 +41,7 @@ public class InscriptionModel {
 		        throw e;
 		    }
 			
-			db.executeUpdate(sql, regid2, name, surnames, phone, email, getFechaHoy(),course_id);
+			db.executeUpdate(sql, regid2, name, surnames, phone, email, today ,course_id);
 			//db.executeUpdate(sql_updateplaces, course_id);
 		}
 		
@@ -73,13 +73,6 @@ public class InscriptionModel {
 		public int getLastID() {
 			String sql = SQL_Last_ID;
 			return db.executeQueryPojo(RegisterMaxDisplayDTO.class, sql).get(0).getReg_id();
-		}
-		
-		public String getFechaHoy()  { 
-			LocalDate currentDate = LocalDate.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
-			String date = currentDate.format(formatter);
-			return date;			
 		}
 		
 }
