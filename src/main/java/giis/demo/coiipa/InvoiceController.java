@@ -30,9 +30,10 @@ public class InvoiceController {
 	private Date today;	
 	
 	//Constructor
-	public InvoiceController(InvoiceModel m, InvoiceView v) {
+	public InvoiceController(InvoiceModel m, InvoiceView v, Date sysDate) {
 		this.model = m;
 		this.view = v;
+		this.today = sysDate;
 		//no model initialization but the view
 		this.initView();
 	}
@@ -40,8 +41,6 @@ public class InvoiceController {
 	//init methods (one for each view)
 	public void initView() {
 		//Sets today's date to the current value (TODAY)
-		LocalDate localdate = LocalDate.now();
-		today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		view.setTodayDate(Util.dateToIsoString(today));
 		
 		this.getListTeachers();

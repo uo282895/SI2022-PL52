@@ -23,10 +23,11 @@ public class RegistrationCancellationController {
 	
 	private Date today;
 	
-	public RegistrationCancellationController(RegistrationCancellationModel model, RegistrationCancellationView view) {
+	public RegistrationCancellationController(RegistrationCancellationModel model, RegistrationCancellationView view, Date sysDate) {
 		super();
 		RegistrationCancellationController.model = model;
 		RegistrationCancellationController.view = view;
+		this.today = sysDate;
 		this.initView();
 		
 	}

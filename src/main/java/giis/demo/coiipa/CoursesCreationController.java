@@ -46,14 +46,15 @@ public class CoursesCreationController {
     private boolean week3_warning = false;
     private boolean date_before_today = false;
     
-    private Date today = new Date();
+    private Date today;
     
     private List<SessionDisplayDTO> sessions = new ArrayList<>();
 ;
  	
-	public CoursesCreationController(CoursesCreationModel m, CoursesCreationView v) {
+	public CoursesCreationController(CoursesCreationModel m, CoursesCreationView v, Date sysDate) {
 		this.model = m;
 		this.view = v;
+		this.today = sysDate;
 		//no hay inicializacion especifica del modelo, solo de la vista
 		this.initView();
 	}

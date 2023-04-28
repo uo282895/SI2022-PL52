@@ -24,9 +24,10 @@ public class ReportOfExpensesController {
 	
 	private Date today;
 	
-	public ReportOfExpensesController(ReportOfExpensesView v, ReportOfExpensesModel m) {
+	public ReportOfExpensesController(ReportOfExpensesView v, ReportOfExpensesModel m, Date sysDate) {
 		this.view = v;
 		this.model = m;
+		this.today = sysDate;
 		this.initView();
 	}
 	

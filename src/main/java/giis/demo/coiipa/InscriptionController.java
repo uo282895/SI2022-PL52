@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
@@ -26,9 +27,12 @@ public class InscriptionController {
 	private String lastSelectedKey="";
 	ArrayList<Integer> ids = new ArrayList<Integer>();
 	
-	public InscriptionController (InscriptionModel m, InscriptionsView v) {
+	private Date today;
+	
+	public InscriptionController (InscriptionModel m, InscriptionsView v, Date sysDate) {
 		this.insmodel = m;
 		this.insview = v;
+		this.today = sysDate;
 		this.initview();
 	}
 	
@@ -48,8 +52,7 @@ public class InscriptionController {
 						+ "\nThis is not reversible and will generate a debt according to the price of the selected formative action.", "Confirm?", 
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 				if (confirm == JOptionPane.YES_OPTION) {
-					insertNewProffessional();
-					insview.getFrame().dispose();
+					SwingUtil.exceptionWrapper(()-> insertNewProffessional());
 				};
 			}
 		});

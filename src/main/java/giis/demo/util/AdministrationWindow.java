@@ -2,11 +2,11 @@ package giis.demo.util;
 
 import java.awt.EventQueue;
 import javax.swing.JFrame;
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.awt.event.ActionEvent;
 
@@ -24,7 +24,7 @@ import javax.swing.JLabel;
  * No sigue MVC pues es solamente temporal para que durante el desarrollo se tenga posibilidad
  * de realizar acciones de inicializacion
  */
-public class AdministrationWindow {
+public class AdministrationWindow{
 
 	private JFrame frame;
 	
@@ -84,7 +84,7 @@ public class AdministrationWindow {
 		JButton btnPayments = new JButton("Register pending payments");
 		btnPayments.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				SecretaryControllerRegisterPendingPayments =new SecretaryController(new SecretaryModel(), new PaymentsView());
+				SecretaryControllerRegisterPendingPayments = new SecretaryController(new SecretaryModel(), new PaymentsView(), system_date);
 				SecretaryControllerRegisterPendingPayments.initControllerPayments();
 			}
 		});
@@ -115,7 +115,7 @@ public class AdministrationWindow {
 		JButton btnCourses = new JButton("Consult formative actions");
 		btnCourses.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				secreatarycontrollerConsultFormativeActions = new SecretaryController(new SecretaryModel(), new CoursesView());
+				secreatarycontrollerConsultFormativeActions = new SecretaryController(new SecretaryModel(), new CoursesView(), system_date);
 				secreatarycontrollerConsultFormativeActions.initControllerCourses();
 			}
 		});
@@ -126,7 +126,7 @@ public class AdministrationWindow {
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				coursescreationcontroller=new CoursesCreationController(new CoursesCreationModel(), new CoursesCreationView());
+				coursescreationcontroller=new CoursesCreationController(new CoursesCreationModel(), new CoursesCreationView(), system_date);
 				coursescreationcontroller.initController();
 			}
 		});
@@ -138,7 +138,7 @@ public class AdministrationWindow {
 			public void actionPerformed(ActionEvent e) {
 				registrationcancellationcontroller=
 						new RegistrationCancellationController(new RegistrationCancellationModel(), 
-								new RegistrationCancellationView());
+								new RegistrationCancellationView(), system_date);
 			}
 		});
 		btnEjecutarTkrun.setBounds(334, 202, 237, 41);
@@ -151,7 +151,7 @@ public class AdministrationWindow {
 		JButton btnManageInvoices = new JButton("Manage invoices");
 		btnManageInvoices.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
-				invoicecontroller = new InvoiceController(new InvoiceModel(), new InvoiceView());
+				invoicecontroller = new InvoiceController(new InvoiceModel(), new InvoiceView(), system_date);
 				invoicecontroller.initController();
 			}
 		});
@@ -163,7 +163,7 @@ public class AdministrationWindow {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				reportofexpensescontroller = new ReportOfExpensesController(new ReportOfExpensesView(),
-						new ReportOfExpensesModel());
+						new ReportOfExpensesModel(), system_date);
 				reportofexpensescontroller.initController();
 			}
 		});
@@ -173,7 +173,7 @@ public class AdministrationWindow {
 		JButton btnInscribeIntoA = new JButton("Inscribe into a formative action");
 		btnInscribeIntoA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InscriptionController controller = new InscriptionController(new InscriptionModel(), new InscriptionsView());
+				InscriptionController controller = new InscriptionController(new InscriptionModel(), new InscriptionsView(), system_date);
 				controller.initController();
 			}
 		});
@@ -191,6 +191,7 @@ public class AdministrationWindow {
 				// First store the system date of the DateChoser
 				
 				system_date = System_timeDateChooser.getDate();
+				System.out.println(system_date);
 				if (secreatarycontrollerConsultFormativeActions != null)
 					secreatarycontrollerConsultFormativeActions.updateSystemDate(system_date);
 				if(SecretaryControllerRegisterPendingPayments != null)

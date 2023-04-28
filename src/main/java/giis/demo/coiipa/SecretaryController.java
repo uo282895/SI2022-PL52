@@ -2,8 +2,7 @@ package giis.demo.coiipa;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -22,33 +21,34 @@ import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
 
-public class SecretaryController {
+public class SecretaryController{
 	
 	private SecretaryModel model;
 	private PaymentsView viewPayments;
 	private CoursesView viewCourses;
 	private String lastSelectedKey=""; //remembers the last selected row to show info about it
-	
+
 	private Date today;
 	
 	//Constructors (one for each view)
-	public SecretaryController(SecretaryModel m, PaymentsView v) {
+	public SecretaryController(SecretaryModel m, PaymentsView v, Date sysDate) {
 		this.model = m;
 		this.viewPayments = v;
+		this.today = sysDate;
 		//no model initialization but the view
 		this.initViewPayments();
 	}
 	
-	public SecretaryController(SecretaryModel m, CoursesView v) {
+	public SecretaryController(SecretaryModel m, CoursesView v, Date sysDate) {
 		this.model = m;
 		this.viewCourses = v;
+		this.today = sysDate;
 		//no model initialization but the view
 		this.initViewCourses();
 	}
 	
 	//init methods (one for each view)
 	public void initViewPayments() {
-		//Sets today's date to the current value (TODAY)
 		viewPayments.setTodayDate(Util.dateToIsoString(today));
 		
 		this.getListPayments();
@@ -357,10 +357,20 @@ public class SecretaryController {
 		}
 		return model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
 	}
-
+	
+	/*
+	SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+    String isoString = outputFormat.format(today);
+    Date isoDate = Util.isoStringToDate(isoString);
+	this.today = isoDate;*/
+	
 	public void updateSystemDate(Date system_date) {
 		this.today = system_date;
+		
+		SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    String isoString = outputFormat.format(today);
+	    Date isoDate = Util.isoStringToDate(isoString);
+		this.today = isoDate;
 	}
-	
 }
 	
