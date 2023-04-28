@@ -51,9 +51,10 @@ public class CoursesCreationController {
     private List<SessionDisplayDTO> sessions = new ArrayList<>();
 ;
  	
-	public CoursesCreationController(CoursesCreationModel m, CoursesCreationView v) {
+	public CoursesCreationController(CoursesCreationModel m, CoursesCreationView v, Date sysDate) {
 		this.model = m;
 		this.view = v;
+		this.today = sysDate;
 		//no hay inicializacion especifica del modelo, solo de la vista
 		this.initView();
 	}
