@@ -19,9 +19,7 @@ public class RegistrationCancellationModel {
 			  + "WHERE Registration.reg_state != 'Cancelled' "
 			  + "GROUP BY Registration.reg_id, Course.course_name, Registration.reg_name, Registration.reg_surnames, Registration.reg_email, "
 			  + "Registration.reg_phone, Registration.reg_date, Course.course_start_date "
-			  + "HAVING SUM(Payment.amount) > 0 "
 			  + "ORDER BY Registration.reg_id;";
-
 
 	public static final String SQL_UPDATE_CANCELLATION=
 			"UPDATE Registration "
