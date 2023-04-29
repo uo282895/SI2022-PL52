@@ -13,7 +13,6 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import giis.demo.dto.CourseDisplayDTO;

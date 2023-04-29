@@ -19,11 +19,9 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableModel;
 
 import giis.demo.dto.SessionDisplayDTO;
 import giis.demo.dto.TeacherDisplayDTO;
-import giis.demo.util.SwingUtil;
 
 /**
  * Controlador para la funcionalidad de visualizacion de carreras para la inscripcion.
