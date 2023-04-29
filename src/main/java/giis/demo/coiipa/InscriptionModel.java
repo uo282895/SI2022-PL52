@@ -41,7 +41,7 @@ public class InscriptionModel {
 		        throw e;
 		    }
 			
-			db.executeUpdate(sql, regid2, name, surnames, phone, email, getFechaHoy(),course_id);
+			db.executeUpdate(sql, regid2, name, surnames, phone, email, date, course_id);
 			//db.executeUpdate(sql_updateplaces, course_id);
 		}
 		
@@ -77,7 +77,7 @@ public class InscriptionModel {
 		
 		public String getFechaHoy()  { 
 			LocalDate currentDate = LocalDate.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			String date = currentDate.format(formatter);
 			return date;			
 		}

@@ -81,7 +81,7 @@ public class InscriptionController {
 		tmodel.setColumnIdentifiers(newHeader);	
 		insview.getTableCourses().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(insview.getTableCourses());
-		
+
 		TableColumnModel columnModel = insview.getTableCourses().getColumnModel();
 		
 		for(int i=0; i<insview.getTableCourses().getRowCount(); i++) {
