@@ -73,7 +73,7 @@ public class InscriptionController {
 		this.getListCourses();
 		insview.getFrame().setVisible(true);
 	}
-	
+		
 	public void getListCourses() {
 		List<CourseDisplayDTO> courses=insmodel.getListCourses(Util.isoStringToDate(insview.getFechaHoy()));
 		DefaultTableModel tmodel= (DefaultTableModel) SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id", "course_name", "course_start_date", "course_end_date", "course_fee"});
@@ -110,8 +110,8 @@ public class InscriptionController {
 			throw new ApplicationException("Be careful, you must fill all the gaps");
 		}	
 		
-		int index = ids.get(insview.getTableCourses().getSelectedRow());
-		int newid = insmodel.getLastID() + 1;
+		int index = ids.get(insview.getTableCourses().getSelectedRow()); // Course_id
+		int newid = insmodel.getLastID() + 1; // Registration_id
 		
 		int places = insmodel.getPlacesCourse(index);
 		if (places > 0) {
@@ -119,6 +119,10 @@ public class InscriptionController {
 			 JOptionPane.showOptionDialog(null, "You have been registered successfully", "Everything seems correct", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
 			 System.out.println("Inscription success");
 			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + state + " " + index);
+			 // Sending the .txt mail to the professional registered
+			 String course_name = insmodel.getCurseName(index);
+			 int course_fee = insmodel.getCurseFee(index);
+			 insmodel.sendRegistrationReceivedMail(newid, name, surnames, course_name, email, course_fee, date);
 		} else {
 			 JOptionPane.showOptionDialog(null, "There are no places left for the selected formative action", "Sorry, no places left", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] {"OK"}, "OK");
 		}
