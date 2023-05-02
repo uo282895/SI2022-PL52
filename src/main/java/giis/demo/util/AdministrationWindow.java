@@ -8,6 +8,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JSeparator;
@@ -15,6 +16,8 @@ import javax.swing.JSeparator;
 import com.toedter.calendar.JDateChooser;
 
 import giis.demo.coiipa.*;
+import giis.demo.dto.CourseDisplayDTO;
+
 import javax.swing.JLabel;
 
 /**
@@ -190,8 +193,23 @@ public class AdministrationWindow{
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// First store the system date of the DateChoser
-				
 				system_date = System_timeDateChooser.getDate();
+				
+				SetSystemDateModel systemDateModel = new SetSystemDateModel();
+				List<CourseDisplayDTO> list_courses = systemDateModel.getAllCourses();
+				for(CourseDisplayDTO course: list_courses) {
+					if(true) // The state of this condition is 'Registered'
+						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Registered");
+					else if(true) // The state of this condition is 'Active'
+						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Active");
+					else if(true) // The state of this condition is 'Cancelled'
+						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Cancelled");
+					else if(true) // The state of this condition is 'Finished'
+						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Finished");
+					else if(true) // The state of this condition is 'Closed'
+						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Closed");
+				}
+				
 				System.out.println(system_date);
 				if (secreatarycontrollerConsultFormativeActions != null)
 					secreatarycontrollerConsultFormativeActions.updateSystemDate(system_date);
