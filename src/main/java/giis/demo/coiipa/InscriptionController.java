@@ -75,7 +75,7 @@ public class InscriptionController {
 	}
 		
 	public void getListCourses() {
-		List<CourseDisplayDTO> courses=insmodel.getListCourses(Util.isoStringToDate(insview.getFechaHoy()));
+		List<CourseDisplayDTO> courses=insmodel.getListCourses(today);
 		DefaultTableModel tmodel= (DefaultTableModel) SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id", "course_name", "course_start_date", "course_end_date", "course_fee"});
 		Object[] newHeader = {"ID", "Name", "Starts", "Ends", "Fee"};
 		tmodel.setColumnIdentifiers(newHeader);	
@@ -97,12 +97,7 @@ public class InscriptionController {
 		String surnames = insview.getsurnamesField().getText();
 		String phone = insview.getphoneField().getText();
 		String email = insview.getemailField().getText();
-		
-		// Formatting today's day string		
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd"); // Create a SimpleDateFormat object with the desired pattern
-        String date = formatter.format(today);
-        System.out.println(date);
-        
+		        
 		String state = "Received";
 		//int course_id = insview.getTableCourses().getSelectedRow() + 1;
 		if (insview.getnameField().getText().isBlank() || insview.getsurnamesField().getText().isBlank() 
@@ -115,14 +110,16 @@ public class InscriptionController {
 		
 		int places = insmodel.getPlacesCourse(index);
 		if (places > 0) {
-			 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, state, index);
+			 insmodel.insertNewProffessional(newid, name, surnames, phone, email, Util.dateToIsoString(today), state, index);
 			 JOptionPane.showOptionDialog(null, "You have been registered successfully", "Everything seems correct", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
 			 System.out.println("Inscription success");
-			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + state + " " + index);
+			 
+			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + today + " " + state + " " + index);
+
 			 // Sending the .txt mail to the professional registered
 			 String course_name = insmodel.getCurseName(index);
 			 int course_fee = insmodel.getCurseFee(index);
-			 insmodel.sendRegistrationReceivedMail(newid, name, surnames, course_name, email, course_fee, date);
+			 insmodel.sendRegistrationReceivedMail(newid, name, surnames, course_name, email, course_fee, Util.dateToIsoString(today));
 		} else {
 			 JOptionPane.showOptionDialog(null, "There are no places left for the selected formative action", "Sorry, no places left", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] {"OK"}, "OK");
 		}
@@ -149,6 +146,11 @@ public class InscriptionController {
 	
 	public void updateSystemDate(Date system_date) {
 		this.today = system_date;
+		
+		SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    String isoString = outputFormat.format(today);
+	    Date isoDate = Util.isoStringToDate(isoString);
+		this.today = isoDate;
 	}
 
 }

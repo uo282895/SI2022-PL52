@@ -131,15 +131,16 @@ public class RegistrationCancellationController {
 				}
 				
 			    int reg_id = SwingUtil.getSelectedKeyInteger(view.getTable());
-			    if (refund != 0.0) {
-			    	model.insertCancellationCompensate(reg_id); // Updating the DB with the cancelled registration to compensate
-			    }else {
-			    	model.insertCancellation(reg_id); // Not going to be compensated
-			    }
 
 			    double amount_paid = (double)view.getTable().getValueAt(sel, 7); // Amount paid by the Professional for the course enrol	    
 
 			    JOptionPane.showMessageDialog(null, "The refund amount must be " + refund*100 + "% of the payed fee, that is " + refund*amount_paid + "€");
+			    
+			    if (refund*amount_paid > 0.0) {
+			    	model.insertCancellationCompensate(reg_id); // Updating the DB with the cancelled registration to compensate
+			    }else {
+			    	model.insertCancellation(reg_id); // Not going to be compensated
+			    }
 				
 				//view.getFrame().setVisible(false); // Hide the window
 			    getListRegistrations(); // Reload the list of registrations that can be cancelled

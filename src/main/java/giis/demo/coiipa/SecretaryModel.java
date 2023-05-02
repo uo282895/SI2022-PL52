@@ -3,8 +3,6 @@ package giis.demo.coiipa;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +28,7 @@ public class SecretaryModel {
 			+ "FROM Course c LEFT JOIN Registration r ON c.course_id = r.course_id "
 			+ "GROUP BY c.course_id";
 	
-	public static final String SQL_INSERT_AMOUNTDATEHOUR=
+	public static final String SQL_INSERT_AMOUNTDATE=
 			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
 			+ "invoice_id, reg_id) values(?, ?, ?,'Professional registration',null, ?)";
 	
@@ -43,6 +41,13 @@ public class SecretaryModel {
 	public static final String SQL_INSERT_AMOUNTDATEHOUR_DEVOLUTION = 
 			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
 			+ "invoice_id, reg_id) values(?, ?, ?,'Devolution',null, ?)";
+	
+	public static final String SQL_INSERT_CANCELLATION = 
+			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
+			+ "invoice_id, reg_id) values(?, ?, ?,'Cancellation',null, ?)";
+	public static final String SQL_INSERT_CANC_WRONG = 
+			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
+			+ "invoice_id, reg_id) values(?, ?, ?,'Cancellation devolution',null, ?)";
 	
 	/**
 	 * Obtains the list of payments of the desired type
@@ -76,7 +81,7 @@ public class SecretaryModel {
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Confirmed' OR reg_state = 'Compensate'"
+					+ "AND reg_state = 'Confirmed' OR reg_state = 'Compensate' OR reg_state = 'Confirmed - Profpay' "
 					+ "AND reg_date <= ?";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}
@@ -85,7 +90,8 @@ public class SecretaryModel {
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate' and reg_date <= ?";
+					+ "AND reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate' OR reg_state = 'Cancelled - Profpay' "
+					+ "AND reg_date <= ?";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}
 	}
@@ -120,7 +126,7 @@ public class SecretaryModel {
 	public void insertPaymentReg(int payid, int amount, Date paydate, int regid) {
 		String d = Util.dateToIsoString(paydate);
 		
-		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR, payid, amount, d, regid);
+		db.executeUpdate(SQL_INSERT_AMOUNTDATE, payid, amount, d, regid);
 	}
 	
 	//Method to insert into the DB each payment of type devolution
@@ -128,6 +134,19 @@ public class SecretaryModel {
 		String d = Util.dateToIsoString(paydate);
 		
 		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR_DEVOLUTION, payid, - amount, d, regid);//Negative amount because it is a devolution
+	}
+	
+	
+	public void insertPaymentCanc(int payid, int amount, Date paydate, int regid) {
+		String d = Util.dateToIsoString(paydate);
+		
+		db.executeUpdate(SQL_INSERT_CANCELLATION, payid, - amount, d, regid);
+	}
+	
+	public void insertPaymentCancDev(int payid, int amount, Date paydate, int regid) {
+		String d = Util.dateToIsoString(paydate);
+		
+		db.executeUpdate(SQL_INSERT_CANC_WRONG, payid, amount, d, regid);
 	}
 	
 	
@@ -175,6 +194,27 @@ public class SecretaryModel {
 	public void updateCompToCancelled(int regid) {
 			String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
 					+ "set reg_state = 'Cancelled' where reg_id = ?";
+			db.executeUpdate(sql_stateComp, regid);
+	}
+	
+	//Method to change the state of a registration (when it is wrongly compensated)
+	public void updateCompToProfPay(int regid) {
+			String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
+					+ "set reg_state = 'Confirmed - Profpay' where reg_id = ?";
+			db.executeUpdate(sql_stateComp, regid);
+	}
+	
+	//Method to change the state of a cancellation (when it is wrongly compensated)
+	public void updateCancToProfPay(int regid) {
+			String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
+					+ "set reg_state = 'Cancelled - Profpay' where reg_id = ?";
+			db.executeUpdate(sql_stateComp, regid);
+	}
+	
+	//Method to change the state of a cancellation (when it is wrongly compensated)
+	public void updateCancComp(int regid) {
+			String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
+					+ "set reg_state = 'Cancelled - Compensate' where reg_id = ?";
 			db.executeUpdate(sql_stateComp, regid);
 	}
 	
@@ -251,6 +291,15 @@ public class SecretaryModel {
 		}else return res;
 	}
 	
+	//Method to get the amount paid of a given registration (to handle wrong payments)
+	public int getCancAmount(int regid) {
+		String sql = "SELECT SUM(CASE WHEN payment_type = 'Cancellation' THEN amount ELSE 0 END) "
+				+ "- SUM(CASE WHEN payment_type = 'Cancellation devolution' THEN amount ELSE 0 END) "
+				+ "AS net_amount FROM Payment where reg_id = ?";
+
+		return db.executeQueryPojo(PaymentInputDTO.class, sql, regid).get(0).getNet_amount();
+	}
+
 	/* General use for object validation */
 	public void validateNotNull(Object obj, String message) {
 		if (obj==null)
