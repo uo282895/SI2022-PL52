@@ -1,5 +1,8 @@
 package giis.demo.coiipa;
 
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
@@ -22,6 +25,8 @@ public class InscriptionModel {
 		public static final String SQL_Last_ID=
 				"SELECT reg_id FROM Registration WHERE reg_id = (SELECT MAX(reg_id) FROM Registration);";
 
+		public static final String SQL_Get_Course_Name=
+				"SELECT course_id, course_name from Course where course_id = ?;";
 		
 		
 		public List<CourseDisplayDTO> getListCourses(Date fechaInsc){
@@ -41,9 +46,22 @@ public class InscriptionModel {
 		        throw e;
 		    }
 			
-			db.executeUpdate(sql, regid2, name, surnames, phone, email, getFechaHoy(),course_id);
+			db.executeUpdate(sql, regid2, name, surnames, phone, email, date, course_id);
 			//db.executeUpdate(sql_updateplaces, course_id);
 		}
+		
+		public String getCurseName(int course_id) {
+			String sql = SQL_Get_Course_Name;
+			List<CourseDisplayDTO> course = db.executeQueryPojo(CourseDisplayDTO.class, sql, course_id);
+			return course.get(0).getCourse_name();			
+		}
+
+		public int getCurseFee(int course_id) {
+			String sql = SQL_Get_Course_Name;
+			List<CourseDisplayDTO> course = db.executeQueryPojo(CourseDisplayDTO.class, sql, course_id);
+			return course.get(0).getCourse_fee();			
+		}
+
 		
 		public CourseEntity getCourse(int id) {
 			String sql="SELECT c.course_id, course_name, description, course_start_date, course_end_date, course_start_period, course_end_period, total_places, "
@@ -70,6 +88,16 @@ public class InscriptionModel {
 			return db.executeQueryPojo(CourseDisplayDTO.class, sql, courseid).get(0).getAvailable_places();
 		}
 		
+		public String getStartPeriod(int id) {
+			String sql = "SELECT course_start_period from Course WHERE course_id = ?;";
+			return db.executeQueryPojo(CourseDisplayDTO.class, sql, id).get(0).getCourse_start_period();
+		}
+		
+		public String getEndPeriod(int id) {
+			String sql = "SELECT course_end_period from Course WHERE course_id = ?;";
+			return db.executeQueryPojo(CourseDisplayDTO.class, sql, id).get(0).getCourse_end_period();
+		}
+		
 		public int getLastID() {
 			String sql = SQL_Last_ID;
 			return db.executeQueryPojo(RegisterMaxDisplayDTO.class, sql).get(0).getReg_id();
@@ -77,9 +105,29 @@ public class InscriptionModel {
 		
 		public String getFechaHoy()  { 
 			LocalDate currentDate = LocalDate.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 			String date = currentDate.format(formatter);
 			return date;			
 		}
+		
+		//Method to send a fictitious mail (via .txt) to the person which has correctly register into a course
+		public void sendRegistrationReceivedMail(int id, String name, String surnames, String coursename, 
+				String mail, int fee, String reg_date) {
+				try {
+					String str = "Registration_" + id + "-" + name+"_"+surnames+"_"+"_"+coursename+".txt";
+			        File file = new File(str);
+			        FileWriter writer = new FileWriter(file);
+			        writer.write("To: "+ name + " "+ surnames + " (" + mail + ")" + "\n\n"
+			            + "Concept: Correct reception of your registration form on " + reg_date + " \n\n"
+			            + "You have, from this moment, 24 hours to pay the course fee: " + fee + "€\n"
+			            + " so that we are able to reserve you a place.\n");
+			        writer.close();
+
+			        System.out.println("Registration received mail sent successfully.\n");
+			    } catch (IOException e) {
+			        e.printStackTrace();
+			      }
+		}
+
 		
 }

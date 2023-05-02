@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.util.Date;
+import java.text.SimpleDateFormat;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JSeparator;
@@ -173,12 +174,22 @@ public class AdministrationWindow {
 		JButton btnInscribeIntoA = new JButton("Inscribe into a formative action");
 		btnInscribeIntoA.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				InscriptionController controller = new InscriptionController(new InscriptionModel(), new InscriptionsView());
+				InscriptionController controller = new InscriptionController(new InscriptionModel(), new InscriptionsView(), system_date);
 				controller.initController();
 			}
 		});
 		btnInscribeIntoA.setBounds(24, 307, 237, 41);
 		frame.getContentPane().add(btnInscribeIntoA);
+		
+		JButton btnConsultRegistrationsOf = new JButton("Consult status and registrations of a formative action");
+		btnConsultRegistrationsOf.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ConsultController controller = new ConsultController(new ConsultModel(), new ConsultView(), system_date);
+				controller.initController();
+			}
+		});
+		btnConsultRegistrationsOf.setBounds(334, 305, 237, 41);
+		frame.getContentPane().add(btnConsultRegistrationsOf);
 
 		JLabel lblNewLabel = new JLabel("Set the System Time:");
 		lblNewLabel.setBounds(65, 94, 131, 20);

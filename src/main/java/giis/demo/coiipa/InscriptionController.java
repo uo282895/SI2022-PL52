@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.Date;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,9 +29,14 @@ public class InscriptionController {
 	private String lastSelectedKey="";
 	ArrayList<Integer> ids = new ArrayList<Integer>();
 	
-	public InscriptionController (InscriptionModel m, InscriptionsView v) {
+	private Date today;
+	int correct = 0;
+	int correctDate = 0;
+	
+	public InscriptionController (InscriptionModel m, InscriptionsView v, Date sysDate) {
 		this.insmodel = m;
 		this.insview = v;
+		this.today = sysDate;
 		this.initview();
 	}
 	
@@ -48,8 +56,16 @@ public class InscriptionController {
 						+ "\nThis is not reversible and will generate a debt according to the price of the selected formative action.", "Confirm?", 
 						JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 				if (confirm == JOptionPane.YES_OPTION) {
-					insertNewProffessional();
-					insview.getFrame().dispose();
+					SwingUtil.exceptionWrapper(()-> {
+						try {
+							insertNewProffessional();
+						} catch (ParseException e1) {
+							// TODO Auto-generated catch block
+							e1.printStackTrace();
+						}
+					});
+					if(correct == 1)
+						insview.getFrame().dispose();
 				};
 			}
 		});
@@ -71,7 +87,7 @@ public class InscriptionController {
 	}
 	
 	public void getListCourses() {
-		List<CourseDisplayDTO> courses=insmodel.getListCourses(Util.isoStringToDate(insview.getFechaHoy()));
+		List<CourseDisplayDTO> courses=insmodel.getListCourses(today);
 		DefaultTableModel tmodel= (DefaultTableModel) SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id", "course_name", "course_start_date", "course_end_date", "course_fee"});
 		Object[] newHeader = {"ID", "Name", "Starts", "Ends", "Fee"};
 		tmodel.setColumnIdentifiers(newHeader);	
@@ -88,12 +104,16 @@ public class InscriptionController {
 		
 	}
 	
-	public void insertNewProffessional() {
+	public void insertNewProffessional() throws ParseException {
 		String name = insview.getnameField().getText();
 		String surnames = insview.getsurnamesField().getText();
 		String phone = insview.getphoneField().getText();
 		String email = insview.getemailField().getText();
-		String date = insview.getFechaHoy();
+		
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		String date = sdf.format(today);
+        System.out.println(date);
+        
 		String state = "Received";
 		//int course_id = insview.getTableCourses().getSelectedRow() + 1;
 		if (insview.getnameField().getText().isBlank() || insview.getsurnamesField().getText().isBlank() 
@@ -104,15 +124,42 @@ public class InscriptionController {
 		 int index = ids.get(insview.getTableCourses().getSelectedRow());
 		 int newid = insmodel.getLastID() + 1;
 		
-		 int places = insmodel.getPlacesCourse(index);
-		 if (places > 0) {
-			 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, state, index);
-			 JOptionPane.showOptionDialog(null, "You have been registered successfully", "Everything seems correct", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
-			 System.out.println("Inscription success");
-			 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + state + " " + index);
-		 } else {
-			 JOptionPane.showOptionDialog(null, "There are no places left for the selected formative action", "Sorry, no places left", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] {"OK"}, "OK");
-		 }
+		Date start = sdf.parse(insmodel.getStartPeriod(index));
+		Date end = sdf.parse(insmodel.getEndPeriod(index));
+			
+		int comp1 = today.compareTo(start);
+		int comp2 = today.compareTo(end);
+		if (comp1 >= 0) {
+			correctDate++;
+		}
+		if (comp2 <= 0) {
+			correctDate++;
+		}
+			
+		if (insview.getnameField().getText().isBlank() || insview.getsurnamesField().getText().isBlank() 
+				|| insview.getphoneField().getText().isBlank() || insview.getemailField().getText().isBlank()) {
+				JOptionPane.showOptionDialog(null, "Be careful, you must fill all the gaps.", "Information missing", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
+		} else if (correctDate == 2){
+			correct = 1;
+			
+			 int places = insmodel.getPlacesCourse(index);
+			 if (places > 0) {
+				 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, state, index);
+				 JOptionPane.showOptionDialog(null, "You have been registered successfully", "Everything seems correct", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
+				 System.out.println("Inscription success");
+				 System.out.println(newid + " " + name + " " + surnames + " " + phone + " " + email + " " + date + " " + state + " " + index);
+				 System.out.println("Places left:" + (places - 1));
+				// Sending the .txt mail to the professional registered
+				String course_name = insmodel.getCurseName(index);
+				int course_fee = insmodel.getCurseFee(index);
+				insmodel.sendRegistrationReceivedMail(newid, name, surnames, course_name, email, course_fee, date);
+			 } else {
+				 JOptionPane.showOptionDialog(null, "There are no places left for the selected formative action", "Sorry, no places left", JOptionPane.OK_OPTION, JOptionPane.WARNING_MESSAGE, null, new Object[] {"OK"}, "OK");
+			 }
+		} else {
+			JOptionPane.showOptionDialog(null, "The selected course is not open.", "Incorrect course selection", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");
+			System.out.println(correctDate);
+		}
 	}
 	
 	public void restoreDetail() {

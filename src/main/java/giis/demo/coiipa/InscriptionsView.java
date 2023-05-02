@@ -67,7 +67,7 @@ public class InscriptionsView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setTitle("Consult screen");
+		frame.setTitle("Enroll in a formative action");
 		frame.getContentPane().setName("");
 		frame.setBounds(100, 100, 680, 507);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
@@ -185,14 +185,14 @@ public class InscriptionsView {
 		description = new JTable();
 		scrollPane_1.setViewportView(description);
 	}
-	
+	/*
 	public String getFechaHoy()  { 
 		LocalDate currentDate = LocalDate.now();
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
 		String date = currentDate.format(formatter);
 		return date;			
 	}
-	
+	*/
 	public JFrame getFrame() { return this.frame; }
 	public JTable getTableCourses() { return this.table; }
 	public JTable getDetalleCourses() { return this.description; }
@@ -202,5 +202,4 @@ public class InscriptionsView {
 	public JTextField getsurnamesField() { return this.surnamesField; }
 	public JTextField getphoneField() { return this.phoneField; }
 	public JTextField getemailField() { return this.emailField; }
-
 }

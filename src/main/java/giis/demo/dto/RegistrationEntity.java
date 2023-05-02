@@ -10,6 +10,7 @@ public class RegistrationEntity {
 	private String reg_email;
 	private String reg_date;
 	private String reg_state;
+	private int course_id;
 	
 	//Getters and setters
 	public int getReg_id() {
@@ -53,6 +54,12 @@ public class RegistrationEntity {
 	}
 	public void setReg_state(String reg_state) {
 		this.reg_state = reg_state;
+	}
+	public int getCourse_id() {
+		return course_id;
+	}
+	public void setCourse_id(int course_id) {
+		this.course_id = course_id;
 	}
 	
 	
