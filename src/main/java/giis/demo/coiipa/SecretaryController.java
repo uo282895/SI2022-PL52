@@ -309,23 +309,23 @@ public class SecretaryController{
 			System.out.println(togive);
 			System.out.println(totalcanc);
 			
-			if (totalcanc == togive) {
+			if (-totalcanc == togive) {
 				SwingUtil.showMessage("The professional has received the money after cancelling its registration to a course.\n"
 						+ "The money paid will be given back, according to the criteria.", "Cancellation paid", 1);
 				model.updateCompToCancelled(regid);
 			}
-			else if (quant < togive) {
+			else if (-totalcanc < togive) {
 				SwingUtil.showMessage("The college must compensate the cancellation again.\n"
-						+ "COIIPA must give back now " + Integer.toString(togive - totalcanc) + " €.\n"
+						+ "COIIPA must give back now " + Integer.toString(togive + totalcanc) + " €.\n"
 								+ "This is due to an incomplete compensation.", 
 						"Incomplete compensation of the payment", 0);
 				model.updateCancComp(regid);
 			}else {//The college pays more than the expected, so the prof must pay back again
 				SwingUtil.showMessage("The college has compensated more money than expected.\n"
-						+ "You must tell the professional to pay back " + Integer.toString(totalcanc - togive) + " €.\n"
+						+ "You must tell the professional to pay back " + Integer.toString(-totalcanc - togive) + " €.\n"
 								+ "This is due to a wrong compensation (more money paid).", 
 								"Wrong compensation of the payment", 0);
-				model.updateCompToProfPay(regid);
+				model.updateCancToProfPay(regid);
 			}
 		}
 		else if (totalamount == fee && days) {//CORRECT

@@ -58,7 +58,7 @@ public class SecretaryModel {
 		
 		if (state.compareTo("--All--") == 0) {//all the payments must be shown
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
-					+ "course_fee, treg_date "
+					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' AND reg_date <= ?";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
@@ -67,21 +67,23 @@ public class SecretaryModel {
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Incomplete' OR reg_state = 'Full' AND reg_date <= ?";
+					+ "AND (reg_state = 'Incomplete' OR reg_state = 'Full') "
+					+ "AND reg_date <= ?";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}else if (state.compareTo("Pending")==0){
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Received' AND reg_date <= ?";
+					+ "AND reg_state = 'Received' "
+					+ "AND reg_date <= ?";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}else if (state.compareTo("Confirmed")==0){
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Confirmed' OR reg_state = 'Compensate' OR reg_state = 'Confirmed - Profpay' "
+					+ "AND (reg_state = 'Confirmed' OR reg_state = 'Compensate' OR reg_state = 'Confirmed - Profpay') "
 					+ "AND reg_date <= ?";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}
@@ -90,7 +92,7 @@ public class SecretaryModel {
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate' OR reg_state = 'Cancelled - Profpay' "
+					+ "AND (reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate' OR reg_state = 'Cancelled - Profpay') "
 					+ "AND reg_date <= ?";
 			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}
@@ -294,7 +296,7 @@ public class SecretaryModel {
 	//Method to get the amount paid of a given registration (to handle wrong payments)
 	public int getCancAmount(int regid) {
 		String sql = "SELECT SUM(CASE WHEN payment_type = 'Cancellation' THEN amount ELSE 0 END) "
-				+ "- SUM(CASE WHEN payment_type = 'Cancellation devolution' THEN amount ELSE 0 END) "
+				+ "+ SUM(CASE WHEN payment_type = 'Cancellation devolution' THEN amount ELSE 0 END) "
 				+ "AS net_amount FROM Payment where reg_id = ?";
 
 		return db.executeQueryPojo(PaymentInputDTO.class, sql, regid).get(0).getNet_amount();
