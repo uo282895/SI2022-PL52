@@ -143,7 +143,7 @@ public class RegistrationCancellationController {
 			    }
 				
 				//view.getFrame().setVisible(false); // Hide the window
-			    getListRegistrations(); // Reload the list of registrations that can be cancelled
+			    //getListRegistrations(); // Reload the list of registrations that can be cancelled
 			    
 			}
 		});
