@@ -85,8 +85,10 @@ public class SecretaryController{
 						state.compareTo("Incomplete")==0 || state.compareTo("Compensate")==0 || 
 						state.compareTo("Cancelled - Compensate")==0 || state.compareTo("Confirmed - Profpay")==0
 						|| state.compareTo("Cancelled - Profpay")==0)) {
-				    viewPayments.getTFAmount().setEnabled(true);
-				    viewPayments.getTFDate().setEnabled(true);
+					if(viewPayments.getcbType().getSelectedIndex()!=0) {
+					    viewPayments.getTFAmount().setEnabled(true);
+					    viewPayments.getTFDate().setEnabled(true);
+					}
 				}
 				
 				SwingUtil.exceptionWrapper(()-> getListPaymentsAdditional());

@@ -116,7 +116,7 @@ public class SecretaryModel {
 	
 	//Method encharged of the validation of dates (both registration and payment)
 	public void validateDate(Date paydate, int regid, Date today) {
-		//Actual date
+		//registration date
 		RegistrationEntity registration = this.getRegistration(regid);
 		Date regdate = Util.isoStringToDate(registration.getReg_date());
 		

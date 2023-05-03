@@ -1,4 +1,4 @@
-package giis.demo.coiipa;
+package giis.demo.dto;
 
 public class CourseEntity {
 	private String course_id;
@@ -9,8 +9,8 @@ public class CourseEntity {
 	private String course_end_period;
 	private String description;
 	private int course_fee;
-	private int available_places;
 	private int total_places;
+	
 	public String getCourse_id() {
 		return course_id;
 	}
@@ -64,12 +64,6 @@ public class CourseEntity {
 	}
 	public void setTotal_places(int total_places) {
 		this.total_places = total_places;
-	}
-	public int getAvailable_places() {
-		return available_places;
-	}
-	public void setAvailable_places(int available_places) {
-		this.available_places = available_places;
 	}
 
 	
