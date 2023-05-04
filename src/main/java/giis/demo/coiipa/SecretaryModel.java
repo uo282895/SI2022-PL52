@@ -221,13 +221,16 @@ public class SecretaryModel {
 	}
 	
 	//Get free places from a course 
-	public int getPlacesCourse(int courseid) {
-		String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed') THEN 1 ELSE 0 END), 0)) "
-				+ "AS available_places FROM Course C "
+	public int getPlacesCourse(int courseid, Date today) {
+		String t = Util.dateToIsoString(today);
+		
+		String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed - Profpay', 'Confirmed') THEN 1 ELSE 0 END), 0)) AS available_places "
+				+ "FROM Course C "
 				+ "LEFT JOIN Registration R ON C.course_id = R.course_id "
-				+ "WHERE C.course_id = ?"
+				+ "WHERE C.course_id = ? "
+				+ "AND (R.reg_date <= ?) "
 				+ "GROUP BY C.course_id";
-		return db.executeQueryPojo(CourseDisplayDTO.class, sql, courseid).get(0).getAvailable_places();
+		return db.executeQueryPojo(CourseDisplayDTO.class, sql, courseid, t).get(0).getAvailable_places();
 	}
 	
 	//Get the id from a course associated to a registration

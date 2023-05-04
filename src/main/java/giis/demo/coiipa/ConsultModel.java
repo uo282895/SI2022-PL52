@@ -26,7 +26,7 @@ public class ConsultModel {
 				"SELECT reg_id FROM Registration WHERE reg_id = (SELECT MAX(reg_id) FROM Registration);";
 		
 		public static final String SQL_List_Registrations=
-				"SELECT * FROM Registration WHERE course_id = ?;";
+				"SELECT * FROM Registration WHERE course_id = ? AND reg_date <= ?";
 
 		
 		
@@ -35,9 +35,11 @@ public class ConsultModel {
 			return db.executeQueryPojo(CourseDisplayDTO.class, sql);
 		}
 		
-		public List<RegistrationDisplayDTO> getListRegistrations(int id){
+		public List<RegistrationDisplayDTO> getListRegistrations(int id, Date today){
+			String t = Util.dateToIsoString(today);
+			
 			String sql = SQL_List_Registrations;
-			return db.executeQueryPojo(RegistrationDisplayDTO.class, sql, id);
+			return db.executeQueryPojo(RegistrationDisplayDTO.class, sql, id, t);
 		}
 		
 		public CourseEntity getCourse(int id) {
@@ -47,21 +49,22 @@ public class ConsultModel {
 			return courses.get(0);
 		}
 		
-		public RegistrationEntity getProffReg(int id) {
-			String sql="SELECT reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_state, course_id from Registration where course_id=?";
-			List<RegistrationEntity> reg=db.executeQueryPojo(RegistrationEntity.class, sql, id);
-			validateCondition(!reg.isEmpty(),"Registrations to the selected course not found: "+id);
-			return reg.get(0);
-		}
-		
 		private void validateCondition(boolean condition, String message) {
 			if (!condition)
 				throw new ApplicationException(message);
 		}
 		
-		public int getPlacesCourse(int id) {
-			String sql = "SELECT available_places from Course WHERE course_id = ?;";
-			return db.executeQueryPojo(CourseDisplayDTO.class, sql, id).get(0).getAvailable_places();
+		//Get free places from a course 
+		public int getPlacesCourse(int courseid, Date today) {
+			String t = Util.dateToIsoString(today);
+			
+			String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed - Profpay', 'Confirmed') THEN 1 ELSE 0 END), 0)) AS available_places "
+					+ "FROM Course C "
+					+ "LEFT JOIN Registration R ON C.course_id = R.course_id "
+					+ "WHERE C.course_id = ? "
+					+ "AND (R.reg_date <= ? OR R.reg_date IS NULL) "
+					+ "GROUP BY C.course_id";
+			return db.executeQueryPojo(CourseDisplayDTO.class, sql, courseid, t).get(0).getAvailable_places();
 		}
 		
 		public int getLastID() {
@@ -77,13 +80,6 @@ public class ConsultModel {
 		public String getEndPeriod(int id) {
 			String sql = "SELECT course_end_period from Course WHERE course_id = ?;";
 			return db.executeQueryPojo(CourseDisplayDTO.class, sql, id).get(0).getCourse_end_period();
-		}
-		
-		public String getFechaHoy()  { 
-			LocalDate currentDate = LocalDate.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-dd-MM");
-			String date = currentDate.format(formatter);
-			return date;			
 		}
 		
 }

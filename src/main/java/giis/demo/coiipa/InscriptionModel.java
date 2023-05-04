@@ -11,6 +11,7 @@ import giis.demo.dto.CourseEntity;
 import giis.demo.dto.RegisterMaxDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
+import giis.demo.util.Util;
 
 public class InscriptionModel {
 		private Database db = new Database();
@@ -77,13 +78,17 @@ public class InscriptionModel {
 				throw new ApplicationException(message);
 		}
 		
-		public int getPlacesCourse(int courseid) {
-			String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed') THEN 1 ELSE 0 END), 0)) "
-					+ "AS available_places FROM Course C "
+		//Get free places from a course 
+		public int getPlacesCourse(int courseid, Date today) {
+			String t = Util.dateToIsoString(today);
+			
+			String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed - Profpay', 'Confirmed') THEN 1 ELSE 0 END), 0)) AS available_places "
+					+ "FROM Course C "
 					+ "LEFT JOIN Registration R ON C.course_id = R.course_id "
-					+ "WHERE C.course_id = ?"
+					+ "WHERE C.course_id = ? "
+					+ "AND (R.reg_date <= ? OR R.reg_date IS NULL) "
 					+ "GROUP BY C.course_id";
-			return db.executeQueryPojo(CourseDisplayDTO.class, sql, courseid).get(0).getAvailable_places();
+			return db.executeQueryPojo(CourseDisplayDTO.class, sql, courseid, t).get(0).getAvailable_places();
 		}
 		
 		public String getStartPeriod(int id) {
@@ -99,14 +104,6 @@ public class InscriptionModel {
 		public int getLastID() {
 			String sql = SQL_Last_ID;
 			return db.executeQueryPojo(RegisterMaxDisplayDTO.class, sql).get(0).getReg_id();
-		}
-		
-
-		public String getFechaHoy()  { 
-			LocalDate currentDate = LocalDate.now();
-			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-			String date = currentDate.format(formatter);
-			return date;			
 		}
 		
 		//Method to send a fictitious mail (via .txt) to the person which has correctly register into a course
