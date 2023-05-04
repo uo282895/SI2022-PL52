@@ -22,7 +22,7 @@ public class InvoiceModel {
 			"SELECT c.course_id, t.teacher_id, t.teacher_name, t.teacher_surnames, c.course_name "+
 			"FROM Teacher t "+ 
 			"INNER JOIN Course c ON t.teacher_id = c.teacher_id "+ 
-			"WHERE c.course_end_date <= ?";
+			"WHERE c.course_end_date < ?";
 	
 	public static final String SQL_LIST_INVOICES=
 			"SELECT i.invoice_id, t.teacher_name, t.teacher_surnames, t.fiscal_number, t.teacher_address, i.invoice_quantity "

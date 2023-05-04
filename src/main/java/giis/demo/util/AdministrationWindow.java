@@ -17,6 +17,7 @@ import com.toedter.calendar.JDateChooser;
 
 import giis.demo.coiipa.*;
 import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.CourseEntity;
 
 import javax.swing.JLabel;
 
@@ -196,18 +197,24 @@ public class AdministrationWindow{
 				system_date = System_timeDateChooser.getDate();
 				
 				SetSystemDateModel systemDateModel = new SetSystemDateModel();
-				List<CourseDisplayDTO> list_courses = systemDateModel.getAllCourses();
-				for(CourseDisplayDTO course: list_courses) {
-					if(true) // The state of this condition is 'Registered'
+				List<CourseEntity> list_courses = systemDateModel.getAllCourses();
+				for(CourseEntity course: list_courses) {
+					
+					String courseend = course.getCourse_end_date();//course end date
+					String regstart = course.getCourse_start_period();//reg start date
+					
+					Date course_end_date = Util.isoStringToDate(courseend);
+					Date reg_start_date = Util.isoStringToDate(regstart);
+					
+					if(system_date.before(reg_start_date)) // The state of this condition is 'Registered'
 						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Registered");
-					else if(true) // The state of this condition is 'Active'
+					else if(system_date.compareTo(reg_start_date) >= 0 && system_date.compareTo(course_end_date) <= 0) // The state of this condition is 'Active'
 						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Active");
-					else if(true) // The state of this condition is 'Cancelled'
-						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Cancelled");
-					else if(true) // The state of this condition is 'Finished'
+					else if(system_date.after(course_end_date)) // The state of this condition is 'Finished'
 						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Finished");
-					else if(true) // The state of this condition is 'Closed'
-						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Closed");
+					else {
+						systemDateModel.updateCourseState(Integer.parseInt(course.getCourse_id()), "Cancelled");
+					}
 				}
 				
 				System.out.println(system_date);

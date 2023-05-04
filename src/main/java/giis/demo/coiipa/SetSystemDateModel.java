@@ -2,6 +2,7 @@ package giis.demo.coiipa;
 import java.util.List;
 
 import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.CourseEntity;
 import giis.demo.util.Database;
 
 public class SetSystemDateModel {
@@ -16,9 +17,9 @@ public class SetSystemDateModel {
 			+ "SET course_state = ? "
 			+ "WHERE course_id = ?;";
 	
-	public List<CourseDisplayDTO> getAllCourses(){
+	public List<CourseEntity> getAllCourses(){
 		String sql= SQL_LIST_COURSES;
-		return db.executeQueryPojo(CourseDisplayDTO.class, sql);
+		return db.executeQueryPojo(CourseEntity.class, sql);
 	}
 	
 	public void updateCourseState(int course_id, final String newState) {
