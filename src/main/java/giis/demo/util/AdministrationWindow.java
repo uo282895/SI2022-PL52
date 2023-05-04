@@ -34,6 +34,7 @@ public class AdministrationWindow{
 	
 	private SecretaryController secreatarycontrollerConsultFormativeActions;
 	private SecretaryController SecretaryControllerRegisterPendingPayments;
+
 	private CoursesCreationController coursescreationcontroller;
 	private RegistrationCancellationController registrationcancellationcontroller;
 	private InvoiceController invoicecontroller;
