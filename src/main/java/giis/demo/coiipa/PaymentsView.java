@@ -25,10 +25,10 @@ public class PaymentsView {
 	private JTextField tfDate;
 	private JButton btnCancel; 
 	private JButton btnConfirm;
-	private JLabel lblTodaysDate;
 	@SuppressWarnings("rawtypes")
 	private JComboBox comboBoxType;
 	private JTable table_1;
+	private JLabel lblTodayDate;
 
 	/**
 	 * Launch the application.
@@ -124,10 +124,6 @@ public class PaymentsView {
 		btnConfirm.setBounds(831, 419, 89, 23);
 		frame.getContentPane().add(btnConfirm);
 		
-		lblTodaysDate = new JLabel("");
-		lblTodaysDate.setBounds(438, 11, 154, 14);
-		frame.getContentPane().add(lblTodaysDate);
-		
 		comboBoxType = new JComboBox();
 		comboBoxType.setModel(new DefaultComboBoxModel(new String[] {"--All--", "Pending", "Confirmed", "Wrong", "Cancelled"}));
 		comboBoxType.setSelectedIndex(1);
@@ -146,6 +142,10 @@ public class PaymentsView {
 		lblHistory.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblHistory.setBounds(611, 271, 285, 14);
 		frame.getContentPane().add(lblHistory);
+		
+		lblTodayDate = new JLabel("");
+		lblTodayDate.setBounds(414, 12, 214, 14);
+		frame.getContentPane().add(lblTodayDate);
 	}
 	
 	
@@ -160,6 +160,8 @@ public class PaymentsView {
 	@SuppressWarnings("rawtypes")
 	public JComboBox getcbType() {return this.comboBoxType;}
 	
-	//Setters
-	public void setTodayDate(String date) {this.lblTodaysDate.setText("Today's date: "+date);}
+	
+	public void setTodayDate(String date) {
+		lblTodayDate.setText("Today's date: "+ date);
+	}
 }

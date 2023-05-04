@@ -58,8 +58,8 @@ VALUES
     (8, 'Sarah', 'Williams', '789123456', 'sarah.williams@email.com', '2023-03-16', 'Confirmed', 2),
     (9, 'David', 'Brown', '321654987', 'david.brown@email.com', '2023-03-17', 'Confirmed', 3),
     (10, 'Emily', 'Davis', '654987321', 'emily.davis@email.com', '2023-03-18', 'Confirmed', 3),
-    (11, 'Daniel', 'Wilson', '987321654', 'daniel.wilson@email.com', '2023-03-19', 'Cancelled', 4),
-    (12, 'Olivia', 'Moore', '321789654', 'olivia.moore@email.com', '2023-03-20', 'Confirmed', 4);
+    (11, 'Daniel', 'Wilson', '987321654', 'daniel.wilson@email.com', '2023-03-19', 'Cancelled', 1),
+    (12, 'Olivia', 'Moore', '321789654', 'olivia.moore@email.com', '2023-03-20', 'Confirmed', 1);
 
 
 -- Insert 5 random entries into Teacher table
@@ -81,10 +81,10 @@ VALUES
 INSERT INTO Registration (reg_id, reg_name, reg_surnames, reg_phone, reg_email, reg_date, reg_state, course_id)
 VALUES 
     
-    (13, 'Isabella', 'Wilson', '321654987', 'isabella.wilson@email.com', '2023-03-25', 'Received', 7),
-    (14, 'Liam', 'Davis', '654987321', 'liam.davis@email.com', '2023-03-26', 'Registered', 7),
-    (15, 'Mason', 'Anderson', '987321654', 'mason.anderson@email.com', '2023-03-27', 'Registered', 8),
-    (16, 'Evelyn', 'Moore', '321789654', 'evelyn.moore@email.com', '2023-03-28', 'Registered', 8),
+    (13, 'Isabella', 'Wilson', '321654987', 'isabella.wilson@email.com', '2023-03-25', 'Received', 10),
+    (14, 'Liam', 'Davis', '654987321', 'liam.davis@email.com', '2023-03-26', 'Registered', 3),
+    (15, 'Mason', 'Anderson', '987321654', 'mason.anderson@email.com', '2023-03-27', 'Registered', 2),
+    (16, 'Evelyn', 'Moore', '321789654', 'evelyn.moore@email.com', '2023-03-28', 'Registered', 1),
     (17, 'Noah', 'Martin', '123456789', 'noah.martin@email.com', '2023-03-29', 'Registered', 9),
     (18, 'Charlotte', 'Clark', '987654321', 'charlotte.clark@email.com', '2023-03-30', 'Registered', 9),
     (19, 'Amelia', 'Rodriguez', '456789123', 'amelia.rodriguez@email.com', '2023-03-31', 'Registered', 10),

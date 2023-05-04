@@ -4,20 +4,23 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+
 import java.util.Date;
 import java.text.ParseException;
+
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import javax.swing.table.TableModel;
-import javax.swing.JButton;
 import javax.swing.JOptionPane;
 
 import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.CourseEntity;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
@@ -30,8 +33,10 @@ public class InscriptionController {
 	ArrayList<Integer> ids = new ArrayList<Integer>();
 	
 	private Date today;
+
 	int correct = 0;
 	int correctDate = 0;
+
 	
 	public InscriptionController (InscriptionModel m, InscriptionsView v, Date sysDate) {
 		this.insmodel = m;
@@ -85,7 +90,7 @@ public class InscriptionController {
 		this.getListCourses();
 		insview.getFrame().setVisible(true);
 	}
-	
+		
 	public void getListCourses() {
 		List<CourseDisplayDTO> courses=insmodel.getListCourses(today);
 		DefaultTableModel tmodel= (DefaultTableModel) SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id", "course_name", "course_start_date", "course_end_date", "course_fee"});
@@ -93,7 +98,7 @@ public class InscriptionController {
 		tmodel.setColumnIdentifiers(newHeader);	
 		insview.getTableCourses().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(insview.getTableCourses());
-		
+
 		TableColumnModel columnModel = insview.getTableCourses().getColumnModel();
 		
 		for(int i=0; i<insview.getTableCourses().getRowCount(); i++) {
@@ -109,6 +114,7 @@ public class InscriptionController {
 		String surnames = insview.getsurnamesField().getText();
 		String phone = insview.getphoneField().getText();
 		String email = insview.getemailField().getText();
+
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
 		String date = sdf.format(today);
@@ -121,8 +127,8 @@ public class InscriptionController {
 			throw new ApplicationException("Be careful, you must fill all the gaps");
 		}	
 		
-		 int index = ids.get(insview.getTableCourses().getSelectedRow());
-		 int newid = insmodel.getLastID() + 1;
+		int index = ids.get(insview.getTableCourses().getSelectedRow()); // Course_id
+		int newid = insmodel.getLastID() + 1; // Registration_id
 		
 		Date start = sdf.parse(insmodel.getStartPeriod(index));
 		Date end = sdf.parse(insmodel.getEndPeriod(index));
@@ -176,9 +182,18 @@ public class InscriptionController {
 		
 		//Detalles de la carrera seleccionada
 		CourseEntity course=insmodel.getCourse(idCourse);
-		TableModel tmodel=SwingUtil.getRecordModelFromPojo(course, new String[] {"course_name", "description", "course_start_period", "course_end_period", "course_start_date", "course_end_date", "total_places", "available_places"});
+		TableModel tmodel=SwingUtil.getRecordModelFromPojo(course, new String[] {"course_name", "description", "course_start_period", "course_end_period", "course_start_date", "course_end_date", "total_places"});
 		insview.getDetalleCourses().setModel(tmodel);
 		SwingUtil.autoAdjustColumns(insview.getDetalleCourses());
+	}
+	
+	public void updateSystemDate(Date system_date) {
+		this.today = system_date;
+		
+		SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    String isoString = outputFormat.format(today);
+	    Date isoDate = Util.isoStringToDate(isoString);
+		this.today = isoDate;
 	}
 
 }

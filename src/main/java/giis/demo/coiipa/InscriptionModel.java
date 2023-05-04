@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
-import giis.demo.util.Util;
 import giis.demo.dto.CourseDisplayDTO;
+import giis.demo.dto.CourseEntity;
 import giis.demo.dto.RegisterMaxDisplayDTO;
 import giis.demo.util.ApplicationException;
 import giis.demo.util.Database;
@@ -27,14 +27,13 @@ public class InscriptionModel {
 
 		public static final String SQL_Get_Course_Name=
 				"SELECT course_id, course_name from Course where course_id = ?;";
-		
-		
+
 		public List<CourseDisplayDTO> getListCourses(Date fechaInsc){
 			String sql = SQL_List_Courses;
 			return db.executeQueryPojo(CourseDisplayDTO.class, sql);
 		}
 		
-		public void insertNewProffessional(int regid, String name, String surnames, String phone, String email, String date, String state, int course_id) {
+		public void insertNewProffessional(int regid, String name, String surnames, String phone, String email, String today, String state, int course_id) {
 			String sql = SQL_Insert_Proffessional;	
 			
 			int regid2 = regid++;
@@ -46,7 +45,7 @@ public class InscriptionModel {
 		        throw e;
 		    }
 			
-			db.executeUpdate(sql, regid2, name, surnames, phone, email, date, course_id);
+			db.executeUpdate(sql, regid2, name, surnames, phone, email, today ,course_id);
 			//db.executeUpdate(sql_updateplaces, course_id);
 		}
 		
@@ -61,8 +60,7 @@ public class InscriptionModel {
 			List<CourseDisplayDTO> course = db.executeQueryPojo(CourseDisplayDTO.class, sql, course_id);
 			return course.get(0).getCourse_fee();			
 		}
-
-		
+	
 		public CourseEntity getCourse(int id) {
 			String sql="SELECT c.course_id, course_name, description, course_start_date, course_end_date, course_start_period, course_end_period, total_places, "
 					+ "(c.total_places - COUNT(CASE WHEN r.reg_state = 'Confirmed' "
@@ -103,6 +101,7 @@ public class InscriptionModel {
 			return db.executeQueryPojo(RegisterMaxDisplayDTO.class, sql).get(0).getReg_id();
 		}
 		
+
 		public String getFechaHoy()  { 
 			LocalDate currentDate = LocalDate.now();
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -128,6 +127,4 @@ public class InscriptionModel {
 			        e.printStackTrace();
 			      }
 		}
-
-		
 }

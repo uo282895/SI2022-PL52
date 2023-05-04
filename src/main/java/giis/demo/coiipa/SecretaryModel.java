@@ -3,8 +3,6 @@ package giis.demo.coiipa;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -30,7 +28,7 @@ public class SecretaryModel {
 			+ "FROM Course c LEFT JOIN Registration r ON c.course_id = r.course_id "
 			+ "GROUP BY c.course_id";
 	
-	public static final String SQL_INSERT_AMOUNTDATEHOUR=
+	public static final String SQL_INSERT_AMOUNTDATE=
 			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
 			+ "invoice_id, reg_id) values(?, ?, ?,'Professional registration',null, ?)";
 	
@@ -44,46 +42,59 @@ public class SecretaryModel {
 			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
 			+ "invoice_id, reg_id) values(?, ?, ?,'Devolution',null, ?)";
 	
+	public static final String SQL_INSERT_CANCELLATION = 
+			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
+			+ "invoice_id, reg_id) values(?, ?, ?,'Cancellation',null, ?)";
+	public static final String SQL_INSERT_CANC_WRONG = 
+			"INSERT into Payment(payment_id, amount, payment_date, payment_type, "
+			+ "invoice_id, reg_id) values(?, ?, ?,'Cancellation devolution',null, ?)";
+	
 	/**
 	 * Obtains the list of payments of the desired type
 	 */
-	public List<PaymentDisplayDTO> getListPayments(String state) {
+	public List<PaymentDisplayDTO> getListPayments(String state, Date today) {
+		
+		String t = Util.dateToIsoString(today);
 		
 		if (state.compareTo("--All--") == 0) {//all the payments must be shown
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
-					+ "WHERE course_state = 'Active'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "WHERE course_state = 'Active' AND reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}else if (state.compareTo("Wrong") == 0){//Only wrong payments shown
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Incomplete' OR reg_state = 'Full'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "AND (reg_state = 'Incomplete' OR reg_state = 'Full') "
+					+ "AND reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}else if (state.compareTo("Pending")==0){
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Received'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "AND reg_state = 'Received' "
+					+ "AND reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}else if (state.compareTo("Confirmed")==0){
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Confirmed' OR reg_state = 'Compensate'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "AND (reg_state = 'Confirmed' OR reg_state = 'Compensate' OR reg_state = 'Confirmed - Profpay') "
+					+ "AND reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}
 		else { //Cancelled
 			String sql = "SELECT course_name, reg_name, reg_surnames, reg_email, "
 					+ "course_fee, reg_date "
 					+ "FROM Course c INNER JOIN Registration r ON c.course_id = r.course_id "
 					+ "WHERE course_state = 'Active' "
-					+ "AND reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate'";
-			return db.executeQueryPojo(PaymentDisplayDTO.class, sql);
+					+ "AND (reg_state = 'Cancelled' OR reg_state = 'Cancelled - Compensate' OR reg_state = 'Cancelled - Profpay') "
+					+ "AND reg_date <= ?";
+			return db.executeQueryPojo(PaymentDisplayDTO.class, sql, t);
 		}
 	}
 	
@@ -104,23 +115,20 @@ public class SecretaryModel {
 	}
 	
 	//Method encharged of the validation of dates (both registration and payment)
-	public void validateDate(Date paydate, int regid) {
+	public void validateDate(Date paydate, int regid, Date today) {
+		//registration date
 		RegistrationEntity registration = this.getRegistration(regid);
-		LocalDate localdate = LocalDate.now();
-		
-		//Actual date
-		Date today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		Date regdate = Util.isoStringToDate(registration.getReg_date());
 		
 		validateCondition(paydate.compareTo(today) <= 0, "You cannot input future dates. Please, enter a valid date.");
-		validateCondition(regdate.compareTo(paydate) < 0, "The payment date must be after the registration date");
+		validateCondition(regdate.compareTo(paydate) <= 0, "The payment date must be after the registration date");
 	}
 	
 	//Method to insert into the DB each payment of type registration
 	public void insertPaymentReg(int payid, int amount, Date paydate, int regid) {
 		String d = Util.dateToIsoString(paydate);
 		
-		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR, payid, amount, d, regid);
+		db.executeUpdate(SQL_INSERT_AMOUNTDATE, payid, amount, d, regid);
 	}
 	
 	//Method to insert into the DB each payment of type devolution
@@ -128,6 +136,19 @@ public class SecretaryModel {
 		String d = Util.dateToIsoString(paydate);
 		
 		db.executeUpdate(SQL_INSERT_AMOUNTDATEHOUR_DEVOLUTION, payid, - amount, d, regid);//Negative amount because it is a devolution
+	}
+	
+	
+	public void insertPaymentCanc(int payid, int amount, Date paydate, int regid) {
+		String d = Util.dateToIsoString(paydate);
+		
+		db.executeUpdate(SQL_INSERT_CANCELLATION, payid, - amount, d, regid);
+	}
+	
+	public void insertPaymentCancDev(int payid, int amount, Date paydate, int regid) {
+		String d = Util.dateToIsoString(paydate);
+		
+		db.executeUpdate(SQL_INSERT_CANC_WRONG, payid, amount, d, regid);
 	}
 	
 	
@@ -175,6 +196,27 @@ public class SecretaryModel {
 	public void updateCompToCancelled(int regid) {
 			String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
 					+ "set reg_state = 'Cancelled' where reg_id = ?";
+			db.executeUpdate(sql_stateComp, regid);
+	}
+	
+	//Method to change the state of a registration (when it is wrongly compensated)
+	public void updateCompToProfPay(int regid) {
+			String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
+					+ "set reg_state = 'Confirmed - Profpay' where reg_id = ?";
+			db.executeUpdate(sql_stateComp, regid);
+	}
+	
+	//Method to change the state of a cancellation (when it is wrongly compensated)
+	public void updateCancToProfPay(int regid) {
+			String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
+					+ "set reg_state = 'Cancelled - Profpay' where reg_id = ?";
+			db.executeUpdate(sql_stateComp, regid);
+	}
+	
+	//Method to change the state of a cancellation (when it is wrongly compensated)
+	public void updateCancComp(int regid) {
+			String sql_stateComp = "UPDATE Registration " //Update the state (it is now wrong)
+					+ "set reg_state = 'Cancelled - Compensate' where reg_id = ?";
 			db.executeUpdate(sql_stateComp, regid);
 	}
 	
@@ -251,6 +293,15 @@ public class SecretaryModel {
 		}else return res;
 	}
 	
+	//Method to get the amount paid of a given registration (to handle wrong payments)
+	public int getCancAmount(int regid) {
+		String sql = "SELECT SUM(CASE WHEN payment_type = 'Cancellation' THEN amount ELSE 0 END) "
+				+ "+ SUM(CASE WHEN payment_type = 'Cancellation devolution' THEN amount ELSE 0 END) "
+				+ "AS net_amount FROM Payment where reg_id = ?";
+
+		return db.executeQueryPojo(PaymentInputDTO.class, sql, regid).get(0).getNet_amount();
+	}
+
 	/* General use for object validation */
 	public void validateNotNull(Object obj, String message) {
 		if (obj==null)

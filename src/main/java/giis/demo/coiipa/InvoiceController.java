@@ -2,8 +2,6 @@ package giis.demo.coiipa;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -30,9 +28,10 @@ public class InvoiceController {
 	private Date today;	
 	
 	//Constructor
-	public InvoiceController(InvoiceModel m, InvoiceView v) {
+	public InvoiceController(InvoiceModel m, InvoiceView v, Date sysDate) {
 		this.model = m;
 		this.view = v;
+		this.today = sysDate;
 		//no model initialization but the view
 		this.initView();
 	}
@@ -40,8 +39,6 @@ public class InvoiceController {
 	//init methods (one for each view)
 	public void initView() {
 		//Sets today's date to the current value (TODAY)
-		LocalDate localdate = LocalDate.now();
-		today = Date.from(localdate.atStartOfDay().atZone(ZoneId.systemDefault()).toInstant());
 		view.setTodayDate(Util.dateToIsoString(today));
 		
 		this.getListTeachers();
@@ -66,6 +63,12 @@ public class InvoiceController {
 				if(model.hasInvoice(courseId).compareTo("Yes") == 0) {
 					view.getTFAmount().setEnabled(true);
 				    view.getTFDate().setEnabled(true);
+				    
+				    int invid = model.getInvoice(courseId).getInvoice_id();
+				    if (model.getInvoiceEntity(invid).getInvoice_state().compareTo("Paid")==0) {
+				    	view.getTFAmount().setEnabled(false);
+					    view.getTFDate().setEnabled(false);
+				    }
 				}
 			}
 		});
@@ -95,15 +98,16 @@ public class InvoiceController {
 		    	SwingUtil.exceptionWrapper(() -> manageConfirm());
 		    	view.getTFAmount().setText("");
 		    	view.getTFDate().setText("");
+		    	//SwingUtil.exceptionWrapper(() -> getListTeachers());
 		    }
 		});
 			
 	}
 	
 
-	//Method listing all the pending payments coming from the POJO object
+	//Method listing the teachers and the course they have taught
 	public void getListTeachers() {
-		List<TeacherInvoiceDisplayDTO> teachers = model.getListTeachers();
+		List<TeacherInvoiceDisplayDTO> teachers = model.getListTeachers(today);
 		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(teachers, new String[] {"course_id", "teacher_id", "teacher_name", "teacher_surnames", "course_name"});
 		Object[] newHeaders = {"Course id", "Teacher id", "Teacher name", "Teacher surnames", "Course name"};
 		tmodel.setColumnIdentifiers(newHeaders);
@@ -161,7 +165,8 @@ public class InvoiceController {
 			
 			//INSERT THE INVOICE
 			model.InsertInvoice(invid, rem, teacherId, courseId);
-			model.updateFinished(courseId);
+			view.getTFAmount().setEnabled(true);
+			view.getTFDate().setEnabled(true);
 		}
 		else {
 			SwingUtil.showMessage("You must select a row of the table.", "Error", 0);
@@ -208,17 +213,32 @@ public class InvoiceController {
 			
 			int invid = model.getInvoice(courseId).getInvoice_id();
 			
-			model.validateDate(Util.isoStringToDate(date));
-			
-			if (quant == rem) {//The payment of the invoice must be exact
+			//Insert the payment
+			model.validateDate(Util.isoStringToDate(date), today, courseId);
+			if(model.getInvoiceEntity(invid).getInvoice_state().compareTo("Profpay") == 0) {
+				model.insertPaymentMore(payid, quant, Util.isoStringToDate(date), invid);
+			}else {
 				model.insertPayment(payid, - quant, Util.isoStringToDate(date), invid);
-				SwingUtil.showMessage("The invoice has been correctly paid.", "Successful payment of an invoice", 1);
-				model.updateState(invid);
+			}
+			
+			int totalquant = model.getAmountPaid(invid);
+			
+			if (-totalquant == rem) {//The payment of the invoice must be exact
+				SwingUtil.showMessage("The invoice has been correctly paid.", "Successful payment of the invoice", 1);
+				model.updateState("Paid",invid);
 				view.getTFAmount().setEnabled(false);
 			    view.getTFDate().setEnabled(false);
+			}else if ((-totalquant) < rem){
+				model.updateState("Received", invid);
+				SwingUtil.showMessage("The college still owes money to the corresponding teacher.\n"
+						+ "Please, try to complete the payment with "+Integer.toString(rem + totalquant)+ " € more.", "Wrong payment", 0);
 			}else {
-				SwingUtil.showMessage("Please, introduce the correct amount to be paid to the teacher.", "Wrong payment", 0);
+				model.updateState("Profpay", invid);
+				SwingUtil.showMessage("You've paid more than necessary to the corresponding teacher.\n"
+						+ "Tell the teacher to give back the money (" + Integer.toString(-totalquant - rem) + " €) to the college.\n", "Wrong payment", 0);
 			}
+		}else {
+			SwingUtil.showMessage("You must select an entry in the table.", "Wrong operation", 0);
 		}
 	}
 

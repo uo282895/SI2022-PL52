@@ -2,8 +2,7 @@ package giis.demo.coiipa;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
-import java.time.LocalDate;
-import java.time.ZoneId;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -22,33 +21,34 @@ import giis.demo.util.ApplicationException;
 import giis.demo.util.SwingUtil;
 import giis.demo.util.Util;
 
-public class SecretaryController {
+public class SecretaryController{
 	
 	private SecretaryModel model;
 	private PaymentsView viewPayments;
 	private CoursesView viewCourses;
 	private String lastSelectedKey=""; //remembers the last selected row to show info about it
-	
+
 	private Date today;
 	
 	//Constructors (one for each view)
-	public SecretaryController(SecretaryModel m, PaymentsView v) {
+	public SecretaryController(SecretaryModel m, PaymentsView v, Date sysDate) {
 		this.model = m;
 		this.viewPayments = v;
+		this.today = sysDate;
 		//no model initialization but the view
 		this.initViewPayments();
 	}
 	
-	public SecretaryController(SecretaryModel m, CoursesView v) {
+	public SecretaryController(SecretaryModel m, CoursesView v, Date sysDate) {
 		this.model = m;
 		this.viewCourses = v;
+		this.today = sysDate;
 		//no model initialization but the view
 		this.initViewCourses();
 	}
 	
 	//init methods (one for each view)
 	public void initViewPayments() {
-		//Sets today's date to the current value (TODAY)
 		viewPayments.setTodayDate(Util.dateToIsoString(today));
 		
 		this.getListPayments();
@@ -81,9 +81,14 @@ public class SecretaryController {
 				int regid = getRegIdUtil();//get the ID of a registration
 				String state = model.getRegistration(regid).getReg_state();//state of a registration
 				
-				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0 || state.compareTo("Incomplete")==0 || state.compareTo("Compensate")==0 || state.compareTo("Cancelled - Compensate")==0)) {
-				    viewPayments.getTFAmount().setEnabled(true);
-				    viewPayments.getTFDate().setEnabled(true);
+				if (viewPayments.getTablePayments().isRowSelected(sel) && (state.compareTo("Received")==0 || 
+						state.compareTo("Incomplete")==0 || state.compareTo("Compensate")==0 || 
+						state.compareTo("Cancelled - Compensate")==0 || state.compareTo("Confirmed - Profpay")==0
+						|| state.compareTo("Cancelled - Profpay")==0)) {
+					if(viewPayments.getcbType().getSelectedIndex()!=0) {
+					    viewPayments.getTFAmount().setEnabled(true);
+					    viewPayments.getTFDate().setEnabled(true);
+					}
 				}
 				
 				SwingUtil.exceptionWrapper(()-> getListPaymentsAdditional());
@@ -133,7 +138,7 @@ public class SecretaryController {
 	//Method listing all the pending payments coming from the POJO object
 	public void getListPayments() {
 		String state = (String) viewPayments.getcbType().getSelectedItem();
-		List<PaymentDisplayDTO> payments = model.getListPayments(state);
+		List<PaymentDisplayDTO> payments = model.getListPayments(state, today);
 		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(payments, new String[] {"course_name", "reg_name", "reg_surnames", "reg_email", "course_fee", "reg_date"});
 		Object[] newHeaders = {"Course name", "Professional name", "Professional surnames", "email", "Course fee", "Date of registration"};
 		tmodel.setColumnIdentifiers(newHeaders);
@@ -230,11 +235,11 @@ public class SecretaryController {
 		String regName = "";
 		String regSurnames = "";
 		if (index >=0) {//No errors if the fields are not selected
-			fee = model.getListPayments(state).get(index).getCourse_fee();
-			courseName = model.getListPayments(state).get(index).getCourse_name();
-			regDate = model.getListPayments(state).get(index).getReg_date();
-			regName = model.getListPayments(state).get(index).getReg_name();
-			regSurnames = model.getListPayments(state).get(index).getReg_surnames();
+			fee = model.getListPayments(state,today).get(index).getCourse_fee();
+			courseName = model.getListPayments(state,today).get(index).getCourse_name();
+			regDate = model.getListPayments(state,today).get(index).getReg_date();
+			regName = model.getListPayments(state,today).get(index).getReg_name();
+			regSurnames = model.getListPayments(state,today).get(index).getReg_surnames();
 		}
 		
 		//Get the course places, depending on which course the registration is associated
@@ -247,7 +252,7 @@ public class SecretaryController {
 		payid++;
 		
 		//True if the difference is smaller or equal than 48 hours
-		boolean days = model.compareDates(Util.isoStringToDate(regDate), Util.isoStringToHour(date));
+		boolean days = true;//model.compareDates(Util.isoStringToDate(regDate), Util.isoStringToHour(date));
 		
 		int totalamount = model.getAmountPaid(regid);
 		
@@ -255,19 +260,26 @@ public class SecretaryController {
 /***********************************************Process of inserting all the payments**********************************/
 		
 		if (state.compareTo("Confirmed") == 0) { //Only for compensations
-			model.validateDate(Util.isoStringToDate(date), regid);
-			if (totalamount - quant >= fee){
+			model.validateDate(Util.isoStringToDate(date), regid, today);
+			
+			if (model.getRegistration(regid).getReg_state().compareTo("Confirmed - Profpay")==0){
+				model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), regid);
+			}else {
 				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), regid);
 			}
+			
 		}else if (state.compareTo("Cancelled") == 0){ //Cancellations
-			int togive = (int) RegistrationCancellationController.getAmountPaid();
-			model.validateDate(Util.isoStringToDate(date), regid);
-			if (quant == togive) {
-				model.insertPaymentDev(payid, quant, Util.isoStringToDate(date), regid);
+			model.validateDate(Util.isoStringToDate(date), regid, today);
+			
+			if (model.getRegistration(regid).getReg_state().compareTo("Cancelled - Profpay")==0){
+				model.insertPaymentCancDev(payid, quant, Util.isoStringToDate(date), regid);
+			}else {
+				model.insertPaymentCanc(payid, quant, Util.isoStringToDate(date), regid);
 			}
+			
 		}
 		else { //Normal payment
-			model.validateDate(Util.isoStringToDate(date), regid);
+			model.validateDate(Util.isoStringToDate(date), regid, today);
 			model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), regid);
 		}
 		
@@ -279,25 +291,43 @@ public class SecretaryController {
 				SwingUtil.showMessage("The money has been correctly compensated.", 
 						"Correct compensation of the payment", 1);
 				model.updateCompToCorrect(regid);
-			}else if (totalamount  > fee) {
+			}else if (totalamount > fee) {
 				SwingUtil.showMessage("The college must compensate the professional again.\n"
-						+ "COIIPA must give him back " + Integer.toString(totalamount - fee) + " €.\n"
-								+ "This is due to an incomplete compensation or a wrong compensation (more money than necessary has been paid).", 
-						"Wrong compensation of the payment", 0);
+						+ "COIIPA must give back " + Integer.toString(totalamount - fee) + " €.\n"
+								+ "This is due to an incomplete compensation.", 
+						"Incomplete compensation of the payment", 0);
+				model.updateComp(regid);
+			}else {//The college pays more than the expected, so the prof must pay back again
+				SwingUtil.showMessage("The college has compensated more money than expected.\n"
+						+ "You must tell the professional to pay back " + Integer.toString(fee - totalamount) + " €.\n"
+								+ "This is due to a wrong compensation (more money paid).", 
+								"Wrong compensation of the payment", 0);
+				model.updateCompToProfPay(regid);
 			}
 		}
 		else if (state.compareTo("Cancelled") == 0) {
 			int togive = (int) RegistrationCancellationController.getAmountPaid();
-			if (quant == togive) {
+			int totalcanc = model.getCancAmount(regid);
+			System.out.println(togive);
+			System.out.println(totalcanc);
+			
+			if (-totalcanc == togive) {
 				SwingUtil.showMessage("The professional has received the money after cancelling its registration to a course.\n"
 						+ "The money paid will be given back, according to the criteria.", "Cancellation paid", 1);
 				model.updateCompToCancelled(regid);
 			}
-			else {
-				SwingUtil.showMessage("The college must compensate the professional's cancellation again.\n"
-						+ "COIIPA must give him back " + Integer.toString(togive) + " €.\n"
-								+ "Please, input the correct amount of money.", 
-						"Wrong compensation of the cancellation", 0);
+			else if (-totalcanc < togive) {
+				SwingUtil.showMessage("The college must compensate the cancellation again.\n"
+						+ "COIIPA must give back now " + Integer.toString(togive + totalcanc) + " €.\n"
+								+ "This is due to an incomplete compensation.", 
+						"Incomplete compensation of the payment", 0);
+				model.updateCancComp(regid);
+			}else {//The college pays more than the expected, so the prof must pay back again
+				SwingUtil.showMessage("The college has compensated more money than expected.\n"
+						+ "You must tell the professional to pay back " + Integer.toString(-totalcanc - togive) + " €.\n"
+								+ "This is due to a wrong compensation (more money paid).", 
+								"Wrong compensation of the payment", 0);
+				model.updateCancToProfPay(regid);
 			}
 		}
 		else if (totalamount == fee && days) {//CORRECT
@@ -351,16 +381,20 @@ public class SecretaryController {
 		String regDate = "";
 		String regName = "";
 		if (sel >=0) {//No errors if the fields are not selected
-			courseName = model.getListPayments(state).get(sel).getCourse_name();
-			regDate = model.getListPayments(state).get(sel).getReg_date();
-			regName = model.getListPayments(state).get(sel).getReg_name();
+			courseName = model.getListPayments(state,today).get(sel).getCourse_name();
+			regDate = model.getListPayments(state,today).get(sel).getReg_date();
+			regName = model.getListPayments(state, today).get(sel).getReg_name();
 		}
 		return model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
 	}
-
+	
 	public void updateSystemDate(Date system_date) {
 		this.today = system_date;
+		
+		SimpleDateFormat outputFormat = new SimpleDateFormat("yyyy-MM-dd");
+	    String isoString = outputFormat.format(today);
+	    Date isoDate = Util.isoStringToDate(isoString);
+		this.today = isoDate;
 	}
-	
 }
 	

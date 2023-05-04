@@ -51,7 +51,7 @@ public class RegistrationCancellationView {
 	 */
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 1315, 569);
+		frame.setBounds(100, 100, 1097, 569);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Register a Cancellation to a Formative Action");
@@ -64,7 +64,7 @@ public class RegistrationCancellationView {
 		
 		//Scroll panel and table to show the headers
 		JScrollPane registrations_scrollPane = new JScrollPane();
-		registrations_scrollPane.setBounds(20, 54, 1260, 260);
+		registrations_scrollPane.setBounds(20, 54, 1051, 260);
 		frame.getContentPane().add(registrations_scrollPane);
 		
 		table = new JTable();
@@ -73,7 +73,7 @@ public class RegistrationCancellationView {
 		registrations_scrollPane.setViewportView(table);
 		
 		Closebutton = new JButton("Close");
-		Closebutton.setBounds(1019, 474, 139, 45);
+		Closebutton.setBounds(932, 462, 139, 45);
 		frame.getContentPane().add(Closebutton);
 		
 		cancellation_dateJDateChooser = new JDateChooser();

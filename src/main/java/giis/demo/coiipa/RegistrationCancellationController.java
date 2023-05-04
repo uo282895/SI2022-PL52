@@ -23,10 +23,11 @@ public class RegistrationCancellationController {
 	
 	private Date today;
 	
-	public RegistrationCancellationController(RegistrationCancellationModel model, RegistrationCancellationView view) {
+	public RegistrationCancellationController(RegistrationCancellationModel model, RegistrationCancellationView view, Date sysDate) {
 		super();
 		RegistrationCancellationController.model = model;
 		RegistrationCancellationController.view = view;
+		this.today = sysDate;
 		this.initView();
 		
 	}
@@ -44,7 +45,7 @@ public class RegistrationCancellationController {
 		List<RegistrationDisplayDTO> registrations = model.getListRegistrations();
 		DefaultTableModel tmodel = (DefaultTableModel) SwingUtil.getTableModelFromPojos(registrations, 
 				new String[] {"reg_id", "course_name", "reg_name", "reg_surnames", "reg_email", "reg_phone", "reg_date",
-						 "course_start_date", "amount"});
+						 "course_start_date", "total_payment"});
 		Object[] newHeaders = {"ID", "Course name", "Professional name", "Professional surnames", "email", "phone", "Date of registration", 
 				"Course start date", "amount paid"};
 		tmodel.setColumnIdentifiers(newHeaders);
@@ -98,8 +99,8 @@ public class RegistrationCancellationController {
 				}
 				
 				DateTimeFormatter formatter_date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-				String course_start_date_string = (String)view.getTable().getValueAt(sel, 7); // Course start date in String
-			    LocalDate course_start = LocalDate.parse(course_start_date_string, formatter_date); // Course end time in LocalTime
+				String course_start_date_string = (String)view.getTable().getValueAt(sel, 6); // Course start date in String
+				LocalDate course_start = LocalDate.parse(course_start_date_string, formatter_date); // Course end time in LocalTime
 			    
 			    Calendar course_s = Calendar.getInstance();
 			    course_s.set(Calendar.YEAR, course_start.getYear());
@@ -129,19 +130,21 @@ public class RegistrationCancellationController {
 					}
 				}
 				
-			    //int reg_id = (int)view.getTable().getValueAt(sel, 0);
 			    int reg_id = SwingUtil.getSelectedKeyInteger(view.getTable());
-			    if (refund != 0.0) {
+
+			    double amount_paid = (double)view.getTable().getValueAt(sel, 7); // Amount paid by the Professional for the course enrol	    
+
+			    JOptionPane.showMessageDialog(null, "The refund amount must be " + refund*100 + "% of the payed fee, that is " + refund*amount_paid + "€");
+			    
+			    if (refund*amount_paid > 0.0) {
 			    	model.insertCancellationCompensate(reg_id); // Updating the DB with the cancelled registration to compensate
 			    }else {
 			    	model.insertCancellation(reg_id); // Not going to be compensated
 			    }
-
-			    double amount_paid = (double)view.getTable().getValueAt(sel, 8); // Amount paid by the Professional for the course enrol	    
-
-			    JOptionPane.showMessageDialog(null, "The refund amount must be " + refund*100 + "% of the payed fee, that is " + refund*amount_paid + "€");
 				
-				view.getFrame().setVisible(false);
+				//view.getFrame().setVisible(false); // Hide the window
+			    //getListRegistrations(); // Reload the list of registrations that can be cancelled
+			    
 			}
 		});
 		
@@ -187,7 +190,7 @@ public class RegistrationCancellationController {
 	    }
 
 	    DateTimeFormatter formatter_date = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	    String course_start_date_string = (String) view.getTable().getValueAt(sel, 7); // Course start date in String
+	    String course_start_date_string = (String) view.getTable().getValueAt(sel, 6); // Course start date in String
 	    LocalDate course_start = LocalDate.parse(course_start_date_string, formatter_date); // Course end time in LocalTime
 
 	    Calendar course_s = Calendar.getInstance();
@@ -218,7 +221,7 @@ public class RegistrationCancellationController {
 	        }
 	    }
 
-	    double amount_paid = (double) view.getTable().getValueAt(sel, 8); // Amount paid by the Professional for the course enrol
+	    double amount_paid = (double) view.getTable().getValueAt(sel, 7); // Amount paid by the Professional for the course enrol
 	    double refund_amount = refund * amount_paid;
 	    
 	    view.getFrame().setVisible(false);
