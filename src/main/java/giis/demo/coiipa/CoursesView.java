@@ -20,6 +20,7 @@ public class CoursesView {
 	private JTable table;
 	private JButton btnOK; 
 	private JTable tableMoreInfo;
+	private JLabel lblTodayDate;
 
 	/**
 	 * Launch the application.
@@ -84,6 +85,10 @@ public class CoursesView {
 		lblInfoMore.setFont(new Font("Tahoma", Font.BOLD, 11));
 		lblInfoMore.setBounds(10, 286, 444, 14);
 		frmConsultFormativeActions.getContentPane().add(lblInfoMore);
+		
+		lblTodayDate = new JLabel("");
+		lblTodayDate.setBounds(411, 12, 214, 14);
+		frmConsultFormativeActions.getContentPane().add(lblTodayDate);
 	}
 	
 	
@@ -92,4 +97,8 @@ public class CoursesView {
 	public JTable getTableCourses() { return this.table; }
 	public JButton getBtnOK() {return this.btnOK;}
 	public JTable getTableMore() {return this.tableMoreInfo;}
+	
+	public void setTodayDate(String date) {
+		lblTodayDate.setText("Today's date: "+ date);
+	}
 }

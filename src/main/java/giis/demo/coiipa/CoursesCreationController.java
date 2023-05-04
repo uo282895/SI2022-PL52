@@ -49,7 +49,6 @@ public class CoursesCreationController {
     private Date today;
     
     private List<SessionDisplayDTO> sessions = new ArrayList<>();
-;
  	
 	public CoursesCreationController(CoursesCreationModel m, CoursesCreationView v, Date sysDate) {
 		this.model = m;
@@ -180,7 +179,6 @@ public class CoursesCreationController {
 		//this.getListaCarreras();
 		
 		//Abre la ventana (sustituye al main generado por WindowBuilder)
-		today = new Date();
 		view.getFrame().setVisible(true); 
 	}
 	

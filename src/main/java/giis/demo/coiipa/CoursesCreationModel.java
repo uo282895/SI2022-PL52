@@ -74,7 +74,7 @@ public class CoursesCreationModel {
 				
 		db.executeUpdate(SQL_INSERT_COURSE, course_id, course_name, course_main_contents, course_objectives, n_hours, 
 				course_start_date, course_end_date, course_enrollement_start_date, course_enrollement_end_date,
-				n_places, fee, "Active", course_teacher_id, teacher_remuneration);
+				n_places, fee, "Registered", course_teacher_id, teacher_remuneration);
 		
 	}
 	
