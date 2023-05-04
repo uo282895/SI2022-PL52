@@ -167,7 +167,7 @@ public class SecretaryController{
 	public void getListCourses() {
 		List<CourseDisplayDTO> courses = model.getListCourses();
 		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id","course_name", "course_state", "course_start_period", "course_end_period", "total_places", "available_places","course_start_date"});
-		Object[] newHeaders = {"Course id", "Course name", "Status", "Start of enrollement period", "End of enrollement period", "Total places", "Places left", "Course date"};
+		Object[] newHeaders = {"Course id", "Course name", "Status", "Start of enrollement period", "End of enrollement period", "Total places", "Places left", "Course start date"};
 		tmodel.setColumnIdentifiers(newHeaders);
 		viewCourses.getTableCourses().setModel(tmodel);
 		//Hide the column of the course id (the user doesn't want to see it)
@@ -245,7 +245,7 @@ public class SecretaryController{
 		//Get the course places, depending on which course the registration is associated
 		int regid = model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
 		int courseid = model.getCourseId(regid);
-		int places = model.getPlacesCourse(courseid);
+		int places = model.getPlacesCourse(courseid, today);
 		
 		//Get a correct id (the last one + 1)
 		int payid = model.getLastPaymentId();

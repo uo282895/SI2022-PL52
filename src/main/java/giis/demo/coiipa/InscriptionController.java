@@ -148,7 +148,7 @@ public class InscriptionController {
 		} else if (correctDate == 2){
 			correct = 1;
 			
-			 int places = insmodel.getPlacesCourse(index);
+			 int places = insmodel.getPlacesCourse(index, today);
 			 if (places > 0) {
 				 insmodel.insertNewProffessional(newid, name, surnames, phone, email, date, state, index);
 				 JOptionPane.showOptionDialog(null, "You have been registered successfully", "Everything seems correct", JOptionPane.OK_OPTION, JOptionPane.INFORMATION_MESSAGE, null, new Object[] {"OK"}, "OK");

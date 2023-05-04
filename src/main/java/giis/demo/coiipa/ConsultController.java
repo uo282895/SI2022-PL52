@@ -81,8 +81,8 @@ public class ConsultController {
 	
 	public void getListCourses() {
 		List<CourseDisplayDTO> courses = cmodel.getListCourses(today);
-		DefaultTableModel tmodel= (DefaultTableModel) SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id","course_name", "course_state", "course_start_period", "course_end_period", "total_places", "course_start_date"});
-		Object[] newHeader = {"Course id", "Course name", "Status", "Start of enrollement period", "End of enrollement period", "Total places", "Places left", "Course date"};
+		DefaultTableModel tmodel= (DefaultTableModel) SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id","course_name", "course_state", "course_start_period", "course_end_period", "available_places", "course_start_date"});
+		Object[] newHeader = {"Course id", "Course name", "Status", "Start of enrollment period", "End of enrollement period", "Places left", "Course start date"};
 		tmodel.setColumnIdentifiers(newHeader);	
 		cview.getTableCourses().setModel(tmodel);
 		
@@ -101,7 +101,7 @@ public class ConsultController {
 	public void getListRegistrations() {
 		int index = ids.get(cview.getTableCourses().getSelectedRow());
 		
-		List<RegistrationDisplayDTO> reg = cmodel.getListRegistrations(index);
+		List<RegistrationDisplayDTO> reg = cmodel.getListRegistrations(index, today);
 		DefaultTableModel tmodel2= (DefaultTableModel) SwingUtil.getTableModelFromPojos(reg, new String[] {"reg_id", "reg_name", "reg_surnames", "reg_phone", "reg_email", "reg_date", "reg_state", "course_id"});
 		Object[] newHeader = {"ID", "Name", "Surnames", "Phone", "Email", "Date", "State", "Course ID"};
 		tmodel2.setColumnIdentifiers(newHeader);	
@@ -163,7 +163,7 @@ public class ConsultController {
 		
 		correctDate = 0;
 		
-		List<RegistrationDisplayDTO> reg = cmodel.getListRegistrations(idCourse);
+		List<RegistrationDisplayDTO> reg = cmodel.getListRegistrations(idCourse, today);
 		DefaultTableModel tmodel2 = (DefaultTableModel) SwingUtil.getTableModelFromPojos(reg, new String[] {"reg_id", "reg_name", "reg_surnames", "reg_phone", "reg_email", "reg_date", "reg_state", "course_id"});
 		Object[] newHeader = {"ID", "Name", "Surnames", "Phone", "Email", "Date", "State", "Course ID"};
 		tmodel2.setColumnIdentifiers(newHeader);

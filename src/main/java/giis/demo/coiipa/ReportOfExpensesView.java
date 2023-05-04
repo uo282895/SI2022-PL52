@@ -93,7 +93,7 @@ public class ReportOfExpensesView {
 		frame.getContentPane().add(Search_courses_button);
 		
 		Close_button = new JButton("Close");
-		Close_button.setBounds(10, 379, 171, 48);
+		Close_button.setBounds(729, 396, 171, 33);
 		frame.getContentPane().add(Close_button);
 		
 	}

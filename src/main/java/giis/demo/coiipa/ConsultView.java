@@ -56,18 +56,18 @@ public class ConsultView {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Consult status and registrations");
-		frame.setBounds(100, 100, 690, 455);
+		frame.setBounds(100, 100, 874, 455);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
 		JLabel lblNewLabel = new JLabel("Click on a course:");
-		lblNewLabel.setBounds(37, 20, 93, 13);
+		lblNewLabel.setBounds(37, 20, 120, 13);
 		frame.getContentPane().add(lblNewLabel);
 		
-		state = new JLabel("State");
+		state = new JLabel("");
+		state.setBounds(37, 196, 45, 13);
 		state.setOpaque(true);
 		state.setBackground(new Color(255, 255, 255));
-		state.setBounds(37, 196, 45, 13);
 		frame.getContentPane().add(state);
 		
 		JPanel panel_2 = new JPanel();
@@ -83,7 +83,7 @@ public class ConsultView {
 				new Object[][] {
 				},
 				new String[] {
-					"C1", "C2", "C3", "C4", "C5", "C6", "C7"
+					"", "", "", "", "", "", ""
 				}
 		));
 		registered.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -95,12 +95,12 @@ public class ConsultView {
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JButton btnNewButton = new JButton("Close");
+		btnNewButton.setBounds(765, 386, 85, 21);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();
 			}
 		});
-		btnNewButton.setBounds(581, 387, 85, 21);
 		frame.getContentPane().add(btnNewButton);
 		
 		JPanel panel = new JPanel();
@@ -116,7 +116,7 @@ public class ConsultView {
 			new Object[][] {
 			},
 			new String[] {
-				"C1", "C2", "C3", "C4", "C5"
+				"", "", "", "", ""
 			}
 		));
 		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);

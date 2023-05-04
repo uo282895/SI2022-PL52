@@ -50,7 +50,7 @@ public class CoursesView {
 	private void initialize() {
 		frmConsultFormativeActions = new JFrame();
 		frmConsultFormativeActions.setTitle("Consult formative actions");
-		frmConsultFormativeActions.setBounds(100, 100, 656, 490);
+		frmConsultFormativeActions.setBounds(100, 100, 914, 493);
 		frmConsultFormativeActions.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frmConsultFormativeActions.getContentPane().setLayout(null);
 		
@@ -61,7 +61,7 @@ public class CoursesView {
 		
 		//Scroll panel and table to show the headers
 		JScrollPane scrollPane = new JScrollPane();
-		scrollPane.setBounds(10, 49, 622, 211);
+		scrollPane.setBounds(10, 49, 860, 211);
 		frmConsultFormativeActions.getContentPane().add(scrollPane);
 		
 		table = new JTable();
@@ -70,7 +70,7 @@ public class CoursesView {
 		scrollPane.setViewportView(table);
 		
 		btnOK = new JButton("OK");
-		btnOK.setBounds(543, 419, 89, 23);
+		btnOK.setBounds(775, 422, 89, 23);
 		frmConsultFormativeActions.getContentPane().add(btnOK);
 		
 		JScrollPane scrollPaneMoreInfo = new JScrollPane();
