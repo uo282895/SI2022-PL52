@@ -63,6 +63,12 @@ public class InvoiceController {
 				if(model.hasInvoice(courseId).compareTo("Yes") == 0) {
 					view.getTFAmount().setEnabled(true);
 				    view.getTFDate().setEnabled(true);
+				    
+				    int invid = model.getInvoice(courseId).getInvoice_id();
+				    if (model.getInvoiceEntity(invid).getInvoice_state().compareTo("Paid")==0) {
+				    	view.getTFAmount().setEnabled(true);
+					    view.getTFDate().setEnabled(true);
+				    }
 				}
 			}
 		});
