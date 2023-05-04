@@ -37,7 +37,7 @@ public class ReportOfExpensesModel {
 	                + "  SELECT r.course_id, COUNT(r.reg_id) * c.course_fee AS registration_invoices_sum "
 	                + "  FROM Registration r "
 	                + "  INNER JOIN Course c ON r.course_id = c.course_id "
-	                + "  WHERE (r.reg_state != 'Cancelled' AND r.reg_state != 'Cancelled - Compensate') and r.reg_state != 'Cancelled - Profpay') "
+	                + "  WHERE (r.reg_state != 'Cancelled' AND r.reg_state != 'Cancelled - Compensate' and r.reg_state != 'Cancelled - Profpay') "
 	                + "  GROUP BY r.course_id "
 	                + ") AS ris ON c.course_id = ris.course_id "
 	                + "WHERE ((? BETWEEN c.course_start_date AND c.course_end_date) OR (? BETWEEN c.course_start_date AND c.course_end_date) "
