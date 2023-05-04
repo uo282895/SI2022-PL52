@@ -15,6 +15,7 @@ import javax.swing.table.TableColumnModel;
 
 import giis.demo.dto.RegistrationDisplayDTO;
 import giis.demo.util.SwingUtil;
+import giis.demo.util.Util;
 
 public class RegistrationCancellationController {
 
@@ -42,7 +43,7 @@ public class RegistrationCancellationController {
 	}
 
 	public void getListRegistrations() {
-		List<RegistrationDisplayDTO> registrations = model.getListRegistrations();
+		List<RegistrationDisplayDTO> registrations = model.getListRegistrations(Util.dateToIsoString(today));
 		DefaultTableModel tmodel = (DefaultTableModel) SwingUtil.getTableModelFromPojos(registrations, 
 				new String[] {"reg_id", "course_name", "reg_name", "reg_surnames", "reg_email", "reg_phone", "reg_date",
 						 "course_start_date", "total_payment"});
@@ -142,7 +143,7 @@ public class RegistrationCancellationController {
 			    	model.insertCancellation(reg_id); // Not going to be compensated
 			    }
 				
-				//view.getFrame().setVisible(false); // Hide the window
+				view.getFrame().setVisible(false); // Hide the window
 			    //getListRegistrations(); // Reload the list of registrations that can be cancelled
 			    
 			}
