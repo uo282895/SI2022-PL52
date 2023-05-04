@@ -79,16 +79,16 @@ public class InscriptionModel {
 		}
 		
 		//Get free places from a course 
-		public int getPlacesCourse(int courseid, Date today) {
+		public int getPlacesCourse(Date today, int courseid) {
 			String t = Util.dateToIsoString(today);
 			
-			String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed - Profpay', 'Confirmed') THEN 1 ELSE 0 END), 0)) AS available_places "
+			String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed', 'Compensate - Profpay') AND R.reg_date <= ? THEN 1 ELSE 0 END), 0)) AS available_places "
 					+ "FROM Course C "
 					+ "LEFT JOIN Registration R ON C.course_id = R.course_id "
 					+ "WHERE C.course_id = ? "
-					+ "AND (R.reg_date <= ? OR R.reg_date IS NULL) "
 					+ "GROUP BY C.course_id";
-			return db.executeQueryPojo(CourseDisplayDTO.class, sql, courseid, t).get(0).getAvailable_places();
+			System.out.println();
+			return db.executeQueryPojo(CourseDisplayDTO.class, sql, t, courseid).get(0).getAvailable_places();
 		}
 		
 		public String getStartPeriod(int id) {

@@ -23,7 +23,7 @@ public class SecretaryModel {
 	
 	public static final String SQL_LIST_COURSES=
 			"SELECT c.course_id, c.course_name, c.course_state, c.course_start_period, c.course_end_period, c.total_places, "
-			+ "(c.total_places - COUNT(CASE WHEN r.reg_state = 'Confirmed' OR r.reg_state = 'Compensate' THEN 1 END)) "
+			+ "(c.total_places - COUNT(CASE WHEN (r.reg_state = 'Confirmed' OR r.reg_state = 'Compensate' OR r.reg_state = 'Confirmed - Profpay') AND r.reg_date <= ? THEN 1 END)) "
 			+ "AS available_places, c.course_start_date "
 			+ "FROM Course c LEFT JOIN Registration r ON c.course_id = r.course_id "
 			+ "GROUP BY c.course_id";
@@ -109,9 +109,10 @@ public class SecretaryModel {
 	/**
 	 * Obtains the list of courses (formative actions)
 	 */
-	public List<CourseDisplayDTO> getListCourses() {
+	public List<CourseDisplayDTO> getListCourses(Date today) {
+		String t = Util.dateToIsoString(today);
 		String sql= SQL_LIST_COURSES;
-		return db.executeQueryPojo(CourseDisplayDTO.class, sql);
+		return db.executeQueryPojo(CourseDisplayDTO.class, sql, t);
 	}
 	
 	//Method encharged of the validation of dates (both registration and payment)
@@ -221,16 +222,16 @@ public class SecretaryModel {
 	}
 	
 	//Get free places from a course 
-	public int getPlacesCourse(int courseid, Date today) {
+	public int getPlacesCourse(Date today, int courseid) {
 		String t = Util.dateToIsoString(today);
 		
-		String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed - Profpay', 'Confirmed') THEN 1 ELSE 0 END), 0)) AS available_places "
+		String sql = "SELECT (C.total_places - COALESCE(SUM(CASE WHEN R.reg_state IN ('Compensate', 'Confirmed', 'Compensate - Profpay') AND R.reg_date <= ? THEN 1 ELSE 0 END), 0)) AS available_places "
 				+ "FROM Course C "
 				+ "LEFT JOIN Registration R ON C.course_id = R.course_id "
 				+ "WHERE C.course_id = ? "
-				+ "AND (R.reg_date <= ?) "
 				+ "GROUP BY C.course_id";
-		return db.executeQueryPojo(CourseDisplayDTO.class, sql, courseid, t).get(0).getAvailable_places();
+		System.out.println();
+		return db.executeQueryPojo(CourseDisplayDTO.class, sql, t, courseid).get(0).getAvailable_places();
 	}
 	
 	//Get the id from a course associated to a registration

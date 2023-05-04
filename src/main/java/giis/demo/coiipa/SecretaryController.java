@@ -167,7 +167,7 @@ public class SecretaryController{
 	
 	//Method listing all the courses coming from the POJO object
 	public void getListCourses() {
-		List<CourseDisplayDTO> courses = model.getListCourses();
+		List<CourseDisplayDTO> courses = model.getListCourses(today);
 		DefaultTableModel tmodel = SwingUtil.getTableModelFromPojos(courses, new String[] {"course_id","course_name", "course_state", "course_start_period", "course_end_period", "total_places", "available_places","course_start_date"});
 		Object[] newHeaders = {"Course id", "Course name", "Status", "Start of enrollement period", "End of enrollement period", "Total places", "Places left", "Course start date"};
 		tmodel.setColumnIdentifiers(newHeaders);
@@ -247,7 +247,8 @@ public class SecretaryController{
 		//Get the course places, depending on which course the registration is associated
 		int regid = model.getRegId(courseName, Util.isoStringToDate(regDate), regName).getReg_id();
 		int courseid = model.getCourseId(regid);
-		int places = model.getPlacesCourse(courseid, today);
+		int places = model.getPlacesCourse(today, courseid);
+		System.out.println(today);
 		
 		//Get a correct id (the last one + 1)
 		int payid = model.getLastPaymentId();
