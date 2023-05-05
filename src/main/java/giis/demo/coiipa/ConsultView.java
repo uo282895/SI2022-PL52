@@ -56,7 +56,7 @@ public class ConsultView {
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Consult status and registrations");
-		frame.setBounds(100, 100, 874, 455);
+		frame.setBounds(100, 100, 634, 468);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -95,7 +95,7 @@ public class ConsultView {
 		frame.getContentPane().add(lblNewLabel_2);
 		
 		JButton btnNewButton = new JButton("Close");
-		btnNewButton.setBounds(765, 386, 85, 21);
+		btnNewButton.setBounds(483, 386, 104, 30);
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				frame.dispose();

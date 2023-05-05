@@ -72,7 +72,7 @@ public class CoursesCreationView {
 	@SuppressWarnings("unchecked")
 	private void initialize() {
 		frame = new JFrame();
-		frame.setBounds(100, 100, 794, 672);
+		frame.setBounds(300, 25, 794, 672);
 		frame.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		frame.setTitle("Plan a new Formative Action");

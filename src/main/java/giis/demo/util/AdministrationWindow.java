@@ -73,7 +73,7 @@ public class AdministrationWindow{
 	private void initialize() {
 		frame = new JFrame();
 		frame.setTitle("Administration Window");
-		frame.setBounds(0, 0, 613, 430);
+		frame.setBounds(0, 0, 694, 411);
 		frame.setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 		frame.getContentPane().setLayout(null);
 		
@@ -87,21 +87,21 @@ public class AdministrationWindow{
 			}
 		});
 		
-		JButton btnPayments = new JButton("Register pending payments");
+		JButton btnPayments = new JButton("Register payments");
 		btnPayments.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
 			public void actionPerformed(ActionEvent e) {
 				SecretaryControllerRegisterPendingPayments = new SecretaryController(new SecretaryModel(), new PaymentsView(), system_date);
 				SecretaryControllerRegisterPendingPayments.initControllerPayments();
 			}
 		});
-		btnPayments.setBounds(334, 150, 237, 41);
+		btnPayments.setBounds(357, 150, 289, 41);
 		frame.getContentPane().add(btnPayments);
-		btnInicializarBaseDeDatos.setBounds(20, 11, 244, 41);
+		btnInicializarBaseDeDatos.setBounds(20, 11, 282, 41);
 		frame.getContentPane().add(btnInicializarBaseDeDatos);
 		
 		
 		System_timeDateChooser = new JDateChooser();
-		System_timeDateChooser.setBounds(201, 94, 161, 20);
+		System_timeDateChooser.setBounds(220, 94, 161, 20);
 		System_timeDateChooser.setDateFormatString("dd/MM/yy HH:mm");
 		system_date = new Date(); // Today's date by default
 		System_timeDateChooser.setDate(system_date);
@@ -115,7 +115,7 @@ public class AdministrationWindow{
 				db.loadDatabase();
 			}
 		});
-		btnCargarDatosIniciales.setBounds(334, 11, 237, 41);
+		btnCargarDatosIniciales.setBounds(357, 11, 289, 41);
 		frame.getContentPane().add(btnCargarDatosIniciales);
 		
 		JButton btnCourses = new JButton("Consult formative actions");
@@ -125,10 +125,14 @@ public class AdministrationWindow{
 				secreatarycontrollerConsultFormativeActions.initControllerCourses();
 			}
 		});
-		btnCourses.setBounds(20, 202, 240, 41);
+		btnCourses.setBounds(20, 202, 282, 41);
 		frame.getContentPane().add(btnCourses);
 		
 		JButton btnNewButton = new JButton("Create a new formative action");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		btnNewButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -137,7 +141,7 @@ public class AdministrationWindow{
 			}
 		});
 		frame.getContentPane().add(btnNewButton);
-		btnNewButton.setBounds(20, 150, 240, 41);
+		btnNewButton.setBounds(20, 150, 282, 41);
 		
 		JButton btnEjecutarTkrun = new JButton("Register cancellations to courses");
 		btnEjecutarTkrun.addActionListener(new ActionListener() { //NOSONAR codigo autogenerado
@@ -147,11 +151,11 @@ public class AdministrationWindow{
 								new RegistrationCancellationView(), system_date);
 			}
 		});
-		btnEjecutarTkrun.setBounds(334, 202, 237, 41);
+		btnEjecutarTkrun.setBounds(357, 202, 289, 41);
 		frame.getContentPane().add(btnEjecutarTkrun);
 		
 		JSeparator separator = new JSeparator();
-		separator.setBounds(20, 71, 551, 18);
+		separator.setBounds(20, 71, 626, 18);
 		frame.getContentPane().add(separator);
 		
 		JButton btnManageInvoices = new JButton("Manage invoices");
@@ -161,7 +165,7 @@ public class AdministrationWindow{
 				invoicecontroller.initController();
 			}
 		});
-		btnManageInvoices.setBounds(334, 254, 237, 41);
+		btnManageInvoices.setBounds(357, 254, 289, 41);
 		frame.getContentPane().add(btnManageInvoices);
 		
 		JButton ReportOfExpensesButton = new JButton("Show a report of expenses");
@@ -173,7 +177,7 @@ public class AdministrationWindow{
 				reportofexpensescontroller.initController();
 			}
 		});
-		ReportOfExpensesButton.setBounds(20, 254, 244, 41);
+		ReportOfExpensesButton.setBounds(20, 254, 282, 41);
 		frame.getContentPane().add(ReportOfExpensesButton);
 		
 		JButton btnInscribeIntoA = new JButton("Inscribe into a formative action");
@@ -183,21 +187,21 @@ public class AdministrationWindow{
 				controller.initController();
 			}
 		});
-		btnInscribeIntoA.setBounds(24, 307, 237, 41);
+		btnInscribeIntoA.setBounds(24, 307, 278, 41);
 		frame.getContentPane().add(btnInscribeIntoA);
 		
-		JButton btnConsultRegistrationsOf = new JButton("Consult status and registrations of a formative action");
+		JButton btnConsultRegistrationsOf = new JButton("Consult registrations of the courses");
 		btnConsultRegistrationsOf.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				ConsultController controller = new ConsultController(new ConsultModel(), new ConsultView(), system_date);
 				controller.initController();
 			}
 		});
-		btnConsultRegistrationsOf.setBounds(334, 305, 237, 41);
+		btnConsultRegistrationsOf.setBounds(357, 307, 289, 41);
 		frame.getContentPane().add(btnConsultRegistrationsOf);
 
 		JLabel lblNewLabel = new JLabel("Set the System Time:");
-		lblNewLabel.setBounds(65, 94, 131, 20);
+		lblNewLabel.setBounds(79, 94, 131, 20);
 		frame.getContentPane().add(lblNewLabel);
 		
 		JButton btnUpdateSystemDate = new JButton("Update system date");
@@ -245,7 +249,7 @@ public class AdministrationWindow{
 					inscriptioncontroller.updateSystemDate(system_date);
 			}
 		});
-		btnUpdateSystemDate.setBounds(382, 87, 162, 35);
+		btnUpdateSystemDate.setBounds(409, 87, 162, 35);
 		frame.getContentPane().add(btnUpdateSystemDate);
 		
 	}
