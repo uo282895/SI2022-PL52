@@ -136,19 +136,5 @@ public class Util {
 		Format formatter = new SimpleDateFormat("yyyy-MM-dd");
 		return formatter.format(javaDate);
 	}
-	
-	
-	public static Date isoStringToHour(String isoHourString) {
-		try {
-		return new SimpleDateFormat("HH:mm:ss").parse(isoHourString);
-		} catch (ParseException e) {
-			throw new ApplicationException("Incorrect ISO format for hours: "+isoHourString);
-		}
-	}
-	
-	public static String hourToIsoString(Date javaHour) {
-		Format formatter = new SimpleDateFormat("HH:mm:ss");
-		return formatter.format(javaHour);
-	}
 
 }

@@ -259,7 +259,7 @@ public class SecretaryController{
 		payid++;
 		
 		//True if the difference is smaller or equal than 48 hours
-		boolean days = true;//model.compareDates(Util.isoStringToDate(regDate), Util.isoStringToHour(date));
+		boolean days = model.compareDates(Util.isoStringToDate(regDate), Util.isoStringToDate(date));
 		
 		int totalamount = model.getAmountPaid(regid);
 		
