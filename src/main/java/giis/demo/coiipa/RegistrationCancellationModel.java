@@ -17,7 +17,7 @@ public class RegistrationCancellationModel {
 		    + "INNER JOIN Registration ON Course.course_id = Registration.course_id "
 		    + "LEFT JOIN Payment ON Payment.reg_id = Registration.reg_id "
 		    + "WHERE (Registration.reg_state != 'Cancelled' AND Registration.reg_state != 'Cancelled - Compensate' "
-		    + "AND Registration.reg_date < ?) "
+		    + "AND Registration.reg_date <= ?) "
 		    + "GROUP BY Registration.reg_id, Course.course_name, Registration.reg_name, Registration.reg_surnames, Registration.reg_email, "
 		    + "Registration.reg_phone, Registration.reg_date, Course.course_start_date "
 		    + "ORDER BY Registration.reg_id;";

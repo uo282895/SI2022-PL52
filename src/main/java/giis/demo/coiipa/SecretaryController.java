@@ -222,6 +222,10 @@ public class SecretaryController{
 			quant = Integer.parseInt(strquant);
 		}
 		
+		if (quant <= 0) {
+			throw new ApplicationException("Please, input a positive amount.");
+		}
+		
 		if (viewPayments.getTFDate().getText().isEmpty()) {
 			throw new ApplicationException("Be careful, you must fill the date gap");
 		} else date = viewPayments.getTFDate().getText();
@@ -286,6 +290,7 @@ public class SecretaryController{
 			model.insertPaymentReg(payid, quant, Util.isoStringToDate(date), regid);
 		}
 		else {
+			model.validateDate(Util.isoStringToDate(date), regid, today);
 			SwingUtil.showMessage("The professional cannot be assigned a place for the course because there are no places left.\n"
 					+ "The money paid will be given back by cash.", "Course full", 0);//WRONG
 			model.updateFull(regid); 
